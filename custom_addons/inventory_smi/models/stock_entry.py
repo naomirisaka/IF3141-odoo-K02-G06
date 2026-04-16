@@ -49,7 +49,19 @@ class SmiStockEntry(models.Model):
         for vals in vals_list:
             if 'jumlah_tersisa' not in vals or vals['jumlah_tersisa'] is None:
                 vals['jumlah_tersisa'] = vals.get('jumlah_awal', 0.0)
-        return super().create(vals_list)
+        records = super().create(vals_list)
+        for entry in records:
+            self.env['smi.activity.log']._log(
+                tipe='stok_masuk',
+                deskripsi=(
+                    f'Menambahkan {entry.jumlah_awal} {entry.material_id.uom_id.name} '
+                    f'{entry.material_id.name} ke {entry.inventory_point_id.name}'
+                ),
+                ref_model='smi.stock_entry',
+                ref_id=entry.id,
+            )
+            self.env['smi.activity.log']._check_and_notify_low_stock(entry.material_id)
+        return records
 
     def write(self, vals):
         result = super().write(vals)
