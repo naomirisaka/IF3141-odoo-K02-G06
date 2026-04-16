@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+  <!-- ======== smi.uom ======== -->
+  <record id="view_smi_uom_list" model="ir.ui.view">
+    <field name="name">smi.uom.list</field>
+    <field name="model">smi.uom</field>
+    <field name="arch" type="xml">
+      <tree string="Satuan Bahan">
+        <field name="name"/>
+        <field name="active"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_smi_uom_form" model="ir.ui.view">
+    <field name="name">smi.uom.form</field>
+    <field name="model">smi.uom</field>
+    <field name="arch" type="xml">
+      <form string="Satuan Bahan">
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="active"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_smi_uom" model="ir.actions.act_window">
+    <field name="name">Satuan Bahan</field>
+    <field name="res_model">smi.uom</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <!-- ======== smi.material.category ======== -->
+  <record id="view_smi_category_list" model="ir.ui.view">
+    <field name="name">smi.material.category.list</field>
+    <field name="model">smi.material.category</field>
+    <field name="arch" type="xml">
+      <tree string="Kategori Bahan">
+        <field name="name"/>
+        <field name="active"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_smi_category_form" model="ir.ui.view">
+    <field name="name">smi.material.category.form</field>
+    <field name="model">smi.material.category</field>
+    <field name="arch" type="xml">
+      <form string="Kategori Bahan">
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="active"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_smi_category" model="ir.actions.act_window">
+    <field name="name">Kategori Bahan</field>
+    <field name="res_model">smi.material.category</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <!-- ======== smi.material ======== -->
+  <record id="view_smi_material_list" model="ir.ui.view">
+    <field name="name">smi.material.list</field>
+    <field name="model">smi.material</field>
+    <field name="arch" type="xml">
+      <tree string="Bahan Baku" decoration-danger="is_low_stock">
+        <field name="name"/>
+        <field name="category_id"/>
+        <field name="uom_id"/>
+        <field name="total_stok"/>
+        <field name="stok_minimum"/>
+        <field name="is_low_stock" widget="boolean" optional="hide"/>
+        <field name="last_added_date"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_smi_material_form" model="ir.ui.view">
+    <field name="name">smi.material.form</field>
+    <field name="model">smi.material</field>
+    <field name="arch" type="xml">
+      <form string="Bahan Baku">
+        <sheet>
+          <div class="oe_title">
+            <h1><field name="name" placeholder="Nama Bahan"/></h1>
+          </div>
+          <group>
+            <group>
+              <field name="category_id"/>
+              <field name="uom_id"/>
+              <field name="warna"/>
+            </group>
+            <group>
+              <field name="stok_minimum"/>
+              <field name="total_stok" readonly="1"/>
+              <field name="is_low_stock" readonly="1"/>
+              <field name="last_added_date" readonly="1"/>
+              <field name="active"/>
+            </group>
+          </group>
+          <notebook>
+            <page string="Riwayat Stok">
+              <field name="stock_entry_ids" readonly="1">
+                <tree>
+                  <field name="tanggal_masuk"/>
+                  <field name="inventory_point_id"/>
+                  <field name="jumlah_awal"/>
+                  <field name="jumlah_tersisa"/>
+                  <field name="state"/>
+                  <field name="user_id"/>
+                </tree>
+              </field>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_smi_material" model="ir.actions.act_window">
+    <field name="name">Bahan Baku</field>
+    <field name="res_model">smi.material</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+</data>
+</odoo>

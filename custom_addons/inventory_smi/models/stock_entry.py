@@ -33,11 +33,16 @@ class SmiStockEntry(models.Model):
             if entry.jumlah_awal <= 0:
                 raise ValidationError('Jumlah awal harus lebih dari 0.')
 
-    @api.constrains('jumlah_tersisa')
+    @api.constrains('jumlah_tersisa', 'jumlah_awal')
     def _check_jumlah_tersisa(self):
         for entry in self:
             if entry.jumlah_tersisa < 0:
                 raise ValidationError('Jumlah tersisa tidak boleh negatif.')
+            if entry.jumlah_tersisa > entry.jumlah_awal:
+                raise ValidationError(
+                    f'Jumlah tersisa ({entry.jumlah_tersisa}) tidak boleh melebihi '
+                    f'jumlah awal ({entry.jumlah_awal}).'
+                )
 
     @api.model_create_multi
     def create(self, vals_list):

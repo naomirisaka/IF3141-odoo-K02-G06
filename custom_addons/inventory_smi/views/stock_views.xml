@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+  <!-- ======== smi.inventory_point ======== -->
+  <record id="view_smi_inventory_point_list" model="ir.ui.view">
+    <field name="name">smi.inventory_point.list</field>
+    <field name="model">smi.inventory_point</field>
+    <field name="arch" type="xml">
+      <tree string="Titik Inventori">
+        <field name="name"/>
+        <field name="koordinat_x"/>
+        <field name="koordinat_y"/>
+        <field name="deskripsi"/>
+        <field name="active"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_smi_inventory_point_form" model="ir.ui.view">
+    <field name="name">smi.inventory_point.form</field>
+    <field name="model">smi.inventory_point</field>
+    <field name="arch" type="xml">
+      <form string="Titik Inventori">
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="koordinat_x"/>
+            <field name="koordinat_y"/>
+            <field name="deskripsi"/>
+            <field name="active"/>
+          </group>
+          <notebook>
+            <page string="Stok di Titik Ini">
+              <field name="stock_entry_ids" readonly="1">
+                <tree>
+                  <field name="material_id"/>
+                  <field name="jumlah_awal"/>
+                  <field name="jumlah_tersisa"/>
+                  <field name="tanggal_masuk"/>
+                  <field name="state"/>
+                </tree>
+              </field>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_smi_inventory_point" model="ir.actions.act_window">
+    <field name="name">Titik Inventori</field>
+    <field name="res_model">smi.inventory_point</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <!-- ======== smi.stock_entry ======== -->
+  <record id="view_smi_stock_entry_list" model="ir.ui.view">
+    <field name="name">smi.stock_entry.list</field>
+    <field name="model">smi.stock_entry</field>
+    <field name="arch" type="xml">
+      <tree string="Riwayat Stok" decoration-muted="state == 'habis'">
+        <field name="tanggal_masuk"/>
+        <field name="material_id"/>
+        <field name="inventory_point_id"/>
+        <field name="jumlah_awal"/>
+        <field name="jumlah_tersisa"/>
+        <field name="state"/>
+        <field name="user_id"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_smi_stock_entry_form" model="ir.ui.view">
+    <field name="name">smi.stock_entry.form</field>
+    <field name="model">smi.stock_entry</field>
+    <field name="arch" type="xml">
+      <form string="Riwayat Stok">
+        <sheet>
+          <group>
+            <group>
+              <field name="material_id"/>
+              <field name="inventory_point_id"/>
+              <field name="tanggal_masuk"/>
+            </group>
+            <group>
+              <field name="jumlah_awal"/>
+              <field name="jumlah_tersisa"/>
+              <field name="state"/>
+              <field name="user_id"/>
+            </group>
+          </group>
+          <group string="Catatan">
+            <field name="catatan" nolabel="1"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_smi_stock_entry" model="ir.actions.act_window">
+    <field name="name">Riwayat Stok</field>
+    <field name="res_model">smi.stock_entry</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+</data>
+</odoo>
