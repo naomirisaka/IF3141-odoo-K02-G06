@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- ============================================================
+             Security Categories
+        ============================================================ -->
+        <record id="module_category_smi" model="ir.module.category">
+            <field name="name">Sistem Manajemen Inventaris</field>
+            <field name="sequence">100</field>
+        </record>
+
+        <!-- ============================================================
+             Groups
+        ============================================================ -->
+        <record id="group_admin" model="res.groups">
+            <field name="name">Admin</field>
+            <field name="category_id" ref="module_category_smi"/>
+            <field name="comment">Mengelola akun pengguna dan konfigurasi sistem.</field>
+        </record>
+
+        <record id="group_kepala_produksi" model="res.groups">
+            <field name="name">Kepala Produksi</field>
+            <field name="category_id" ref="module_category_smi"/>
+            <field name="comment">Akses penuh stok, order, laporan, dan titik inventori.</field>
+        </record>
+
+        <record id="group_staf_produksi" model="res.groups">
+            <field name="name">Staf Produksi</field>
+            <field name="category_id" ref="module_category_smi"/>
+            <field name="comment">Input dan output stok, membuat order.</field>
+        </record>
+
+        <record id="group_direktur" model="res.groups">
+            <field name="name">Direktur</field>
+            <field name="category_id" ref="module_category_smi"/>
+            <field name="comment">Akses lihat saja: dashboard dan laporan stok.</field>
+        </record>
+
+    </data>
+</odoo>

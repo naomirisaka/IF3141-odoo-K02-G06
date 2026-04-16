@@ -1,0 +1,45 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_smi_uom_admin,smi.uom admin,model_smi_uom,inventory_smi.group_admin,1,1,1,1
+access_smi_uom_kepala,smi.uom kepala,model_smi_uom,inventory_smi.group_kepala_produksi,1,1,1,1
+access_smi_uom_staf,smi.uom staf,model_smi_uom,inventory_smi.group_staf_produksi,1,1,1,0
+access_smi_uom_direktur,smi.uom direktur,model_smi_uom,inventory_smi.group_direktur,1,0,0,0
+
+access_smi_material_category_admin,smi.material.category admin,model_smi_material_category,inventory_smi.group_admin,1,1,1,1
+access_smi_material_category_kepala,smi.material.category kepala,model_smi_material_category,inventory_smi.group_kepala_produksi,1,1,1,1
+access_smi_material_category_staf,smi.material.category staf,model_smi_material_category,inventory_smi.group_staf_produksi,1,1,1,0
+access_smi_material_category_direktur,smi.material.category direktur,model_smi_material_category,inventory_smi.group_direktur,1,0,0,0
+
+access_smi_material_admin,smi.material admin,model_smi_material,inventory_smi.group_admin,1,1,1,1
+access_smi_material_kepala,smi.material kepala,model_smi_material,inventory_smi.group_kepala_produksi,1,1,1,1
+access_smi_material_staf,smi.material staf,model_smi_material,inventory_smi.group_staf_produksi,1,1,1,0
+access_smi_material_direktur,smi.material direktur,model_smi_material,inventory_smi.group_direktur,1,0,0,0
+
+access_smi_inventory_point_admin,smi.inventory_point admin,model_smi_inventory_point,inventory_smi.group_admin,1,1,1,1
+access_smi_inventory_point_kepala,smi.inventory_point kepala,model_smi_inventory_point,inventory_smi.group_kepala_produksi,1,1,1,1
+access_smi_inventory_point_staf,smi.inventory_point staf,model_smi_inventory_point,inventory_smi.group_staf_produksi,1,0,0,0
+access_smi_inventory_point_direktur,smi.inventory_point direktur,model_smi_inventory_point,inventory_smi.group_direktur,1,0,0,0
+
+access_smi_stock_entry_admin,smi.stock_entry admin,model_smi_stock_entry,inventory_smi.group_admin,1,1,1,1
+access_smi_stock_entry_kepala,smi.stock_entry kepala,model_smi_stock_entry,inventory_smi.group_kepala_produksi,1,1,1,1
+access_smi_stock_entry_staf,smi.stock_entry staf,model_smi_stock_entry,inventory_smi.group_staf_produksi,1,1,1,0
+access_smi_stock_entry_direktur,smi.stock_entry direktur,model_smi_stock_entry,inventory_smi.group_direktur,1,0,0,0
+
+access_smi_order_admin,smi.order admin,model_smi_order,inventory_smi.group_admin,1,1,1,1
+access_smi_order_kepala,smi.order kepala,model_smi_order,inventory_smi.group_kepala_produksi,1,1,1,0
+access_smi_order_staf,smi.order staf,model_smi_order,inventory_smi.group_staf_produksi,1,1,1,1
+access_smi_order_direktur,smi.order direktur,model_smi_order,inventory_smi.group_direktur,1,0,0,0
+
+access_smi_order_line_admin,smi.order.line admin,model_smi_order_line,inventory_smi.group_admin,1,1,1,1
+access_smi_order_line_kepala,smi.order.line kepala,model_smi_order_line,inventory_smi.group_kepala_produksi,1,1,1,0
+access_smi_order_line_staf,smi.order.line staf,model_smi_order_line,inventory_smi.group_staf_produksi,1,1,1,1
+access_smi_order_line_direktur,smi.order.line direktur,model_smi_order_line,inventory_smi.group_direktur,1,0,0,0
+
+access_smi_order_pick_admin,smi.order.pick admin,model_smi_order_pick,inventory_smi.group_admin,1,1,1,1
+access_smi_order_pick_kepala,smi.order.pick kepala,model_smi_order_pick,inventory_smi.group_kepala_produksi,1,1,1,0
+access_smi_order_pick_staf,smi.order.pick staf,model_smi_order_pick,inventory_smi.group_staf_produksi,1,1,1,1
+access_smi_order_pick_direktur,smi.order.pick direktur,model_smi_order_pick,inventory_smi.group_direktur,1,0,0,0
+
+access_smi_activity_log_admin,smi.activity.log admin,model_smi_activity_log,inventory_smi.group_admin,1,1,1,1
+access_smi_activity_log_kepala,smi.activity.log kepala,model_smi_activity_log,inventory_smi.group_kepala_produksi,1,1,1,0
+access_smi_activity_log_staf,smi.activity.log staf,model_smi_activity_log,inventory_smi.group_staf_produksi,1,1,1,0
+access_smi_activity_log_direktur,smi.activity.log direktur,model_smi_activity_log,inventory_smi.group_direktur,1,0,0,0
