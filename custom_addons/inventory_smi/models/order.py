@@ -27,6 +27,22 @@ class SmiOrder(models.Model):
     order_line_ids = fields.One2many('smi.order.line', 'order_id', string='Bahan yang Dibutuhkan')
 
     # ------------------------------------------------------------------
+    # Log on create
+    # ------------------------------------------------------------------
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+        for order in records:
+            self.env['smi.activity.log']._log(
+                tipe='order_dibuat',
+                deskripsi=f'Membuat order "{order.name}" (SPK: {order.no_spk or "-"})',
+                ref_model='smi.order',
+                ref_id=order.id,
+            )
+        return records
+
+    # ------------------------------------------------------------------
     # Guard: prevent editing once confirmed
     # ------------------------------------------------------------------
 
@@ -54,18 +70,41 @@ class SmiOrder(models.Model):
                 else:
                     order._validate_manual_picks(line)
             order.sudo().write({'state': 'dikonfirmasi'})
+            for line in order.order_line_ids:
+                self.env['smi.activity.log']._log(
+                    tipe='stok_keluar',
+                    deskripsi=(
+                        f'Mengambil {line.jumlah_dibutuhkan} {line.material_id.uom_id.name} '
+                        f'{line.material_id.name} untuk order "{order.name}"'
+                    ),
+                    ref_model='smi.order',
+                    ref_id=order.id,
+                )
+                self.env['smi.activity.log']._check_and_notify_low_stock(line.material_id)
 
     def action_complete(self):
         for order in self:
             if order.state != 'dikonfirmasi':
                 raise ValidationError('Hanya order berstatus Dikonfirmasi yang dapat diselesaikan.')
             order.sudo().write({'state': 'selesai'})
+            self.env['smi.activity.log']._log(
+                tipe='order_selesai',
+                deskripsi=f'Order "{order.name}" (SPK: {order.no_spk or "-"}) diselesaikan',
+                ref_model='smi.order',
+                ref_id=order.id,
+            )
 
     def action_cancel(self):
         for order in self:
             if order.state == 'selesai':
                 raise ValidationError('Order yang sudah selesai tidak dapat dibatalkan.')
             order.sudo().write({'state': 'dibatalkan'})
+            self.env['smi.activity.log']._log(
+                tipe='order_dibatalkan',
+                deskripsi=f'Order "{order.name}" (SPK: {order.no_spk or "-"}) dibatalkan',
+                ref_model='smi.order',
+                ref_id=order.id,
+            )
 
     # ------------------------------------------------------------------
     # FIFO algorithm

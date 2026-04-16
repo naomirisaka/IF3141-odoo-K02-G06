@@ -10,6 +10,7 @@
         'security/smi_security.xml',
         'security/ir.model.access.csv',
         'data/demo_users.xml',
+        'data/email_templates.xml',
         'views/auth_templates.xml',
         'views/material_views.xml',
         'views/stock_views.xml',

@@ -14,6 +14,18 @@ class SmiInventoryPoint(models.Model):
 
     stock_entry_ids = fields.One2many('smi.stock_entry', 'inventory_point_id', string='Stok di Titik Ini')
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+        for point in records:
+            self.env['smi.activity.log']._log(
+                tipe='titik_ditambah',
+                deskripsi=f'Menambahkan titik inventori baru: {point.name}',
+                ref_model='smi.inventory_point',
+                ref_id=point.id,
+            )
+        return records
+
     @api.constrains('koordinat_x', 'koordinat_y')
     def _check_coordinates(self):
         for point in self:
