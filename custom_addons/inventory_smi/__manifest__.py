@@ -14,6 +14,7 @@
         'views/material_views.xml',
         'views/stock_views.xml',
         'views/menu_views.xml',
+        'views/order_views.xml',
     ],
     'assets': {
         'web.assets_backend': [],
