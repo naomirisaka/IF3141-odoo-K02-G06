@@ -10,6 +10,7 @@
         'security/smi_security.xml',
         'security/ir.model.access.csv',
         'data/demo_users.xml',
+        'views/auth_templates.xml',
     ],
     'assets': {
         'web.assets_backend': [],
