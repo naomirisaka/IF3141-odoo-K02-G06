@@ -1,3 +1,4 @@
 from . import test_models
 from . import test_auth
 from . import test_stock
+from . import test_order
