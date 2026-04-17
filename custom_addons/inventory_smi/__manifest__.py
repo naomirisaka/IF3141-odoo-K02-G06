@@ -12,6 +12,8 @@
         'data/demo_users.xml',
         'data/email_templates.xml',
         'views/auth_templates.xml',
+        'views/layout_template.xml',
+        'views/dashboard_views.xml',
         'views/material_views.xml',
         'views/stock_views.xml',
         'views/menu_views.xml',
