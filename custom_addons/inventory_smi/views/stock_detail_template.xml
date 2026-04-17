@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+<template id="stock_detail_page" name="SMI Stock Detail">
+    <t t-call="inventory_smi.layout">
+        <t t-set="page_title" t-value="material.name"/>
+
+        <!-- Back + actions -->
+        <div class="toolbar">
+            <a href="/smi/stok" class="btn btn-secondary btn-sm">← Kembali</a>
+            <t t-if="not is_direktur">
+                <a href="/smi/stok/tambah" class="btn btn-primary btn-sm">+ Tambah Stok</a>
+            </t>
+        </div>
+
+        <!-- Material info card -->
+        <div class="card" style="margin-bottom:20px;">
+            <div class="card-header">
+                <span class="card-title" t-esc="material.name"/>
+                <t t-if="material.is_low_stock">
+                    <span class="badge badge-danger">Sisa Sedikit</span>
+                </t>
+                <t t-else="">
+                    <span class="badge badge-success">Stok Aman</span>
+                </t>
+            </div>
+            <div class="card-body">
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;">
+                    <div>
+                        <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;">Kategori</div>
+                        <div style="font-weight:500;" t-esc="material.category_id.name or '—'"/>
+                    </div>
+                    <div>
+                        <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;">Total Stok</div>
+                        <div style="font-weight:600;font-size:20px;">
+                            <t t-esc="'%.1f' % total_stok"/>
+                            <span style="font-size:13px;color:var(--text-muted);margin-left:4px;" t-esc="material.uom_id.name"/>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;">Stok Minimum</div>
+                        <div style="font-weight:500;">
+                            <t t-esc="'%.1f' % (material.stok_minimum or 0.0)"/>
+                            <span style="font-size:13px;color:var(--text-muted);margin-left:4px;" t-esc="material.uom_id.name"/>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;">Terakhir Ditambahkan</div>
+                        <div style="font-weight:500;">
+                            <t t-if="material.last_added_date">
+                                <t t-esc="material.last_added_date.strftime('%d %b %Y')"/>
+                            </t>
+                            <t t-else="">—</t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Denah section: points that hold this material -->
+        <div class="card" style="margin-bottom:20px;">
+            <div class="card-header">
+                <span class="card-title">Lokasi di Denah Gudang</span>
+                <a t-att-href="'/smi/stok/denah?material_id=' + str(material.id)"
+                   class="btn btn-secondary btn-sm">Lihat Denah Lengkap</a>
+            </div>
+            <div class="card-body" style="padding:16px;">
+                <div class="denah-container" style="position:relative;">
+                    <img src="/inventory_smi/static/src/img/denah.svg" alt="Denah Gudang"
+                         style="width:100%;border-radius:6px;"/>
+                    <t t-foreach="points_with_stock" t-as="pt">
+                        <div style="position:absolute;border-radius:50%;background:#3B82F6;width:14px;height:14px;transform:translate(-50%,-50%);"
+                             t-att-title="pt.name"
+                             t-att-style="'position:absolute;border-radius:50%;background:#3B82F6;width:14px;height:14px;transform:translate(-50%,-50%);left:' + str(pt.koordinat_x) + '%;top:' + str(pt.koordinat_y) + '%;'"/>
+                    </t>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transaction history (entries) -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Riwayat Transaksi</span>
+                <span style="font-size:12px;color:var(--text-muted);">
+                    <t t-esc="len(entries)"/> catatan
+                </span>
+            </div>
+            <div class="card-body" style="padding:0;">
+                <t t-if="entries">
+                    <table class="tbl">
+                        <thead>
+                            <tr>
+                                <th>Tanggal Masuk</th>
+                                <th>Lokasi</th>
+                                <th>Jumlah Awal</th>
+                                <th>Stok Tersedia</th>
+                                <th>Status</th>
+                                <th>Dicatat Oleh</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="entries" t-as="entry">
+                                <tr>
+                                    <td style="color:var(--text-muted);font-size:13px;">
+                                        <t t-if="entry.tanggal_masuk">
+                                            <t t-esc="entry.tanggal_masuk.strftime('%d %b %Y %H:%M')"/>
+                                        </t>
+                                        <t t-else="">—</t>
+                                    </td>
+                                    <td t-esc="entry.inventory_point_id.name or '—'"/>
+                                    <td>
+                                        <t t-esc="'%.1f' % entry.jumlah_awal"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="'%.1f' % entry.jumlah_tersedia"/>
+                                    </td>
+                                    <td>
+                                        <t t-if="entry.state == 'tersedia'">
+                                            <span class="badge badge-success">Tersedia</span>
+                                        </t>
+                                        <t t-elif="entry.state == 'habis'">
+                                            <span class="badge badge-danger">Habis</span>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="badge badge-grey" t-esc="entry.state"/>
+                                        </t>
+                                    </td>
+                                    <td style="color:var(--text-muted);" t-esc="entry.user_id.name or '—'"/>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </t>
+                <t t-else="">
+                    <div class="empty">Belum ada transaksi stok untuk bahan ini.</div>
+                </t>
+            </div>
+        </div>
+
+    </t>
+</template>
+
+</data>
+</odoo>
