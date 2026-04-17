@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+<template id="dashboard_page" name="SMI Dashboard">
+    <t t-call="inventory_smi.layout">
+        <t t-set="page_title">Dashboard</t>
+
+        <!-- ===================================================
+             ROW 1 — Stat Cards
+        ==================================================== -->
+        <div class="stat-grid">
+
+            <!-- Total Bahan -->
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                    </svg>
+                </div>
+                <div class="stat-label">Total Bahan</div>
+                <div class="stat-value" t-esc="total_bahan"/>
+                <span class="stat-trend neu">jenis bahan aktif</span>
+            </div>
+
+            <!-- Total Stok -->
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                        <path d="M16 3H8L6 7h12l-2-4z"/>
+                    </svg>
+                </div>
+                <div class="stat-label">Total Stok</div>
+                <div class="stat-value" t-esc="'%.0f' % total_stok"/>
+                <span class="stat-trend neu">unit tersedia</span>
+            </div>
+
+            <!-- Order Aktif -->
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                    </svg>
+                </div>
+                <div class="stat-label">Order Aktif</div>
+                <div class="stat-value" t-esc="active_orders"/>
+                <span class="stat-trend neu">sedang dikonfirmasi</span>
+            </div>
+
+            <!-- Bahan Sisa Sedikit -->
+            <div class="stat-card">
+                <div class="stat-icon red">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                </div>
+                <div class="stat-label">Sisa Sedikit</div>
+                <t t-if="low_stock_count &gt; 0">
+                    <div class="stat-value danger" t-esc="low_stock_count"/>
+                    <span class="stat-trend down">perlu restock</span>
+                </t>
+                <t t-else="">
+                    <div class="stat-value" t-esc="low_stock_count"/>
+                    <span class="stat-trend up">stok aman</span>
+                </t>
+            </div>
+
+        </div><!-- /stat-grid -->
+
+        <!-- ===================================================
+             ROW 2 — Daftar Bahan (left) + Denah Mini (right)
+        ==================================================== -->
+        <div class="row-60-40">
+
+            <!-- Daftar Bahan -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Daftar Bahan</span>
+                    <span style="font-size:12px;color:var(--text-muted);">Prioritas stok rendah</span>
+                </div>
+                <div class="card-body">
+                    <t t-if="top5_bahan">
+                        <table class="tbl">
+                            <thead>
+                                <tr>
+                                    <th>Nama Bahan</th>
+                                    <th>Total Stok</th>
+                                    <th>Terakhir Ditambahkan</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="top5_bahan" t-as="mat">
+                                    <tr>
+                                        <td>
+                                            <span style="font-weight:500;" t-esc="mat.name"/>
+                                            <div style="font-size:11px;color:var(--text-muted);" t-esc="mat.category_id.name"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="'%.1f' % mat.total_stok"/>
+                                            <span style="color:var(--text-muted);margin-left:4px;" t-esc="mat.uom_id.name"/>
+                                        </td>
+                                        <td style="color:var(--text-muted);font-size:13px;">
+                                            <t t-if="mat.last_added_date">
+                                                <t t-esc="mat.last_added_date.strftime('%d %b %Y')"/>
+                                            </t>
+                                            <t t-else="">—</t>
+                                        </td>
+                                        <td>
+                                            <t t-if="mat.is_low_stock">
+                                                <span class="badge badge-danger">Sisa Sedikit</span>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </t>
+                    <t t-else="">
+                        <div class="empty">Belum ada bahan baku tercatat.</div>
+                    </t>
+                </div>
+                <div class="card-footer">
+                    <t t-if="not is_direktur">
+                        <a href="/smi/stok/tambah" class="btn btn-primary btn-sm">+ Tambah Stok</a>
+                    </t>
+                    <a href="/smi/stok" class="btn btn-secondary btn-sm">Lihat Semua</a>
+                </div>
+            </div>
+
+            <!-- Denah Mini -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Denah Gudang</span>
+                    <span style="font-size:12px;color:var(--text-muted);">Titik inventori</span>
+                </div>
+                <div class="card-body" style="padding:16px;">
+                    <div class="mini-denah" id="mini-denah-wrap">
+                        <img src="/inventory_smi/static/src/img/denah.svg" alt="Denah" style="width:100%;border-radius:6px;"/>
+                        <!-- Inventory point overlays -->
+                        <t t-foreach="map_points" t-as="pt">
+                            <div class="mini-denah-pt"
+                                 t-att-title="pt['name']"
+                                 t-att-style="'left:' + str(pt['x']) + '%;top:' + str(pt['y']) + '%;background:' + pt['color'] + ';'"/>
+                        </t>
+                    </div>
+                    <!-- Legend -->
+                    <div style="display:flex;gap:12px;margin-top:10px;font-size:11px;color:var(--text-muted);">
+                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#10B981;margin-right:4px;"/>Aman</span>
+                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#F59E0B;margin-right:4px;"/>Sedikit</span>
+                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#EF4444;margin-right:4px;"/>Habis</span>
+                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#94A3B8;margin-right:4px;"/>Kosong</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="/smi/stok/denah" class="btn btn-secondary btn-sm">Lihat Denah Lengkap</a>
+                </div>
+            </div>
+
+        </div><!-- /row-60-40 -->
+
+        <!-- ===================================================
+             ROW 3 — Order Terbaru (left) + Aktivitas Terbaru (right)
+        ==================================================== -->
+        <div class="row-50-50">
+
+            <!-- Order Terbaru -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Order Terbaru</span>
+                </div>
+                <div class="card-body">
+                    <t t-if="recent_orders">
+                        <table class="tbl">
+                            <thead>
+                                <tr>
+                                    <th>Pesanan</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="recent_orders" t-as="order">
+                                    <tr style="cursor:pointer;" t-att-data-href="'/smi/order/' + str(order.id)" onclick="window.location=this.dataset.href">
+                                        <td>
+                                            <span style="font-weight:500;" t-esc="order.name"/>
+                                            <t t-if="order.no_spk">
+                                                <div style="font-size:11px;color:var(--text-muted);" t-esc="order.no_spk"/>
+                                            </t>
+                                        </td>
+                                        <td style="font-size:13px;color:var(--text-muted);">
+                                            <t t-esc="order.tanggal.strftime('%d %b %Y') if order.tanggal else '—'"/>
+                                        </td>
+                                        <td>
+                                            <t t-if="order.state == 'draft'">
+                                                <span class="badge badge-grey">Draft</span>
+                                            </t>
+                                            <t t-elif="order.state == 'dikonfirmasi'">
+                                                <span class="badge badge-blue">Dikonfirmasi</span>
+                                            </t>
+                                            <t t-elif="order.state == 'selesai'">
+                                                <span class="badge badge-success">Selesai</span>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="badge badge-danger">Dibatalkan</span>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </t>
+                    <t t-else="">
+                        <div class="empty">Belum ada order.</div>
+                    </t>
+                </div>
+                <div class="card-footer">
+                    <t t-if="not is_direktur">
+                        <a href="/smi/order/tambah" class="btn btn-primary btn-sm">+ Tambah Order</a>
+                    </t>
+                    <a href="/smi/order" class="btn btn-secondary btn-sm">Lihat Semua</a>
+                </div>
+            </div>
+
+            <!-- Aktivitas Terbaru -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Aktivitas Terbaru</span>
+                </div>
+                <div class="card-body">
+                    <t t-if="recent_activity">
+                        <t t-foreach="recent_activity" t-as="log">
+                            <div class="activity-item">
+                                <div class="avatar"
+                                     t-att-style="'background:' + ('#3B82F6' if log_index % 3 == 0 else ('#10B981' if log_index % 3 == 1 else '#8B5CF6'))">
+                                    <t t-esc="(log.user_id.name or 'U')[0].upper()"/>
+                                </div>
+                                <div style="flex:1;min-width:0;">
+                                    <div style="font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;">
+                                        <span t-esc="log.user_id.name or '—'"/>
+                                        <t t-if="log.tipe == 'stok_masuk'">
+                                            <span class="badge badge-success" style="font-size:11px;">Stok Masuk</span>
+                                        </t>
+                                        <t t-elif="log.tipe == 'stok_keluar'">
+                                            <span class="badge badge-blue" style="font-size:11px;">Stok Keluar</span>
+                                        </t>
+                                        <t t-elif="log.tipe in ('order_dibuat', 'order_selesai')">
+                                            <span class="badge badge-warning" style="font-size:11px;">Order</span>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="badge badge-grey" style="font-size:11px;" t-esc="log.tipe.replace('_', ' ').title()"/>
+                                        </t>
+                                    </div>
+                                    <div class="activity-desc" t-esc="log.deskripsi"/>
+                                    <div class="activity-meta">
+                                        <t t-if="log.jabatan"><t t-esc="log.jabatan"/> · </t>
+                                        <t t-esc="log.tanggal.strftime('%d %b %Y %H:%M') if log.tanggal else ''"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </t>
+                    <t t-else="">
+                        <div class="empty">Belum ada aktivitas.</div>
+                    </t>
+                </div>
+                <div class="card-footer">
+                    <a href="/smi/activity" class="btn btn-secondary btn-sm">Lihat Semua</a>
+                </div>
+            </div>
+
+        </div><!-- /row-50-50 -->
+
+    </t>
+</template>
+
+</data>
+</odoo>
