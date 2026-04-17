@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+<template id="order_list_page" name="SMI Order List">
+    <t t-call="inventory_smi.layout">
+        <t t-set="page_title">Daftar Order</t>
+
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <form method="get" action="/smi/order"
+                  style="display:flex;gap:8px;align-items:center;flex:1;">
+                <input type="text" name="search" class="form-control"
+                       placeholder="Cari nama pesanan..."
+                       t-att-value="search"/>
+                <select name="status" class="form-control" style="width:180px;">
+                    <option value="">Semua Status</option>
+                    <option value="draft"
+                            t-att-selected="'selected' if status == 'draft' else None">Draft</option>
+                    <option value="dikonfirmasi"
+                            t-att-selected="'selected' if status == 'dikonfirmasi' else None">Dikonfirmasi</option>
+                    <option value="selesai"
+                            t-att-selected="'selected' if status == 'selesai' else None">Selesai</option>
+                    <option value="dibatalkan"
+                            t-att-selected="'selected' if status == 'dibatalkan' else None">Dibatalkan</option>
+                </select>
+                <button type="submit" class="btn btn-secondary btn-sm">Cari</button>
+            </form>
+            <div style="display:flex;gap:8px;">
+                <t t-if="not is_direktur">
+                    <a href="/smi/order/tambah" class="btn btn-primary btn-sm">+ Tambah Order</a>
+                </t>
+            </div>
+        </div>
+
+        <!-- Table Card -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Daftar Order</span>
+                <span style="font-size:12px;color:var(--text-muted);">
+                    <t t-esc="len(orders)"/> order
+                </span>
+            </div>
+            <div class="card-body" style="padding:0;">
+                <t t-if="orders">
+                    <table class="tbl">
+                        <thead>
+                            <tr>
+                                <th>Nama Pesanan</th>
+                                <th>No. SPK</th>
+                                <th>Tanggal</th>
+                                <th>Dibuat Oleh</th>
+                                <th>Status</th>
+                                <th style="width:120px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="orders" t-as="ord">
+                                <tr style="cursor:pointer;"
+                                    t-att-data-href="'/smi/order/' + str(ord.id)"
+                                    onclick="window.location=this.dataset.href">
+                                    <td style="font-weight:500;" t-esc="ord.name"/>
+                                    <td style="color:var(--text-muted);">
+                                        <t t-esc="ord.no_spk or '-'"/>
+                                    </td>
+                                    <td t-esc="ord.tanggal"/>
+                                    <td style="color:var(--text-muted);" t-esc="ord.user_id.name"/>
+                                    <td>
+                                        <t t-if="ord.state == 'draft'">
+                                            <span class="badge badge-grey">Draft</span>
+                                        </t>
+                                        <t t-elif="ord.state == 'dikonfirmasi'">
+                                            <span class="badge badge-blue">Dikonfirmasi</span>
+                                        </t>
+                                        <t t-elif="ord.state == 'selesai'">
+                                            <span class="badge badge-success">Selesai</span>
+                                        </t>
+                                        <t t-elif="ord.state == 'dibatalkan'">
+                                            <span class="badge badge-danger">Dibatalkan</span>
+                                        </t>
+                                    </td>
+                                    <td onclick="event.stopPropagation()" style="display:flex;gap:6px;">
+                                        <a t-att-href="'/smi/order/' + str(ord.id)"
+                                           class="btn btn-secondary btn-sm">Detail</a>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </t>
+                <t t-else="">
+                    <div class="empty">Tidak ada order ditemukan.</div>
+                </t>
+            </div>
+        </div>
+
+    </t>
+</template>
+
+</data>
+</odoo>

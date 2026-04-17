@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+<template id="order_form_step2_page" name="SMI Order Form Step 2">
+    <t t-call="inventory_smi.layout">
+        <t t-set="page_title">Tambah Order — Langkah 2</t>
+
+        <!-- Step indicator -->
+        <div style="display:flex;gap:0;margin-bottom:24px;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;">
+                <div style="width:28px;height:28px;border-radius:50%;background:var(--success);
+                            color:#fff;display:flex;align-items:center;justify-content:center;
+                            font-size:13px;font-weight:600;">✓</div>
+                <span style="font-size:13px;color:var(--text-muted);">Info Pesanan</span>
+            </div>
+            <div style="flex:1;height:2px;background:var(--primary);margin:0 12px;"/>
+            <div style="display:flex;align-items:center;gap:8px;">
+                <div style="width:28px;height:28px;border-radius:50%;background:var(--primary);
+                            color:#fff;display:flex;align-items:center;justify-content:center;
+                            font-size:13px;font-weight:600;">2</div>
+                <span style="font-size:13px;font-weight:600;color:var(--primary);">Pilih Bahan</span>
+            </div>
+            <div style="flex:1;height:2px;background:var(--border);margin:0 12px;"/>
+            <div style="display:flex;align-items:center;gap:8px;">
+                <div style="width:28px;height:28px;border-radius:50%;background:var(--border);
+                            color:var(--text-muted);display:flex;align-items:center;justify-content:center;
+                            font-size:13px;font-weight:600;">3</div>
+                <span style="font-size:13px;color:var(--text-muted);">Konfirmasi</span>
+            </div>
+        </div>
+
+        <!-- Order summary header -->
+        <div class="card" style="margin-bottom:16px;padding:16px 20px;
+                                  display:flex;gap:24px;align-items:center;">
+            <div>
+                <div style="font-size:12px;color:var(--text-muted);">Nama Pesanan</div>
+                <div style="font-size:15px;font-weight:600;" t-esc="order.name"/>
+            </div>
+            <div>
+                <div style="font-size:12px;color:var(--text-muted);">No. SPK</div>
+                <div style="font-size:14px;"><t t-esc="order.no_spk or '-'"/></div>
+            </div>
+            <div>
+                <div style="font-size:12px;color:var(--text-muted);">Tanggal</div>
+                <div style="font-size:14px;" t-esc="order.tanggal"/>
+            </div>
+        </div>
+
+        <!-- Existing order lines -->
+        <div class="card" style="margin-bottom:16px;">
+            <div class="card-header">
+                <span class="card-title">Bahan yang Dibutuhkan</span>
+            </div>
+            <div class="card-body" style="padding:0;">
+                <t t-if="order.order_line_ids">
+                    <table class="tbl">
+                        <thead>
+                            <tr>
+                                <th>Bahan</th>
+                                <th>Jumlah</th>
+                                <th>Stok Tersedia</th>
+                                <th>Mode</th>
+                                <th>Status</th>
+                                <th>Preview / Pick Manual</th>
+                                <th style="width:60px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="order.order_line_ids" t-as="line">
+                                <tr>
+                                    <td style="font-weight:500;" t-esc="line.material_id.name"/>
+                                    <td>
+                                        <t t-esc="'%.1f' % line.jumlah_dibutuhkan"/>
+                                        <span style="color:var(--text-muted);font-size:12px;margin-left:4px;"
+                                              t-esc="line.material_id.uom_id.name"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="'%.1f' % line.material_id.total_stok"/>
+                                        <span style="color:var(--text-muted);font-size:12px;margin-left:4px;"
+                                              t-esc="line.material_id.uom_id.name"/>
+                                    </td>
+                                    <td>
+                                        <t t-if="line.mode_pick == 'auto'">
+                                            <span class="badge badge-blue">Otomatis (FIFO)</span>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="badge badge-grey">Manual</span>
+                                        </t>
+                                    </td>
+                                    <td>
+                                        <t t-if="line.is_sufficient">
+                                            <span class="badge badge-success">Stok Cukup</span>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="badge badge-danger">Stok Tidak Cukup</span>
+                                        </t>
+                                    </td>
+                                    <td>
+                                        <!-- FIFO preview -->
+                                        <t t-if="line.mode_pick == 'auto' and line.id in fifo_previews and fifo_previews[line.id]">
+                                            <div style="font-size:11px;color:var(--text-muted);">
+                                                <div style="font-weight:600;margin-bottom:4px;">Akan diambil (FIFO):</div>
+                                                <t t-foreach="fifo_previews[line.id]" t-as="fp">
+                                                    <div>
+                                                        <t t-esc="fp['point_name']"/> —
+                                                        <t t-esc="'%.1f' % fp['jumlah_diambil']"/>
+                                                        <t t-if="fp['tanggal_masuk']">
+                                                            (Masuk: <t t-esc="fp['tanggal_masuk']"/>)
+                                                        </t>
+                                                    </div>
+                                                </t>
+                                            </div>
+                                        </t>
+                                        <!-- Manual picks -->
+                                        <t t-if="line.mode_pick == 'manual'">
+                                            <div style="font-size:11px;">
+                                                <t t-if="line.order_pick_ids">
+                                                    <div style="margin-bottom:6px;">
+                                                        <t t-foreach="line.order_pick_ids" t-as="pick">
+                                                            <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+                                                                <span>
+                                                                    <t t-esc="pick.inventory_point_id.name"/> —
+                                                                    <t t-esc="'%.1f' % pick.jumlah_diambil"/>
+                                                                </span>
+                                                                <form method="post"
+                                                                      t-att-action="'/smi/order/tambah/step2?order_id=' + str(order.id)"
+                                                                      style="display:inline;">
+                                                                    <input type="hidden" name="csrf_token"
+                                                                           t-att-value="request.csrf_token()"/>
+                                                                    <input type="hidden" name="action" value="remove_manual_pick"/>
+                                                                    <input type="hidden" name="pick_id"
+                                                                           t-att-value="str(pick.id)"/>
+                                                                    <button type="submit" class="btn btn-sm"
+                                                                            style="padding:2px 8px;font-size:11px;
+                                                                                   color:var(--danger);background:none;border:none;">✕</button>
+                                                                </form>
+                                                            </div>
+                                                        </t>
+                                                    </div>
+                                                </t>
+                                                <!-- Add manual pick form -->
+                                                <details style="margin-top:4px;">
+                                                    <summary style="cursor:pointer;color:var(--primary);font-weight:500;">
+                                                        + Tambah Titik Pengambilan
+                                                    </summary>
+                                                    <form method="post" style="margin-top:8px;"
+                                                          t-att-action="'/smi/order/tambah/step2?order_id=' + str(order.id)">
+                                                        <input type="hidden" name="csrf_token"
+                                                               t-att-value="request.csrf_token()"/>
+                                                        <input type="hidden" name="action" value="add_manual_pick"/>
+                                                        <input type="hidden" name="line_id"
+                                                               t-att-value="str(line.id)"/>
+                                                        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                                                            <select name="stock_entry_id" class="form-control"
+                                                                    style="width:auto;font-size:12px;">
+                                                                <t t-foreach="points_with_stock" t-as="pt">
+                                                                    <t t-foreach="pt.stock_entry_ids.filtered(lambda e: e.material_id.id == line.material_id.id and e.state == 'tersedia')" t-as="se">
+                                                                        <option t-att-value="str(se.id)">
+                                                                            <t t-esc="pt.name"/> —
+                                                                            Sisa: <t t-esc="'%.1f' % se.jumlah_tersisa"/>
+                                                                            <t t-esc="line.material_id.uom_id.name"/>
+                                                                        </option>
+                                                                    </t>
+                                                                </t>
+                                                            </select>
+                                                            <input type="number" name="jumlah_diambil"
+                                                                   class="form-control"
+                                                                   style="width:80px;font-size:12px;"
+                                                                   placeholder="Jumlah" min="0.01" step="0.01"/>
+                                                            <button type="submit" class="btn btn-primary btn-sm">Tambah</button>
+                                                        </div>
+                                                    </form>
+                                                </details>
+                                            </div>
+                                        </t>
+                                    </td>
+                                    <td>
+                                        <form method="post"
+                                              t-att-action="'/smi/order/tambah/step2?order_id=' + str(order.id)">
+                                            <input type="hidden" name="csrf_token"
+                                                   t-att-value="request.csrf_token()"/>
+                                            <input type="hidden" name="action" value="remove_line"/>
+                                            <input type="hidden" name="line_id" t-att-value="str(line.id)"/>
+                                            <button type="submit" class="btn btn-sm"
+                                                    style="color:var(--danger);background:none;border:none;
+                                                           font-size:16px;cursor:pointer;">✕</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </t>
+                <t t-else="">
+                    <div class="empty">Belum ada bahan. Tambahkan bahan di bawah.</div>
+                </t>
+            </div>
+        </div>
+
+        <!-- Add material line form -->
+        <div class="card" style="margin-bottom:16px;">
+            <div class="card-header">
+                <span class="card-title">Tambah Bahan</span>
+            </div>
+            <div class="card-body" style="padding:20px;">
+                <form method="post"
+                      t-att-action="'/smi/order/tambah/step2?order_id=' + str(order.id)">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <input type="hidden" name="action" value="add_line"/>
+                    <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
+                        <div style="flex:2;min-width:180px;">
+                            <label style="display:block;font-size:12px;font-weight:500;
+                                          color:var(--text-muted);margin-bottom:4px;">Bahan</label>
+                            <select name="material_id" class="form-control">
+                                <option value="">— Pilih Bahan —</option>
+                                <t t-foreach="materials" t-as="mat">
+                                    <option t-att-value="str(mat.id)">
+                                        <t t-esc="mat.name"/> (Stok: <t t-esc="'%.1f' % mat.total_stok"/>
+                                        <t t-esc="mat.uom_id.name"/>)
+                                    </option>
+                                </t>
+                            </select>
+                        </div>
+                        <div style="flex:1;min-width:100px;">
+                            <label style="display:block;font-size:12px;font-weight:500;
+                                          color:var(--text-muted);margin-bottom:4px;">Jumlah</label>
+                            <input type="number" name="jumlah_dibutuhkan" class="form-control"
+                                   placeholder="0" min="0.01" step="0.01"/>
+                        </div>
+                        <div style="flex:1;min-width:140px;">
+                            <label style="display:block;font-size:12px;font-weight:500;
+                                          color:var(--text-muted);margin-bottom:4px;">Mode Pengambilan</label>
+                            <select name="mode_pick" class="form-control">
+                                <option value="auto">Otomatis (FIFO)</option>
+                                <option value="manual">Manual</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary">+ Tambah</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div style="display:flex;gap:8px;">
+            <a t-att-href="'/smi/order/tambah'" class="btn btn-secondary">← Kembali</a>
+            <form method="post"
+                  t-att-action="'/smi/order/tambah/step2?order_id=' + str(order.id)"
+                  style="display:inline;">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <input type="hidden" name="action" value="next"/>
+                <button type="submit" class="btn btn-primary">
+                    Lanjut ke Konfirmasi →
+                </button>
+            </form>
+        </div>
+
+    </t>
+</template>
+
+</data>
+</odoo>

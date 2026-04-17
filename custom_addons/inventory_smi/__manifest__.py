@@ -22,6 +22,11 @@
         'views/stock_views.xml',
         'views/menu_views.xml',
         'views/order_views.xml',
+        'views/order_list_template.xml',
+        'views/order_form_step1_template.xml',
+        'views/order_form_step2_template.xml',
+        'views/order_form_step3_template.xml',
+        'views/order_detail_template.xml',
     ],
     'assets': {
         'web.assets_backend': [

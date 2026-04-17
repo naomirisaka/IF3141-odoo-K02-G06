@@ -6,3 +6,4 @@ from . import test_activity_notif
 from . import test_map_api
 from . import test_dashboard
 from . import test_stock_ui
+from . import test_order_ui
