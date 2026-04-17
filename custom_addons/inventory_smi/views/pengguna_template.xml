@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+<template id="pengguna_page" name="SMI Pengguna Page">
+    <t t-call="inventory_smi.layout">
+        <t t-set="page_title">Manajemen Pengguna</t>
+
+        <!-- Toolbar -->
+        <div class="toolbar" style="margin-bottom:16px;">
+            <form method="get" action="/smi/pengguna"
+                  style="display:flex;gap:8px;align-items:center;flex:1;">
+                <input type="text" name="search" class="form-control"
+                       placeholder="Cari nama pengguna..."
+                       t-att-value="search"/>
+                <button type="submit" class="btn btn-secondary btn-sm">Cari</button>
+                <t t-if="search">
+                    <a href="/smi/pengguna" class="btn btn-secondary btn-sm">Reset</a>
+                </t>
+            </form>
+            <div style="font-size:13px;color:var(--text-muted);align-self:center;">
+                <t t-esc="len(users_data)"/> pengguna
+            </div>
+        </div>
+
+        <!-- Users table -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Daftar Pengguna</span>
+            </div>
+            <div class="card-body" style="padding:0;">
+                <t t-if="users_data">
+                    <table class="tbl">
+                        <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th>Login</th>
+                                <th>Jabatan / Role</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="users_data" t-as="ud">
+                                <tr>
+                                    <td>
+                                        <div style="display:flex;align-items:center;gap:8px;">
+                                            <div class="avatar"
+                                                 t-att-style="'background:' + (['#3B82F6','#10B981','#F59E0B','#EF4444','#8B5CF6'][ud['user'].id % 5]) + ';'">
+                                                <t t-esc="(ud['user'].name or 'U')[0].upper()"/>
+                                            </div>
+                                            <span style="font-weight:500;"
+                                                  t-esc="ud['user'].name"/>
+                                        </div>
+                                    </td>
+                                    <td style="color:var(--text-muted);"
+                                        t-esc="ud['user'].login"/>
+                                    <td>
+                                        <t t-if="ud['role'] == 'Admin'">
+                                            <span class="badge badge-blue">Admin</span>
+                                        </t>
+                                        <t t-elif="ud['role'] == 'Kepala Produksi'">
+                                            <span class="badge badge-success">Kepala Produksi</span>
+                                        </t>
+                                        <t t-elif="ud['role'] == 'Staf Produksi'">
+                                            <span class="badge badge-grey">Staf Produksi</span>
+                                        </t>
+                                        <t t-elif="ud['role'] == 'Direktur'">
+                                            <span class="badge badge-warning">Direktur</span>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="badge badge-grey">
+                                                <t t-esc="ud['role']"/>
+                                            </span>
+                                        </t>
+                                    </td>
+                                    <td style="color:var(--text-muted);">
+                                        <t t-esc="ud['user'].email or '-'"/>
+                                    </td>
+                                    <td>
+                                        <t t-if="ud['user'].active">
+                                            <span class="badge badge-success">Aktif</span>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="badge badge-danger">Nonaktif</span>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </t>
+                <t t-else="">
+                    <div class="empty">Tidak ada pengguna ditemukan.</div>
+                </t>
+            </div>
+        </div>
+
+        <div style="margin-top:16px;padding:12px 16px;background:#EFF6FF;
+                    border:1px solid #BFDBFE;border-radius:8px;font-size:13px;color:#1E40AF;">
+            ℹ️ Manajemen pengguna lengkap tersedia di
+            <a href="/odoo/settings/users" style="color:#1D4ED8;font-weight:600;">
+                Odoo Settings → Users
+            </a>.
+        </div>
+
+    </t>
+</template>
+
+</data>
+</odoo>
