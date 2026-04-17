@@ -21,4 +21,5 @@ __pycache__/
 .idea/
 
 # Planning docs (local only)
-
+PLAN.md
+IMPLEMENTATION.md

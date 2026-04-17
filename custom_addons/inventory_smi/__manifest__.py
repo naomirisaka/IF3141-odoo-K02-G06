@@ -18,7 +18,10 @@
         'views/order_views.xml',
     ],
     'assets': {
-        'web.assets_backend': [],
+        'web.assets_backend': [
+            'inventory_smi/static/src/css/smi_theme.css',
+            'inventory_smi/static/src/js/components/MapWidget.js',
+        ],
     },
     'installable': True,
     'application': True,
