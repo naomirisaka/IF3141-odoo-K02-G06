@@ -27,6 +27,7 @@
         'views/order_form_step2_template.xml',
         'views/order_form_step3_template.xml',
         'views/order_detail_template.xml',
+        'views/activity_template.xml',
     ],
     'assets': {
         'web.assets_backend': [
