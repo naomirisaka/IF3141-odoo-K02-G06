@@ -11,6 +11,7 @@
         'security/ir.model.access.csv',
         'data/demo_users.xml',
         'data/email_templates.xml',
+        'data/seed_materials.xml',
         'views/auth_templates.xml',
         'views/layout_template.xml',
         'views/dashboard_views.xml',
@@ -28,6 +29,7 @@
         'views/order_form_step3_template.xml',
         'views/order_detail_template.xml',
         'views/activity_template.xml',
+        'views/pengguna_template.xml',
     ],
     'assets': {
         'web.assets_backend': [

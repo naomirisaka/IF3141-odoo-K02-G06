@@ -7,35 +7,35 @@ from odoo.tools import mute_logger
 class TestUoMModel(TransactionCase):
 
     def test_uom_create(self):
-        uom = self.env['smi.uom'].create({'name': 'Lembar'})
-        self.assertEqual(uom.name, 'Lembar')
+        uom = self.env['smi.uom'].create({'name': 'Lembar-mdl-test'})
+        self.assertEqual(uom.name, 'Lembar-mdl-test')
 
     def test_uom_unique_name(self):
-        self.env['smi.uom'].create({'name': 'Rim'})
+        self.env['smi.uom'].create({'name': 'Rim-mdl-test'})
         with mute_logger('odoo.sql_db'):
             with self.assertRaises(Exception):
-                self.env['smi.uom'].create({'name': 'Rim'})
+                self.env['smi.uom'].create({'name': 'Rim-mdl-test'})
 
 
 class TestMaterialCategoryModel(TransactionCase):
 
     def test_category_create(self):
-        cat = self.env['smi.material.category'].create({'name': 'Kertas'})
-        self.assertEqual(cat.name, 'Kertas')
+        cat = self.env['smi.material.category'].create({'name': 'Kertas-mdl-test'})
+        self.assertEqual(cat.name, 'Kertas-mdl-test')
 
     def test_category_unique_name(self):
-        self.env['smi.material.category'].create({'name': 'Tinta'})
+        self.env['smi.material.category'].create({'name': 'Tinta-mdl-test'})
         with mute_logger('odoo.sql_db'):
             with self.assertRaises(Exception):
-                self.env['smi.material.category'].create({'name': 'Tinta'})
+                self.env['smi.material.category'].create({'name': 'Tinta-mdl-test'})
 
 
 class TestMaterialModel(TransactionCase):
 
     def setUp(self):
         super().setUp()
-        self.uom = self.env['smi.uom'].create({'name': 'Lembar'})
-        self.category = self.env['smi.material.category'].create({'name': 'Kertas'})
+        self.uom = self.env['smi.uom'].create({'name': 'Lembar-mdl-test'})
+        self.category = self.env['smi.material.category'].create({'name': 'Kertas-mdl-test'})
 
     def test_material_create_minimal(self):
         mat = self.env['smi.material'].create({
@@ -128,8 +128,8 @@ class TestStockEntryModel(TransactionCase):
 
     def setUp(self):
         super().setUp()
-        self.uom = self.env['smi.uom'].create({'name': 'Rim'})
-        self.category = self.env['smi.material.category'].create({'name': 'Kertas'})
+        self.uom = self.env['smi.uom'].create({'name': 'Rim-mdl-test'})
+        self.category = self.env['smi.material.category'].create({'name': 'Kertas-mdl-test'})
         self.material = self.env['smi.material'].create({
             'name': 'Kertas HVS 80gsm',
             'uom_id': self.uom.id,
@@ -282,8 +282,8 @@ class TestOrderModel(TransactionCase):
 
     def setUp(self):
         super().setUp()
-        self.uom = self.env['smi.uom'].create({'name': 'Lembar'})
-        self.category = self.env['smi.material.category'].create({'name': 'Kertas'})
+        self.uom = self.env['smi.uom'].create({'name': 'Lembar-mdl-test'})
+        self.category = self.env['smi.material.category'].create({'name': 'Kertas-mdl-test'})
         self.material = self.env['smi.material'].create({
             'name': 'Kertas Art Paper',
             'uom_id': self.uom.id,

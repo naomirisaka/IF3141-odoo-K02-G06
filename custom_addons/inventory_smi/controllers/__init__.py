@@ -4,3 +4,4 @@ from . import main
 from . import stock_controller
 from . import order_controller
 from . import activity_controller
+from . import user_controller
