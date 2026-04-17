@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+<template id="stock_form_page" name="SMI Tambah Stok">
+    <t t-call="inventory_smi.layout">
+        <t t-set="page_title">Tambah Stok</t>
+
+        <div class="card" style="max-width:680px;">
+            <div class="card-header">
+                <span class="card-title">Form Tambah Stok</span>
+            </div>
+            <div class="card-body">
+
+                <!-- Error banner -->
+                <t t-if="error">
+                    <div class="alert alert-danger" style="margin-bottom:16px;" t-esc="error"/>
+                </t>
+
+                <form method="post" action="/smi/stok/tambah">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                    <!-- material_id -->
+                    <div class="form-group">
+                        <label class="form-label">Nama Bahan <span style="color:red;">*</span></label>
+                        <select name="material_id" class="form-control" required="required" id="material_id">
+                            <option value="">-- Pilih Bahan --</option>
+                            <t t-foreach="materials" t-as="mat">
+                                <option t-att-value="mat.id"
+                                        t-att-selected="'selected' if post.get('material_id') == str(mat.id) else None"
+                                        t-esc="mat.name"/>
+                            </t>
+                        </select>
+                    </div>
+
+                    <!-- inventory_point -->
+                    <div class="form-group">
+                        <label class="form-label">Titik Inventori <span style="color:red;">*</span></label>
+                        <div style="display:flex;gap:8px;align-items:center;">
+                            <select name="inventory_point_id" class="form-control" required="required" id="inventory_point_id">
+                                <option value="">-- Pilih Lokasi --</option>
+                                <t t-foreach="points" t-as="pt">
+                                    <option t-att-value="pt.id"
+                                            t-att-selected="'selected' if post.get('inventory_point_id') == str(pt.id) else None"
+                                            t-esc="pt.name"/>
+                                </t>
+                            </select>
+                            <button type="button" class="btn btn-secondary btn-sm"
+                                    onclick="document.getElementById('map-modal').style.display='flex'">
+                                Pilih dari Denah
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- jumlah_awal (jumlah) -->
+                    <div class="form-group">
+                        <label class="form-label">Jumlah Masuk <span style="color:red;">*</span></label>
+                        <input type="number" name="jumlah_awal" class="form-control"
+                               min="0.01" step="0.01" required="required"
+                               placeholder="Masukkan jumlah stok"
+                               t-att-value="post.get('jumlah_awal', '')"/>
+                    </div>
+
+                    <!-- tanggal_masuk -->
+                    <div class="form-group">
+                        <label class="form-label">Tanggal Masuk</label>
+                        <input type="datetime-local" name="tanggal_masuk" class="form-control"
+                               t-att-value="post.get('tanggal_masuk', '')"/>
+                        <span style="font-size:12px;color:var(--text-muted);">Kosongkan untuk menggunakan waktu sekarang.</span>
+                    </div>
+
+                    <!-- catatan -->
+                    <div class="form-group">
+                        <label class="form-label">Catatan</label>
+                        <textarea name="catatan" class="form-control" rows="3"
+                                  placeholder="Catatan tambahan (opsional)">
+                            <t t-esc="post.get('catatan', '')"/>
+                        </textarea>
+                    </div>
+
+                    <div style="display:flex;gap:8px;margin-top:24px;">
+                        <button type="submit" class="btn btn-primary">Simpan Stok</button>
+                        <a href="/smi/stok" class="btn btn-secondary">Batal</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Map Modal -->
+        <div id="map-modal"
+             style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;">
+            <div style="background:#fff;border-radius:12px;padding:24px;width:760px;max-width:95vw;max-height:90vh;overflow:auto;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                    <h3 style="margin:0;font-size:16px;font-weight:600;">Pilih Titik dari Denah</h3>
+                    <button type="button" class="btn btn-secondary btn-sm"
+                            onclick="document.getElementById('map-modal').style.display='none'">Tutup</button>
+                </div>
+                <div class="denah-container" style="position:relative;">
+                    <img src="/inventory_smi/static/src/img/denah.svg" alt="Denah Gudang"
+                         style="width:100%;border-radius:6px;"/>
+                    <t t-foreach="points" t-as="pt">
+                        <div class="denah-point" style="position:absolute;cursor:pointer;border-radius:50%;background:#3B82F6;width:16px;height:16px;transform:translate(-50%,-50%);"
+                             t-att-title="pt.name"
+                             t-att-data-id="pt.id"
+                             t-att-data-name="pt.name"
+                             t-att-style="'position:absolute;cursor:pointer;border-radius:50%;background:#3B82F6;width:16px;height:16px;transform:translate(-50%,-50%);left:' + str(pt.koordinat_x) + '%;top:' + str(pt.koordinat_y) + '%;'"
+                             onclick="selectInventoryPoint(this.dataset.id, this.dataset.name)">
+                        </div>
+                    </t>
+                </div>
+                <p style="margin-top:12px;font-size:13px;color:var(--text-muted);">Klik pada titik biru untuk memilih lokasi inventori.</p>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+        function selectInventoryPoint(id, name) {
+            var sel = document.getElementById('inventory_point_id');
+            for (var i = 0; i &lt; sel.options.length; i++) {
+                if (sel.options[i].value == id) {
+                    sel.selectedIndex = i;
+                    break;
+                }
+            }
+            document.getElementById('map-modal').style.display = 'none';
+        }
+        </script>
+
+    </t>
+</template>
+
+</data>
+</odoo>
