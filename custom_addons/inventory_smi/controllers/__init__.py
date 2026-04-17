@@ -2,3 +2,4 @@ from . import auth
 from . import api
 from . import main
 from . import stock_controller
+from . import order_controller

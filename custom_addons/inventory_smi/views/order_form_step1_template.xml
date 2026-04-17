@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+<template id="order_form_step1_page" name="SMI Order Form Step 1">
+    <t t-call="inventory_smi.layout">
+        <t t-set="page_title">Tambah Order — Langkah 1</t>
+
+        <!-- Step indicator -->
+        <div style="display:flex;gap:0;margin-bottom:24px;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;">
+                <div style="width:28px;height:28px;border-radius:50%;background:var(--primary);
+                            color:#fff;display:flex;align-items:center;justify-content:center;
+                            font-size:13px;font-weight:600;">1</div>
+                <span style="font-size:13px;font-weight:600;color:var(--primary);">Info Pesanan</span>
+            </div>
+            <div style="flex:1;height:2px;background:var(--border);margin:0 12px;"/>
+            <div style="display:flex;align-items:center;gap:8px;">
+                <div style="width:28px;height:28px;border-radius:50%;background:var(--border);
+                            color:var(--text-muted);display:flex;align-items:center;justify-content:center;
+                            font-size:13px;font-weight:600;">2</div>
+                <span style="font-size:13px;color:var(--text-muted);">Pilih Bahan</span>
+            </div>
+            <div style="flex:1;height:2px;background:var(--border);margin:0 12px;"/>
+            <div style="display:flex;align-items:center;gap:8px;">
+                <div style="width:28px;height:28px;border-radius:50%;background:var(--border);
+                            color:var(--text-muted);display:flex;align-items:center;justify-content:center;
+                            font-size:13px;font-weight:600;">3</div>
+                <span style="font-size:13px;color:var(--text-muted);">Konfirmasi</span>
+            </div>
+        </div>
+
+        <div class="card" style="max-width:600px;">
+            <div class="card-header">
+                <span class="card-title">Informasi Pesanan</span>
+            </div>
+            <div class="card-body" style="padding:24px;">
+
+                <t t-if="error">
+                    <div style="background:#FEF2F2;border:1px solid #FECACA;color:#991B1B;
+                                border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:14px;">
+                        <t t-esc="error"/>
+                    </div>
+                </t>
+
+                <form method="post" action="/smi/order/tambah">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                    <div style="margin-bottom:16px;">
+                        <label style="display:block;font-size:13px;font-weight:500;
+                                      color:var(--text);margin-bottom:6px;">
+                            Nama Pesanan <span style="color:var(--danger);">*</span>
+                        </label>
+                        <input type="text" name="name" class="form-control"
+                               placeholder="e.g. Cetak Brosur PT. XYZ"
+                               t-att-value="post.get('name', '')" required="required"/>
+                    </div>
+
+                    <div style="margin-bottom:16px;">
+                        <label style="display:block;font-size:13px;font-weight:500;
+                                      color:var(--text);margin-bottom:6px;">No. SPK</label>
+                        <input type="text" name="no_spk" class="form-control"
+                               placeholder="e.g. SPK-001"
+                               t-att-value="post.get('no_spk', '')"/>
+                    </div>
+
+                    <div style="margin-bottom:16px;">
+                        <label style="display:block;font-size:13px;font-weight:500;
+                                      color:var(--text);margin-bottom:6px;">
+                            Tanggal <span style="color:var(--danger);">*</span>
+                        </label>
+                        <input type="date" name="tanggal" class="form-control"
+                               t-att-value="post.get('tanggal', today)"/>
+                    </div>
+
+                    <div style="margin-bottom:24px;">
+                        <label style="display:block;font-size:13px;font-weight:500;
+                                      color:var(--text);margin-bottom:6px;">Catatan</label>
+                        <textarea name="catatan" class="form-control" rows="3"
+                                  placeholder="Catatan tambahan (opsional)">
+                            <t t-esc="post.get('catatan', '')"/>
+                        </textarea>
+                    </div>
+
+                    <div style="display:flex;gap:8px;">
+                        <a href="/smi/order" class="btn btn-secondary">Batal</a>
+                        <button type="submit" class="btn btn-primary">
+                            Lanjut →
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </t>
+</template>
+
+</data>
+</odoo>

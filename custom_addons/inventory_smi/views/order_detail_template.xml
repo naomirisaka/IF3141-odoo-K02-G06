@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+<template id="order_detail_page" name="SMI Order Detail">
+    <t t-call="inventory_smi.layout">
+        <t t-set="page_title">Detail Order</t>
+
+        <t t-if="error">
+            <div style="background:#FEF2F2;border:1px solid #FECACA;color:#991B1B;
+                        border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:14px;">
+                <t t-esc="error"/>
+            </div>
+        </t>
+
+        <!-- Breadcrumb / back -->
+        <div style="margin-bottom:16px;">
+            <a href="/smi/order" style="color:var(--text-muted);font-size:13px;
+                                        text-decoration:none;">← Daftar Order</a>
+        </div>
+
+        <!-- Order header card -->
+        <div class="card" style="margin-bottom:16px;">
+            <div class="card-header">
+                <span class="card-title" t-esc="order.name"/>
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <t t-if="order.state == 'draft'">
+                        <span class="badge badge-grey">Draft</span>
+                    </t>
+                    <t t-elif="order.state == 'dikonfirmasi'">
+                        <span class="badge badge-blue">Dikonfirmasi</span>
+                    </t>
+                    <t t-elif="order.state == 'selesai'">
+                        <span class="badge badge-success">Selesai</span>
+                    </t>
+                    <t t-elif="order.state == 'dibatalkan'">
+                        <span class="badge badge-danger">Dibatalkan</span>
+                    </t>
+
+                    <!-- Action buttons for authorized roles -->
+                    <t t-if="not is_direktur">
+                        <t t-if="order.state == 'draft'">
+                            <a t-att-href="'/smi/order/tambah/step2?order_id=' + str(order.id)"
+                               class="btn btn-secondary btn-sm">Edit Bahan</a>
+                            <form method="post"
+                                  t-att-action="'/smi/order/' + str(order.id)"
+                                  style="display:inline;">
+                                <input type="hidden" name="csrf_token"
+                                       t-att-value="request.csrf_token()"/>
+                                <input type="hidden" name="action" value="cancel"/>
+                                <button type="submit" class="btn btn-sm"
+                                        style="background:#FEF2F2;color:var(--danger);
+                                               border:1px solid #FECACA;">
+                                    Batalkan
+                                </button>
+                            </form>
+                        </t>
+                        <t t-if="order.state == 'dikonfirmasi' and (is_kepala or is_admin)">
+                            <form method="post"
+                                  t-att-action="'/smi/order/' + str(order.id)"
+                                  style="display:inline;">
+                                <input type="hidden" name="csrf_token"
+                                       t-att-value="request.csrf_token()"/>
+                                <input type="hidden" name="action" value="complete"/>
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    Selesaikan
+                                </button>
+                            </form>
+                            <form method="post"
+                                  t-att-action="'/smi/order/' + str(order.id)"
+                                  style="display:inline;">
+                                <input type="hidden" name="csrf_token"
+                                       t-att-value="request.csrf_token()"/>
+                                <input type="hidden" name="action" value="cancel"/>
+                                <button type="submit" class="btn btn-sm"
+                                        style="background:#FEF2F2;color:var(--danger);
+                                               border:1px solid #FECACA;">
+                                    Batalkan
+                                </button>
+                            </form>
+                        </t>
+                    </t>
+                </div>
+            </div>
+            <div class="card-body" style="padding:20px;">
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;">
+                    <div>
+                        <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;">No. SPK</div>
+                        <div style="font-size:14px;font-weight:500;">
+                            <t t-esc="order.no_spk or '-'"/>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;">Tanggal</div>
+                        <div style="font-size:14px;" t-esc="order.tanggal"/>
+                    </div>
+                    <div>
+                        <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;">Dibuat Oleh</div>
+                        <div style="font-size:14px;" t-esc="order.user_id.name"/>
+                    </div>
+                    <div>
+                        <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;">Catatan</div>
+                        <div style="font-size:14px;"><t t-esc="order.catatan or '-'"/></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order lines + pick detail -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Daftar Bahan &amp; Detail Pengambilan</span>
+            </div>
+            <div class="card-body" style="padding:0;">
+                <t t-if="order.order_line_ids">
+                    <t t-foreach="order.order_line_ids" t-as="line">
+                        <div style="padding:16px 20px;border-bottom:1px solid var(--border);">
+                            <div style="display:flex;justify-content:space-between;
+                                        align-items:flex-start;margin-bottom:8px;">
+                                <div>
+                                    <span style="font-size:15px;font-weight:600;"
+                                          t-esc="line.material_id.name"/>
+                                    <span style="margin-left:10px;">
+                                        <t t-if="line.mode_pick == 'auto'">
+                                            <span class="badge badge-blue">Otomatis (FIFO)</span>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="badge badge-grey">Manual</span>
+                                        </t>
+                                    </span>
+                                </div>
+                                <div style="text-align:right;">
+                                    <div style="font-size:13px;color:var(--text-muted);">
+                                        Dibutuhkan:
+                                        <strong>
+                                            <t t-esc="'%.1f' % line.jumlah_dibutuhkan"/>
+                                            <t t-esc="line.material_id.uom_id.name"/>
+                                        </strong>
+                                    </div>
+                                    <div style="font-size:13px;color:var(--text-muted);">
+                                        Terpenuhi:
+                                        <strong>
+                                            <t t-esc="'%.1f' % line.jumlah_terpenuhi"/>
+                                            <t t-esc="line.material_id.uom_id.name"/>
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Pick details (order_pick_ids) -->
+                            <t t-if="line.order_pick_ids">
+                                <div style="margin-top:8px;">
+                                    <div style="font-size:12px;color:var(--text-muted);
+                                                font-weight:600;margin-bottom:6px;">Detail Pengambilan:</div>
+                                    <table class="tbl" style="font-size:13px;">
+                                        <thead>
+                                            <tr>
+                                                <th>Titik Penyimpanan</th>
+                                                <th>Jumlah Diambil</th>
+                                                <th>Batch Masuk</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="line.order_pick_ids" t-as="pick">
+                                                <tr>
+                                                    <td t-esc="pick.inventory_point_id.name"/>
+                                                    <td>
+                                                        <t t-esc="'%.1f' % pick.jumlah_diambil"/>
+                                                        <span style="color:var(--text-muted);margin-left:4px;"
+                                                              t-esc="line.material_id.uom_id.name"/>
+                                                    </td>
+                                                    <td style="color:var(--text-muted);">
+                                                        <t t-esc="pick.stock_entry_id.tanggal_masuk"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">
+                                    Belum ada detail pengambilan.
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+                </t>
+                <t t-else="">
+                    <div class="empty">Tidak ada bahan dalam order ini.</div>
+                </t>
+            </div>
+        </div>
+
+    </t>
+</template>
+
+</data>
+</odoo>
