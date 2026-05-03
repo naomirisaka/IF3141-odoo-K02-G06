@@ -35,6 +35,7 @@ services:
     depends_on:
       - db
       - web
+    tty: true
     volumes:
       - odoo-web-data:/var/lib/odoo
       - ./dump:/backup
