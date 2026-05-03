@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ── Satuan (UoM) ── -->
+        <record id="uom_lembar" model="smi.uom">
+            <field name="name">Lembar</field>
+        </record>
+        <record id="uom_rim" model="smi.uom">
+            <field name="name">Rim</field>
+        </record>
+        <record id="uom_kg" model="smi.uom">
+            <field name="name">Kg</field>
+        </record>
+        <record id="uom_liter" model="smi.uom">
+            <field name="name">Liter</field>
+        </record>
+        <record id="uom_rol" model="smi.uom">
+            <field name="name">Rol</field>
+        </record>
+        <record id="uom_pcs" model="smi.uom">
+            <field name="name">Pcs</field>
+        </record>
+
+        <!-- ── Kategori Bahan ── -->
+        <record id="cat_kertas" model="smi.material.category">
+            <field name="name">Kertas</field>
+        </record>
+        <record id="cat_tinta" model="smi.material.category">
+            <field name="name">Tinta</field>
+        </record>
+        <record id="cat_laminasi" model="smi.material.category">
+            <field name="name">Laminasi</field>
+        </record>
+        <record id="cat_foil" model="smi.material.category">
+            <field name="name">Foil</field>
+        </record>
+        <record id="cat_bahan_kimia" model="smi.material.category">
+            <field name="name">Bahan Kimia</field>
+        </record>
+
+        <!-- ── Bahan Baku Kertas ── -->
+        <record id="mat_kertas_art_120" model="smi.material">
+            <field name="name">Kertas Art Paper 120gsm</field>
+            <field name="uom_id" ref="uom_lembar"/>
+            <field name="category_id" ref="cat_kertas"/>
+            <field name="stok_minimum">500.0</field>
+        </record>
+        <record id="mat_kertas_art_150" model="smi.material">
+            <field name="name">Kertas Art Paper 150gsm</field>
+            <field name="uom_id" ref="uom_lembar"/>
+            <field name="category_id" ref="cat_kertas"/>
+            <field name="stok_minimum">300.0</field>
+        </record>
+        <record id="mat_kertas_hvs_80" model="smi.material">
+            <field name="name">Kertas HVS 80gsm</field>
+            <field name="uom_id" ref="uom_rim"/>
+            <field name="category_id" ref="cat_kertas"/>
+            <field name="stok_minimum">20.0</field>
+        </record>
+        <record id="mat_kertas_dupleks" model="smi.material">
+            <field name="name">Kertas Dupleks 300gsm</field>
+            <field name="uom_id" ref="uom_lembar"/>
+            <field name="category_id" ref="cat_kertas"/>
+            <field name="stok_minimum">200.0</field>
+        </record>
+
+        <!-- ── Bahan Baku Tinta ── -->
+        <record id="mat_tinta_hitam" model="smi.material">
+            <field name="name">Tinta Hitam</field>
+            <field name="uom_id" ref="uom_kg"/>
+            <field name="category_id" ref="cat_tinta"/>
+            <field name="stok_minimum">5.0</field>
+        </record>
+        <record id="mat_tinta_cyan" model="smi.material">
+            <field name="name">Tinta Cyan</field>
+            <field name="uom_id" ref="uom_kg"/>
+            <field name="category_id" ref="cat_tinta"/>
+            <field name="stok_minimum">5.0</field>
+        </record>
+        <record id="mat_tinta_magenta" model="smi.material">
+            <field name="name">Tinta Magenta</field>
+            <field name="uom_id" ref="uom_kg"/>
+            <field name="category_id" ref="cat_tinta"/>
+            <field name="stok_minimum">5.0</field>
+        </record>
+        <record id="mat_tinta_yellow" model="smi.material">
+            <field name="name">Tinta Yellow</field>
+            <field name="uom_id" ref="uom_kg"/>
+            <field name="category_id" ref="cat_tinta"/>
+            <field name="stok_minimum">5.0</field>
+        </record>
+
+        <!-- ── Bahan Baku Laminasi ── -->
+        <record id="mat_laminasi_glossy" model="smi.material">
+            <field name="name">Laminasi Glossy</field>
+            <field name="uom_id" ref="uom_rol"/>
+            <field name="category_id" ref="cat_laminasi"/>
+            <field name="stok_minimum">3.0</field>
+        </record>
+        <record id="mat_laminasi_doff" model="smi.material">
+            <field name="name">Laminasi Doff</field>
+            <field name="uom_id" ref="uom_rol"/>
+            <field name="category_id" ref="cat_laminasi"/>
+            <field name="stok_minimum">3.0</field>
+        </record>
+
+        <!-- ── Bahan Baku Foil ── -->
+        <record id="mat_foil_gold" model="smi.material">
+            <field name="name">Foil Gold</field>
+            <field name="uom_id" ref="uom_rol"/>
+            <field name="category_id" ref="cat_foil"/>
+            <field name="stok_minimum">2.0</field>
+        </record>
+        <record id="mat_foil_silver" model="smi.material">
+            <field name="name">Foil Silver</field>
+            <field name="uom_id" ref="uom_rol"/>
+            <field name="category_id" ref="cat_foil"/>
+            <field name="stok_minimum">2.0</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+<template id="activity_page" name="SMI Activity Page">
+    <t t-call="inventory_smi.layout">
+        <t t-set="page_title">Aktivitas</t>
+
+        <!-- Tabs -->
+        <div style="display:flex;gap:0;border-bottom:2px solid var(--border);
+                    margin-bottom:20px;">
+            <a t-att-href="'/smi/activity?tab=stok' + ('&amp;search=' + search if search else '')"
+               t-att-style="'padding:10px 20px;font-size:14px;font-weight:600;text-decoration:none;border-bottom:2px solid ' + ('var(--primary);color:var(--primary);margin-bottom:-2px;' if tab == 'stok' else 'transparent;color:var(--text-muted);')">
+                Stok
+            </a>
+            <a t-att-href="'/smi/activity?tab=order' + ('&amp;search=' + search if search else '')"
+               t-att-style="'padding:10px 20px;font-size:14px;font-weight:600;text-decoration:none;border-bottom:2px solid ' + ('var(--primary);color:var(--primary);margin-bottom:-2px;' if tab == 'order' else 'transparent;color:var(--text-muted);')">
+                Order
+            </a>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="toolbar" style="margin-bottom:16px;">
+            <form method="get" action="/smi/activity"
+                  style="display:flex;gap:8px;align-items:center;flex:1;">
+                <input type="hidden" name="tab" t-att-value="tab"/>
+                <input type="text" name="search" class="form-control"
+                       placeholder="Cari nama pengguna..."
+                       t-att-value="search"/>
+                <button type="submit" class="btn btn-secondary btn-sm">Cari</button>
+                <t t-if="search">
+                    <a t-att-href="'/smi/activity?tab=' + tab"
+                       class="btn btn-secondary btn-sm">Reset</a>
+                </t>
+            </form>
+            <div style="font-size:13px;color:var(--text-muted);align-self:center;">
+                <t t-esc="len(logs)"/> entri
+                <t t-if="is_staf"> (hanya milik Anda)</t>
+            </div>
+        </div>
+
+        <!-- Activity Table -->
+        <div class="card">
+            <div class="card-body" style="padding:0;">
+                <t t-if="logs">
+                    <table class="tbl">
+                        <thead>
+                            <tr>
+                                <th>Pengguna</th>
+                                <th>Jabatan</th>
+                                <th>Tanggal &amp; Waktu</th>
+                                <th>Tipe Aktivitas</th>
+                                <th>Deskripsi</th>
+                                <th style="width:60px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="logs" t-as="log">
+                                <t t-set="tipe_info" t-value="tipe_labels.get(log.tipe, (log.tipe, 'badge-grey'))"/>
+                                <tr style="cursor:pointer;"
+                                    t-att-data-user="log.user_id.name or '-'"
+                                    t-att-data-jabatan="log.jabatan or '-'"
+                                    t-att-data-tanggal="str(log.tanggal)"
+                                    t-att-data-tipe-label="tipe_info[0]"
+                                    t-att-data-deskripsi="log.deskripsi or ''"
+                                    onclick="openActivityDetailFromRow(this)">
+                                    <td>
+                                        <div style="display:flex;align-items:center;gap:8px;">
+                                            <div class="avatar"
+                                                 t-att-style="'background:' + (['#3B82F6','#10B981','#F59E0B','#EF4444','#8B5CF6'][log.id % 5]) + ';'">
+                                                <t t-esc="(log.user_id.name or 'U')[0].upper()"/>
+                                            </div>
+                                            <span style="font-weight:500;"
+                                                  t-esc="log.user_id.name or '-'"/>
+                                        </div>
+                                    </td>
+                                    <td style="color:var(--text-muted);"
+                                        t-esc="log.jabatan or '-'"/>
+                                    <td style="color:var(--text-muted);font-size:13px;"
+                                        t-esc="log.tanggal"/>
+                                    <td>
+                                        <span t-att-class="'badge ' + tipe_info[1]"
+                                              t-esc="tipe_info[0]"/>
+                                    </td>
+                                    <td style="max-width:320px;font-size:13px;
+                                               white-space:nowrap;overflow:hidden;
+                                               text-overflow:ellipsis;"
+                                        t-esc="log.deskripsi"/>
+                                    <td onclick="event.stopPropagation()">
+                                        <button class="btn btn-secondary btn-sm"
+                                                t-att-data-user="log.user_id.name or '-'"
+                                                t-att-data-jabatan="log.jabatan or '-'"
+                                                t-att-data-tanggal="str(log.tanggal)"
+                                                t-att-data-tipe-label="tipe_info[0]"
+                                                t-att-data-deskripsi="log.deskripsi or ''"
+                                                onclick="openActivityDetailFromRow(this.parentElement.parentElement)">
+                                            Detail
+                                        </button>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </t>
+                <t t-else="">
+                    <div class="empty">Tidak ada aktivitas ditemukan.</div>
+                </t>
+            </div>
+        </div>
+
+        <!-- Detail Modal -->
+        <div id="activityModal"
+             style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);
+                    z-index:1000;align-items:center;justify-content:center;">
+            <div style="background:var(--surface);border-radius:var(--radius);
+                        box-shadow:var(--shadow-md);width:520px;max-width:90vw;
+                        max-height:80vh;overflow-y:auto;">
+                <div style="padding:16px 20px;border-bottom:1px solid var(--border);
+                             display:flex;justify-content:space-between;align-items:center;">
+                    <span style="font-size:16px;font-weight:600;">Detail Aktivitas</span>
+                    <button onclick="document.getElementById('activityModal').style.display='none';"
+                            style="background:none;border:none;font-size:20px;
+                                   cursor:pointer;color:var(--text-muted);line-height:1;">&#215;</button>
+                </div>
+                <div id="activityModalBody" style="padding:20px;">
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+        //<![CDATA[
+        function openActivityDetailFromRow(row) {
+            var d = row.dataset;
+            var fields = [
+                ['Pengguna',         d.user        || '-'],
+                ['Jabatan',          d.jabatan     || '-'],
+                ['Tanggal & Waktu',  d.tanggal     || '-'],
+                ['Tipe Aktivitas',   d.tipeLabel   || '-'],
+                ['Deskripsi',        d.deskripsi   || '-']
+            ];
+            var html = '<div style="display:grid;grid-template-columns:140px 1fr;gap:12px;font-size:14px;">';
+            fields.forEach(function(f) {
+                html += '<div style="color:#64748B;font-weight:500;">' + esc(f[0]) + '</div>';
+                if (f[0] === 'Deskripsi') {
+                    html += '<div style="white-space:pre-wrap;">' + esc(f[1]) + '</div>';
+                } else if (f[0] === 'Tipe Aktivitas') {
+                    html += '<div><span class="badge badge-blue">' + esc(f[1]) + '</span></div>';
+                } else {
+                    html += '<div>' + esc(f[1]) + '</div>';
+                }
+            });
+            html += '</div>';
+            document.getElementById('activityModalBody').innerHTML = html;
+            var modal = document.getElementById('activityModal');
+            modal.style.display = 'flex';
+            modal.onclick = function(e) {
+                if (e.target === modal) modal.style.display = 'none';
+            };
+        }
+        function esc(s) {
+            return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        }
+        //]]>
+        </script>
+
+    </t>
+</template>
+
+</data>
+</odoo>

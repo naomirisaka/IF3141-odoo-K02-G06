@@ -57,4 +57,12 @@ fi
 echo "Starting full stack..."
 "${DC[@]}" up -d
 
+echo "Upgrading inventory_smi module to apply latest access rights..."
+"${DC[@]}" exec -T web odoo -u inventory_smi -d postgres \
+    --db_host=db --db_port=5432 --db_user=odoo --db_password=password \
+    --stop-after-init
+
+echo "Restarting web container..."
+"${DC[@]}" restart web
+
 echo "Done. Database imported."

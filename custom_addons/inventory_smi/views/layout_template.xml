@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+<template id="layout" name="SMI Layout">
+<html lang="id">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Sistem Manajemen Inventaris</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <style>
+    /* ============================================================
+       SMI Design System — D-inventy inspired
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+        --primary:       #3B82F6;
+        --primary-dark:  #1D4ED8;
+        --primary-bg:    #EFF6FF;
+        --danger:        #EF4444;
+        --warning:       #F59E0B;
+        --success:       #10B981;
+        --bg:            #F1F5F9;
+        --surface:       #FFFFFF;
+        --text:          #1E293B;
+        --text-muted:    #64748B;
+        --border:        #E2E8F0;
+        --sidebar-w:     240px;
+        --topbar-h:      64px;
+        --radius:        12px;
+        --shadow:        0 1px 3px rgba(0,0,0,0.08);
+        --shadow-md:     0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    body {
+        font-family: 'Inter', system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+    }
+
+    /* ---- Sidebar ------------------------------------------ */
+    .sidebar {
+        position: fixed;
+        top: 0; left: 0; bottom: 0;
+        width: var(--sidebar-w);
+        background: var(--surface);
+        border-right: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        z-index: 100;
+        overflow-y: auto;
+    }
+
+    .sidebar-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 20px 20px 16px;
+        border-bottom: 1px solid var(--border);
+        text-decoration: none;
+    }
+    .sidebar-brand-icon {
+        width: 36px; height: 36px;
+        background: var(--primary);
+        border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0;
+    }
+    .sidebar-brand-icon svg { width: 20px; height: 20px; fill: #fff; }
+    .sidebar-brand-text { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.3; }
+    .sidebar-brand-sub  { font-size: 11px; color: var(--text-muted); }
+
+    .sidebar-nav { padding: 12px 12px; flex: 1; }
+    .sidebar-section-label {
+        font-size: 11px; font-weight: 600; color: var(--text-muted);
+        text-transform: uppercase; letter-spacing: 0.5px;
+        padding: 8px 8px 4px;
+    }
+
+    .nav-item {
+        display: flex; align-items: center; gap: 10px;
+        padding: 10px 12px;
+        border-radius: 8px;
+        font-size: 14px; font-weight: 500;
+        color: var(--text-muted);
+        text-decoration: none;
+        transition: background 0.15s, color 0.15s;
+        margin-bottom: 2px;
+        cursor: pointer;
+    }
+    .nav-item:hover  { background: var(--bg); color: var(--text); }
+    .nav-item.active { background: var(--primary-bg); color: var(--primary); }
+    .nav-item svg    { width: 18px; height: 18px; flex-shrink: 0; }
+
+    .sidebar-divider { height: 1px; background: var(--border); margin: 8px 0; }
+
+    /* ---- Topbar ------------------------------------------- */
+    .topbar {
+        position: fixed;
+        top: 0; left: var(--sidebar-w); right: 0;
+        height: var(--topbar-h);
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        display: flex; align-items: center;
+        padding: 0 24px; gap: 12px;
+        z-index: 90;
+    }
+    .topbar-title { font-size: 20px; font-weight: 700; color: var(--text); flex: 1; }
+    .topbar-search {
+        display: flex; align-items: center; gap: 8px;
+        background: var(--bg); border: 1px solid var(--border);
+        border-radius: 8px; padding: 8px 14px;
+        color: var(--text-muted); font-size: 14px;
+    }
+    .topbar-search input {
+        border: none; background: transparent; outline: none;
+        font-size: 14px; font-family: inherit; color: var(--text);
+        width: 180px;
+    }
+    .topbar-search input::placeholder { color: var(--text-muted); }
+    .topbar-avatar {
+        width: 36px; height: 36px; border-radius: 50%;
+        background: var(--primary); color: #fff;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 13px; font-weight: 600; cursor: pointer;
+        flex-shrink: 0;
+    }
+    .topbar-notif {
+        position: relative; cursor: pointer;
+        width: 36px; height: 36px;
+        display: flex; align-items: center; justify-content: center;
+        border-radius: 8px; color: var(--text-muted);
+        transition: background 0.15s;
+    }
+    .topbar-notif:hover { background: var(--bg); }
+    .topbar-notif svg  { width: 20px; height: 20px; }
+    .topbar-notif-badge {
+        position: absolute; top: 4px; right: 4px;
+        width: 16px; height: 16px; border-radius: 50%;
+        background: var(--danger); color: #fff;
+        font-size: 9px; font-weight: 700;
+        display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ---- Main content ------------------------------------- */
+    .main {
+        margin-left: var(--sidebar-w);
+        margin-top: var(--topbar-h);
+        padding: 24px;
+        min-height: calc(100vh - var(--topbar-h));
+    }
+
+    /* ---- Password expiry banner --------------------------- */
+    .expiry-banner {
+        background: #FFFBEB; border: 1px solid #FDE68A;
+        color: #92400E; border-radius: 10px;
+        padding: 12px 16px; margin-bottom: 20px;
+        display: flex; align-items: center; gap: 10px;
+        font-size: 14px;
+    }
+    .expiry-banner a { color: #B45309; font-weight: 600; }
+
+    /* ---- Cards -------------------------------------------- */
+    .card {
+        background: var(--surface);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+    }
+    .card-header {
+        padding: 16px 20px;
+        display: flex; align-items: center; justify-content: space-between;
+        border-bottom: 1px solid var(--border);
+    }
+    .card-title { font-size: 15px; font-weight: 600; color: var(--text); }
+    .card-body  { padding: 0; }
+    .card-footer {
+        padding: 14px 20px; border-top: 1px solid var(--border);
+        display: flex; gap: 8px;
+    }
+
+    /* ---- Stat cards --------------------------------------- */
+    .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+    .stat-card {
+        background: var(--surface);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        padding: 20px;
+    }
+    .stat-icon {
+        width: 40px; height: 40px; border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        margin-bottom: 12px;
+    }
+    .stat-icon svg { width: 20px; height: 20px; }
+    .stat-icon.blue   { background: #EFF6FF; color: var(--primary); }
+    .stat-icon.green  { background: #ECFDF5; color: var(--success); }
+    .stat-icon.orange { background: #FFFBEB; color: var(--warning); }
+    .stat-icon.red    { background: #FEF2F2; color: var(--danger); }
+    .stat-label { font-size: 13px; color: var(--text-muted); margin-bottom: 6px; font-weight: 500; }
+    .stat-value { font-size: 28px; font-weight: 700; color: var(--text); line-height: 1; }
+    .stat-value.danger { color: var(--danger); }
+    .stat-trend {
+        display: inline-flex; align-items: center; gap: 3px;
+        margin-top: 8px; font-size: 12px; font-weight: 600;
+        padding: 2px 8px; border-radius: 999px;
+    }
+    .stat-trend.up    { background: #ECFDF5; color: var(--success); }
+    .stat-trend.down  { background: #FEF2F2; color: var(--danger); }
+    .stat-trend.neu   { background: var(--bg); color: var(--text-muted); }
+
+    /* ---- Two-column rows ---------------------------------- */
+    .row-60-40 { display: grid; grid-template-columns: 60fr 40fr; gap: 16px; margin-bottom: 24px; }
+    .row-50-50 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+
+    /* ---- Table -------------------------------------------- */
+    .tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .tbl th {
+        text-align: left; padding: 11px 16px;
+        font-size: 12px; font-weight: 600; color: var(--text-muted);
+        text-transform: uppercase; letter-spacing: 0.4px;
+        border-bottom: 1px solid var(--border);
+        background: #FAFAFA;
+    }
+    .tbl td { padding: 12px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .tbl tr:last-child td { border-bottom: none; }
+    .tbl tbody tr:hover td { background: #F8FAFC; }
+
+    /* ---- Badges ------------------------------------------- */
+    .badge {
+        display: inline-flex; align-items: center;
+        padding: 3px 10px; border-radius: 999px;
+        font-size: 12px; font-weight: 500;
+    }
+    .badge-danger  { background: #FEF2F2; color: var(--danger); }
+    .badge-success { background: #ECFDF5; color: var(--success); }
+    .badge-blue    { background: #EFF6FF; color: var(--primary); }
+    .badge-grey    { background: var(--bg); color: var(--text-muted); }
+    .badge-warning { background: #FFFBEB; color: var(--warning); }
+
+    /* ---- Buttons ------------------------------------------ */
+    .btn {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 8px 16px; border-radius: 8px;
+        font-size: 13px; font-weight: 500;
+        cursor: pointer; border: none; text-decoration: none;
+        transition: background 0.15s; white-space: nowrap;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-secondary { background: var(--bg); color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { background: var(--border); }
+    .btn-sm { padding: 6px 12px; font-size: 12px; }
+
+    /* ---- Avatar initial ----------------------------------- */
+    .avatar {
+        width: 32px; height: 32px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 12px; font-weight: 600; color: #fff; flex-shrink: 0;
+    }
+
+    /* ---- Activity item ------------------------------------ */
+    .activity-item {
+        display: flex; gap: 12px; padding: 12px 16px;
+        border-bottom: 1px solid var(--border);
+        align-items: flex-start;
+    }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-meta { font-size: 12px; color: var(--text-muted); }
+    .activity-desc { font-size: 13px; margin-top: 2px; }
+
+    /* ---- Mini denah --------------------------------------- */
+    .mini-denah {
+        position: relative; width: 100%;
+        background: #F8FAFC; border-radius: 8px; overflow: hidden;
+    }
+    .mini-denah img { width: 100%; height: auto; display: block; }
+    .mini-denah-pt {
+        position: absolute;
+        width: 14px; height: 14px; border-radius: 50%;
+        border: 2px solid #fff;
+        transform: translate(-50%, -50%);
+        cursor: pointer;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    /* ---- Empty state -------------------------------------- */
+    .empty { text-align: center; padding: 32px 16px; color: var(--text-muted); font-size: 14px; }
+
+    /* ---- Form inputs -------------------------------------- */
+    .form-body { padding: 20px; }
+    .form-group { margin-bottom: 18px; }
+    .form-label {
+        display: block;
+        font-size: 13px; font-weight: 600;
+        color: var(--text); margin-bottom: 6px;
+    }
+    .form-control {
+        width: 100%; padding: 10px 14px;
+        font-size: 14px; font-family: inherit;
+        color: var(--text); background: #F8FAFC;
+        border: 1.5px solid var(--border);
+        border-radius: 8px; outline: none;
+        transition: border-color 0.15s, box-shadow 0.15s;
+        appearance: auto;
+    }
+    .form-control:focus {
+        border-color: var(--primary);
+        background: var(--surface);
+        box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+    }
+    .form-control::placeholder { color: var(--text-muted); }
+    select.form-control { cursor: pointer; }
+    textarea.form-control { resize: vertical; min-height: 80px; }
+    input[type="number"].form-control::-webkit-inner-spin-button { opacity: 0.6; }
+    input[type="datetime-local"].form-control { color: var(--text); }
+    .form-hint { font-size: 12px; color: var(--text-muted); margin-top: 5px; }
+    .input-group { display: flex; gap: 8px; align-items: center; }
+    .input-group .form-control { flex: 1; }
+    .alert { padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; }
+    .alert-danger { background: #FEF2F2; color: #B91C1C; border: 1px solid #FECACA; }
+    .alert-success { background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0; }
+
+    /* ---- Modal overlay ------------------------------------ */
+    .modal-overlay {
+        display: none; position: fixed; inset: 0;
+        background: rgba(0,0,0,0.4); z-index: 200;
+        align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+        background: var(--surface); border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        width: 820px; max-width: 95vw;
+        max-height: 90vh; overflow: auto;
+    }
+    .modal-header {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 18px 24px; border-bottom: 1px solid var(--border);
+    }
+    .modal-title { font-size: 16px; font-weight: 600; }
+    .modal-body { padding: 24px; }
+    .modal-footer {
+        padding: 16px 24px; border-top: 1px solid var(--border);
+        display: flex; gap: 8px; justify-content: flex-end;
+    }
+
+    /* ---- Toolbar / filter bar ----------------------------- */
+    .toolbar {
+        display: flex; align-items: center; gap: 10px;
+        margin-bottom: 18px; flex-wrap: wrap;
+    }
+
+    /* ---- Page header -------------------------------------- */
+    .page-header {
+        display: flex; align-items: center; justify-content: space-between;
+        margin-bottom: 20px;
+    }
+    .page-header-title { font-size: 18px; font-weight: 700; }
+    .back-link {
+        display: inline-flex; align-items: center; gap: 6px;
+        font-size: 13px; color: var(--text-muted); text-decoration: none;
+        margin-bottom: 16px; transition: color 0.15s;
+    }
+    .back-link:hover { color: var(--primary); }
+
+    /* ---- Responsive --------------------------------------- */
+    @media (max-width: 1100px) {
+        .stat-grid { grid-template-columns: repeat(2, 1fr); }
+        .row-60-40 { grid-template-columns: 1fr; }
+        .row-50-50 { grid-template-columns: 1fr; }
+    }
+    </style>
+</head>
+<body>
+
+    <!-- ===== SIDEBAR ===== -->
+    <nav class="sidebar">
+        <a href="/smi/dashboard" class="sidebar-brand">
+            <div class="sidebar-brand-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                    <path d="M16 3H8L6 7h12l-2-4z" opacity=".7"/>
+                </svg>
+            </div>
+            <div>
+                <div class="sidebar-brand-text">SMI</div>
+                <div class="sidebar-brand-sub">Dunia Offset Printing</div>
+            </div>
+        </a>
+
+        <div class="sidebar-nav">
+            <div class="sidebar-section-label">Menu Utama</div>
+
+            <a href="/smi/dashboard" t-att-class="'nav-item' + (' active' if active_menu == 'dashboard' else '')">
+                <!-- Dashboard icon -->
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                    <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+                </svg>
+                Dashboard
+            </a>
+
+            <a href="/smi/stok" t-att-class="'nav-item' + (' active' if active_menu == 'stok' else '')">
+                <!-- Box/inventory icon -->
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
+                </svg>
+                Stok
+            </a>
+
+            <a href="/smi/order" t-att-class="'nav-item' + (' active' if active_menu == 'order' else '')">
+                <!-- Clipboard icon -->
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/>
+                </svg>
+                Order
+            </a>
+
+            <a href="/smi/activity" t-att-class="'nav-item' + (' active' if active_menu == 'activity' else '')">
+                <!-- Activity / list icon -->
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                </svg>
+                Aktivitas
+            </a>
+
+            <t t-if="request.env.user.has_group('inventory_smi.group_admin')">
+                <div class="sidebar-divider"/>
+                <div class="sidebar-section-label">Administrasi</div>
+                <a href="/smi/pengguna" t-att-class="'nav-item' + (' active' if active_menu == 'pengguna' else '')">
+                    <!-- Users icon -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    Pengguna
+                </a>
+            </t>
+        </div>
+
+        <!-- Logout -->
+        <div style="padding:12px;">
+            <div class="sidebar-divider"/>
+            <a href="/web/session/logout" class="nav-item" style="color:var(--danger);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                    <polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+                Keluar
+            </a>
+        </div>
+    </nav>
+
+    <!-- ===== TOPBAR ===== -->
+    <header class="topbar">
+        <span class="topbar-title" t-esc="page_title or 'Dashboard'"/>
+        <div class="topbar-search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" placeholder="Cari..."/>
+        </div>
+        <div class="topbar-notif">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+            <t t-if="low_stock_count and low_stock_count &gt; 0">
+                <span class="topbar-notif-badge" t-esc="low_stock_count"/>
+            </t>
+        </div>
+        <div class="topbar-avatar" t-esc="(request.env.user.name or 'U')[0].upper()"/>
+    </header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main">
+        <!-- Password expiry banner -->
+        <t t-if="request.env.user.must_change_password">
+            <div class="expiry-banner">
+                ⚠️ Kata sandi Anda sudah kadaluwarsa. Silakan
+                <a href="/web/settings">ubah kata sandi</a> sekarang.
+            </div>
+        </t>
+
+        <!-- Page content injected here -->
+        <t t-out="0"/>
+    </main>
+
+</body>
+</html>
+</template>
+
+</data>
+</odoo>
