@@ -31,19 +31,20 @@
         </div>
 
         <!-- Order summary header -->
-        <div class="card" style="margin-bottom:16px;padding:16px 20px;
-                                  display:flex;gap:24px;align-items:center;">
-            <div>
-                <div style="font-size:12px;color:var(--text-muted);">Nama Pesanan</div>
-                <div style="font-size:15px;font-weight:600;" t-esc="order.name"/>
-            </div>
-            <div>
-                <div style="font-size:12px;color:var(--text-muted);">No. SPK</div>
-                <div style="font-size:14px;"><t t-esc="order.no_spk or '-'"/></div>
-            </div>
-            <div>
-                <div style="font-size:12px;color:var(--text-muted);">Tanggal</div>
-                <div style="font-size:14px;" t-esc="order.tanggal"/>
+        <div class="card" style="margin-bottom:16px;padding:16px 20px;">
+            <div class="field-row" style="grid-template-columns:repeat(3, 1fr); gap: 18px;">
+                <div>
+                    <div class="field-label">Nama Pesanan</div>
+                    <div style="font-size:15px;font-weight:600;" t-esc="order.name"/>
+                </div>
+                <div>
+                    <div class="field-label">No. SPK</div>
+                    <div style="font-size:14px;"><t t-esc="order.no_spk or '-'"/></div>
+                </div>
+                <div>
+                    <div class="field-label">Tanggal</div>
+                    <div style="font-size:14px;" t-esc="order.tanggal"/>
+                </div>
             </div>
         </div>
 
@@ -204,14 +205,14 @@
                 <span class="card-title">Tambah Bahan</span>
             </div>
             <div class="card-body" style="padding:20px;">
+                <div class="panel-note">Pilih bahan yang dibutuhkan, tentukan jumlah, lalu pilih mode pengambilan.</div>
                 <form method="post"
                       t-att-action="'/smi/order/tambah/step2?order_id=' + str(order.id)">
                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                     <input type="hidden" name="action" value="add_line"/>
-                    <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
-                        <div style="flex:2;min-width:180px;">
-                            <label style="display:block;font-size:12px;font-weight:500;
-                                          color:var(--text-muted);margin-bottom:4px;">Bahan</label>
+                    <div class="field-row field-row--3">
+                        <div class="field">
+                            <label class="field-label">Bahan</label>
                             <select name="material_id" class="form-control">
                                 <option value="">— Pilih Bahan —</option>
                                 <t t-foreach="materials" t-as="mat">
@@ -222,21 +223,19 @@
                                 </t>
                             </select>
                         </div>
-                        <div style="flex:1;min-width:100px;">
-                            <label style="display:block;font-size:12px;font-weight:500;
-                                          color:var(--text-muted);margin-bottom:4px;">Jumlah</label>
+                        <div class="field">
+                            <label class="field-label">Jumlah</label>
                             <input type="number" name="jumlah_dibutuhkan" class="form-control"
                                    placeholder="0" min="0.01" step="0.01"/>
                         </div>
-                        <div style="flex:1;min-width:140px;">
-                            <label style="display:block;font-size:12px;font-weight:500;
-                                          color:var(--text-muted);margin-bottom:4px;">Mode Pengambilan</label>
+                        <div class="field">
+                            <label class="field-label">Mode Pengambilan</label>
                             <select name="mode_pick" class="form-control">
                                 <option value="auto">Otomatis (FIFO)</option>
                                 <option value="manual">Manual</option>
                             </select>
                         </div>
-                        <div>
+                        <div class="field-actions">
                             <button type="submit" class="btn btn-primary">+ Tambah</button>
                         </div>
                     </div>
