@@ -37,7 +37,6 @@ class SmiAuthController(Home):
 
         if uid:
             # Success — go to dashboard
-            request.session.get_context()
             return request.redirect('/smi/dashboard')
 
         # Failure — show error
