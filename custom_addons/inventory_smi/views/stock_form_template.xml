@@ -5,24 +5,46 @@
 <template id="stock_form_page" name="SMI Tambah Stok">
     <t t-call="inventory_smi.layout">
         <t t-set="page_title">Tambah Stok</t>
+        <t t-set="active_menu">stok</t>
 
-        <div class="card" style="max-width:680px;">
+        <!-- Back link -->
+        <a href="/smi/stok" class="back-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"/>
+            </svg>
+            Kembali ke Daftar Stok
+        </a>
+
+        <div class="card" style="max-width:700px;">
             <div class="card-header">
-                <span class="card-title">Form Tambah Stok</span>
+                <span class="card-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         style="vertical-align:middle;margin-right:6px;">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                        <line x1="12" y1="22.08" x2="12" y2="12"/>
+                    </svg>
+                    Form Tambah Stok
+                </span>
             </div>
-            <div class="card-body">
+
+            <div class="form-body">
 
                 <!-- Error banner -->
                 <t t-if="error">
-                    <div class="alert alert-danger" style="margin-bottom:16px;" t-esc="error"/>
+                    <div class="alert alert-danger" t-esc="error"/>
                 </t>
 
                 <form method="post" action="/smi/stok/tambah">
                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
 
-                    <!-- material_id -->
+                    <!-- Nama Bahan -->
                     <div class="form-group">
-                        <label class="form-label">Nama Bahan <span style="color:red;">*</span></label>
+                        <label class="form-label" for="material_id">
+                            Nama Bahan <span style="color:var(--danger);">*</span>
+                        </label>
                         <select name="material_id" class="form-control" required="required" id="material_id">
                             <option value="">-- Pilih Bahan --</option>
                             <t t-foreach="materials" t-as="mat">
@@ -33,10 +55,12 @@
                         </select>
                     </div>
 
-                    <!-- inventory_point -->
+                    <!-- Titik Inventori -->
                     <div class="form-group">
-                        <label class="form-label">Titik Inventori <span style="color:red;">*</span></label>
-                        <div style="display:flex;gap:8px;align-items:center;">
+                        <label class="form-label" for="inventory_point_id">
+                            Titik Inventori <span style="color:var(--danger);">*</span>
+                        </label>
+                        <div class="input-group">
                             <select name="inventory_point_id" class="form-control" required="required" id="inventory_point_id">
                                 <option value="">-- Pilih Lokasi --</option>
                                 <t t-foreach="points" t-as="pt">
@@ -45,70 +69,100 @@
                                             t-esc="pt.name"/>
                                 </t>
                             </select>
-                            <button type="button" class="btn btn-secondary btn-sm"
-                                    onclick="document.getElementById('map-modal').style.display='flex'">
+                            <button type="button" class="btn btn-secondary"
+                                    onclick="document.getElementById('map-modal').classList.add('open')">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+                                </svg>
                                 Pilih dari Denah
                             </button>
                         </div>
                     </div>
 
-                    <!-- jumlah_awal (jumlah) -->
+                    <!-- Jumlah Masuk -->
                     <div class="form-group">
-                        <label class="form-label">Jumlah Masuk <span style="color:red;">*</span></label>
-                        <input type="number" name="jumlah_awal" class="form-control"
-                               min="0.01" step="0.01" required="required"
-                               placeholder="Masukkan jumlah stok"
+                        <label class="form-label" for="jumlah_awal">
+                            Jumlah Masuk <span style="color:var(--danger);">*</span>
+                        </label>
+                        <input type="number" name="jumlah_awal" id="jumlah_awal"
+                               class="form-control" min="0.01" step="0.01"
+                               required="required" placeholder="Masukkan jumlah stok"
                                t-att-value="post.get('jumlah_awal', '')"/>
                     </div>
 
-                    <!-- tanggal_masuk -->
+                    <!-- Tanggal Masuk -->
                     <div class="form-group">
-                        <label class="form-label">Tanggal Masuk</label>
-                        <input type="datetime-local" name="tanggal_masuk" class="form-control"
+                        <label class="form-label" for="tanggal_masuk">Tanggal Masuk</label>
+                        <input type="datetime-local" name="tanggal_masuk" id="tanggal_masuk"
+                               class="form-control"
                                t-att-value="post.get('tanggal_masuk', '')"/>
-                        <span style="font-size:12px;color:var(--text-muted);">Kosongkan untuk menggunakan waktu sekarang.</span>
+                        <span class="form-hint">Kosongkan untuk menggunakan waktu sekarang.</span>
                     </div>
 
-                    <!-- catatan -->
+                    <!-- Catatan -->
                     <div class="form-group">
-                        <label class="form-label">Catatan</label>
-                        <textarea name="catatan" class="form-control" rows="3"
-                                  placeholder="Catatan tambahan (opsional)">
+                        <label class="form-label" for="catatan">Catatan</label>
+                        <textarea name="catatan" id="catatan" class="form-control"
+                                  rows="3" placeholder="Catatan tambahan (opsional)">
                             <t t-esc="post.get('catatan', '')"/>
                         </textarea>
                     </div>
 
-                    <div style="display:flex;gap:8px;margin-top:24px;">
-                        <button type="submit" class="btn btn-primary">Simpan Stok</button>
+                    <div style="display:flex;gap:10px;margin-top:24px;padding-top:20px;border-top:1px solid var(--border);">
+                        <button type="submit" class="btn btn-primary">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Simpan Stok
+                        </button>
                         <a href="/smi/stok" class="btn btn-secondary">Batal</a>
                     </div>
                 </form>
             </div>
         </div>
 
-        <!-- Map Modal -->
-        <div id="map-modal"
-             style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;">
-            <div style="background:#fff;border-radius:12px;padding:24px;width:760px;max-width:95vw;max-height:90vh;overflow:auto;">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-                    <h3 style="margin:0;font-size:16px;font-weight:600;">Pilih Titik dari Denah</h3>
+        <!-- ===== MAP MODAL ===== -->
+        <div id="map-modal" class="modal-overlay">
+            <div class="modal-box">
+                <div class="modal-header">
+                    <span class="modal-title">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             style="vertical-align:middle;margin-right:6px;">
+                            <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+                        </svg>
+                        Pilih Titik dari Denah
+                    </span>
                     <button type="button" class="btn btn-secondary btn-sm"
-                            onclick="document.getElementById('map-modal').style.display='none'">Tutup</button>
+                            onclick="document.getElementById('map-modal').classList.remove('open')">
+                        ✕ Tutup
+                    </button>
                 </div>
-                <div class="denah-container" style="position:relative;">
-                    <img src="/inventory_smi/static/src/img/denah.svg" alt="Denah Gudang"
-                         style="width:100%;border-radius:6px;"/>
-                    <t t-foreach="points" t-as="pt">
-                        <div class="denah-point" style="position:absolute;cursor:pointer;border-radius:50%;background:#3B82F6;width:16px;height:16px;transform:translate(-50%,-50%);"
-                             t-att-title="pt.name"
-                             t-att-data-id="pt.id"
-                             t-att-data-name="pt.name"
-                             t-att-style="'position:absolute;cursor:pointer;border-radius:50%;background:#3B82F6;width:16px;height:16px;transform:translate(-50%,-50%);left:' + str(pt.koordinat_x) + '%;top:' + str(pt.koordinat_y) + '%;'"
-                             onclick="selectInventoryPoint(this.dataset.id, this.dataset.name)">
-                        </div>
-                    </t>
+                <div class="modal-body">
+                    <div style="position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--border);">
+                        <img src="/inventory_smi/static/src/img/denah.svg" alt="Denah Gudang"
+                             style="width:100%;display:block;"/>
+                        <t t-foreach="points" t-as="pt">
+                            <div style="position:absolute;cursor:pointer;width:18px;height:18px;
+                                        border-radius:50%;background:#3B82F6;border:2px solid #fff;
+                                        box-shadow:0 2px 6px rgba(0,0,0,0.25);
+                                        transform:translate(-50%,-50%);transition:transform 0.15s,background 0.15s;"
+                                 t-att-title="pt.name"
+                                 t-att-data-id="pt.id"
+                                 t-att-data-name="pt.name"
+                                 t-att-style="'position:absolute;cursor:pointer;width:18px;height:18px;border-radius:50%;background:#3B82F6;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.25);transform:translate(-50%,-50%);transition:transform 0.15s;left:' + str(pt.koordinat_x) + '%;top:' + str(pt.koordinat_y) + '%;'"
+                                 onmouseenter="this.style.transform='translate(-50%,-50%) scale(1.3)'"
+                                 onmouseleave="this.style.transform='translate(-50%,-50%) scale(1)'"
+                                 onclick="selectInventoryPoint(this.dataset.id, this.dataset.name)">
+                            </div>
+                        </t>
+                    </div>
+                    <p style="margin-top:12px;font-size:13px;color:var(--text-muted);">
+                        Klik titik biru pada denah untuk memilih lokasi inventori.
+                    </p>
                 </div>
-                <p style="margin-top:12px;font-size:13px;color:var(--text-muted);">Klik pada titik biru untuk memilih lokasi inventori.</p>
             </div>
         </div>
 
@@ -118,11 +172,23 @@
             for (var i = 0; i &lt; sel.options.length; i++) {
                 if (sel.options[i].value == id) {
                     sel.selectedIndex = i;
+                    // Visual feedback
+                    sel.style.borderColor = '#10B981';
+                    sel.style.boxShadow = '0 0 0 3px rgba(16,185,129,0.15)';
+                    setTimeout(function() {
+                        sel.style.borderColor = '';
+                        sel.style.boxShadow = '';
+                    }, 2000);
                     break;
                 }
             }
-            document.getElementById('map-modal').style.display = 'none';
+            document.getElementById('map-modal').classList.remove('open');
         }
+
+        // Close modal when clicking backdrop
+        document.getElementById('map-modal').addEventListener('click', function(e) {
+            if (e.target === this) this.classList.remove('open');
+        });
         </script>
 
     </t>

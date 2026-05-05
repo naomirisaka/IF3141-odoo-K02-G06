@@ -55,32 +55,32 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <t t-foreach="orders" t-as="order_rec">
+                            <t t-foreach="orders" t-as="order_item">
                                 <tr style="cursor:pointer;"
-                                    t-att-data-href="'/smi/order/' + str(order_rec.id)"
+                                    t-att-data-href="'/smi/order/' + str(order_item.id)"
                                     onclick="window.location=this.dataset.href">
-                                    <td style="font-weight:500;" t-esc="order_rec.name"/>
+                                    <td style="font-weight:500;" t-esc="order_item.name"/>
                                     <td style="color:var(--text-muted);">
-                                        <t t-esc="order_rec.no_spk or '-'"/>
+                                        <t t-esc="order_item.no_spk or '-'"/>
                                     </td>
-                                    <td t-esc="order_rec.tanggal"/>
-                                    <td style="color:var(--text-muted);" t-esc="order_rec.user_id.name"/>
+                                    <td t-esc="order_item.tanggal"/>
+                                    <td style="color:var(--text-muted);" t-esc="order_item.user_id.name"/>
                                     <td>
-                                        <t t-if="order_rec.state == 'draft'">
+                                        <t t-if="order_item.state == 'draft'">
                                             <span class="badge badge-grey">Draft</span>
                                         </t>
-                                        <t t-elif="order_rec.state == 'dikonfirmasi'">
+                                        <t t-elif="order_item.state == 'dikonfirmasi'">
                                             <span class="badge badge-blue">Dikonfirmasi</span>
                                         </t>
-                                        <t t-elif="order_rec.state == 'selesai'">
+                                        <t t-elif="order_item.state == 'selesai'">
                                             <span class="badge badge-success">Selesai</span>
                                         </t>
-                                        <t t-elif="order_rec.state == 'dibatalkan'">
+                                        <t t-elif="order_item.state == 'dibatalkan'">
                                             <span class="badge badge-danger">Dibatalkan</span>
                                         </t>
                                     </td>
                                     <td onclick="event.stopPropagation()" style="display:flex;gap:6px;">
-                                        <a t-att-href="'/smi/order/' + str(order_rec.id)"
+                                        <a t-att-href="'/smi/order/' + str(order_item.id)"
                                            class="btn btn-secondary btn-sm">Detail</a>
                                     </td>
                                 </tr>
