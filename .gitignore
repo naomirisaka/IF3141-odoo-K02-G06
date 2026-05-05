@@ -19,3 +19,7 @@ __pycache__/
 # IDE / Editor
 .vscode/
 .idea/
+
+# Planning docs (local only)
+PLAN.md
+IMPLEMENTATION.md
