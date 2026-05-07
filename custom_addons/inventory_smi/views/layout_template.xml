@@ -3,13 +3,16 @@
 <data>
 
 <template id="layout" name="SMI Layout">
-<html lang="id">
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Sistem Manajemen Inventaris</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com"/>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+    <html lang="id">
+        <head>
+            <meta charset="UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <title>Sistem Manajemen Inventaris</title>
+            
+            <!-- 1. ADD THIS LINE HERE -->
+            <t t-call-assets="web.assets_frontend" t-js="true" t-css="true"/>
+
+            <link rel="preconnect" href="https://fonts.googleapis.com"/>    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
     <style>
     /* ============================================================
@@ -152,9 +155,10 @@
         margin-left: var(--sidebar-w);
         margin-top: var(--topbar-h);
         padding: 24px;
-        min-height: calc(100vh - var(--topbar-h));
-    }
 
+        height: calc(100vh - var(--topbar-h));
+        overflow-y: auto;
+    }
     /* ---- Password expiry banner --------------------------- */
     .expiry-banner {
         background: #FFFBEB; border: 1px solid #FDE68A;

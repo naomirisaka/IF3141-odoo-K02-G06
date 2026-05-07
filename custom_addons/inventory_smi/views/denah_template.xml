@@ -37,11 +37,10 @@
                         <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#94A3B8;margin-right:4px;"/>Kosong</span>
                     </div>
                 </div>
-                <div class="card-body" style="padding:16px;">
-                    <div class="denah-container" id="denah-map" style="position:relative;cursor:default;">
+                <div class="card-body" style="padding:16px;" id="smi_map_root">
+                    <!-- <div class="denah-container" id="denah-map" style="position:relative;cursor:default;">
                         <img src="/inventory_smi/static/src/img/denah.svg" alt="Denah Gudang"
                              style="width:100%;border-radius:6px;display:block;"/>
-                        <!-- map_points overlay -->
                         <t t-foreach="map_points" t-as="pt">
                             <div class="denah-point"
                                  t-att-data-point-id="pt['id']"
@@ -49,8 +48,8 @@
                                  t-att-style="'position:absolute;border-radius:50%;width:16px;height:16px;transform:translate(-50%,-50%);cursor:pointer;border:2px solid rgba(255,255,255,0.8);transition:transform .15s;left:' + str(pt['x']) + '%;top:' + str(pt['y']) + '%;background:' + pt['color'] + ';'"
                                  onclick="showPointPanel(this.dataset.pointId)">
                             </div>
-                        </t>
-                    </div>
+                        </t> -->
+                    <!-- </div> -->
                 </div>
             </div>
 

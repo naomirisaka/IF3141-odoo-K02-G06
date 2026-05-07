@@ -113,7 +113,7 @@
                                         <t t-esc="'%.1f' % entry.jumlah_awal"/>
                                     </td>
                                     <td>
-                                        <t t-esc="'%.1f' % entry.jumlah_tersedia"/>
+                                        <t t-esc="'%.1f' % entry.jumlah_tersisa"/>
                                     </td>
                                     <td>
                                         <t t-if="entry.state == 'tersedia'">
