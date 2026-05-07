@@ -9,7 +9,7 @@ whenReady(() => {
         mount(MapWidget, target, {
             templates,
             props: {
-                mode: 'add_point',
+                mode: 'view',
                 onNewPoint: async (coords) => {
                     // 1. Ask for the required 'name' field
                     const name = prompt("Masukkan Nama Titik Penyimpanan:");
@@ -49,7 +49,13 @@ whenReady(() => {
                         console.error("Network Error:", error);
                         alert("Koneksi gagal. Pastikan server Odoo berjalan.");
                     }
-                }
+                },
+                onPointSelected: (point) => {
+            // Call the global function sitting in your XML script tag
+            if (window.showPointPanel) {
+                window.showPointPanel(point.id);
+            }
+        },
             }
         });
     }
