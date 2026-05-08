@@ -2,107 +2,202 @@
 <odoo>
 <data>
 
-<template id="denah_page" name="SMI Denah Gudang">
-    <t t-call="inventory_smi.layout">
-        <t t-set="page_title">Denah Gudang</t>
-
-        <!-- Toolbar with material filter -->
-        <div class="toolbar">
-            <form method="get" action="/smi/stok/denah" style="display:flex;gap:8px;align-items:center;flex:1;">
-                <label style="font-size:13px;color:var(--text-muted);white-space:nowrap;">Filter bahan:</label>
-                <select name="material_id" class="form-control" style="max-width:260px;"
-                        onchange="this.form.submit()">
-                    <option value="">-- Semua Bahan --</option>
-                    <t t-foreach="materials" t-as="mat">
-                        <option t-att-value="mat.id"
-                                t-att-selected="'selected' if selected_material and selected_material.id == mat.id else None"
-                                t-esc="mat.name"/>
-                    </t>
-                </select>
-            </form>
-            <a href="/smi/stok" class="btn btn-secondary btn-sm">← Kembali ke Stok</a>
-        </div>
-
-        <!-- Main layout: denah (left) + side panel (right) -->
-        <div style="display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start;">
-
-            <!-- Denah map area -->
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">Peta Gudang</span>
-                    <div style="display:flex;gap:12px;font-size:11px;color:var(--text-muted);">
-                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#10B981;margin-right:4px;"/>Aman</span>
-                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#F59E0B;margin-right:4px;"/>Sedikit</span>
-                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#EF4444;margin-right:4px;"/>Habis</span>
-                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#94A3B8;margin-right:4px;"/>Kosong</span>
-                    </div>
-                </div>
-                <div class="card-body" style="padding:16px;" id="smi_map_root">
-                    <!-- <div class="denah-container" id="denah-map" style="position:relative;cursor:default;">
-                        <img src="/inventory_smi/static/src/img/denah.svg" alt="Denah Gudang"
-                             style="width:100%;border-radius:6px;display:block;"/>
-                        <t t-foreach="map_points" t-as="pt">
-                            <div class="denah-point"
-                                 t-att-data-point-id="pt['id']"
-                                 t-att-title="pt['name']"
-                                 t-att-style="'position:absolute;border-radius:50%;width:16px;height:16px;transform:translate(-50%,-50%);cursor:pointer;border:2px solid rgba(255,255,255,0.8);transition:transform .15s;left:' + str(pt['x']) + '%;top:' + str(pt['y']) + '%;background:' + pt['color'] + ';'"
-                                 onclick="showPointPanel(this.dataset.pointId)">
-                            </div>
-                        </t> -->
-                    <!-- </div> -->
-                </div>
-            </div>
-
-            <!-- Side panel -->
-            <div class="card" id="point-panel">
-                <div class="card-header">
-                    <span class="card-title">Detail Titik</span>
-                </div>
-                <div class="card-body" id="panel-body">
-                    <div class="empty" style="padding:24px 0;">Klik titik pada denah untuk melihat detail.</div>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Hidden point data for JS -->
+    <template id="warehouse_map_script">
         <script type="text/javascript">
+        //<![CDATA[
+
         var SMI_MAP_POINTS = <t t-raw="map_points_json"/>;
 
         function showPointPanel(pointId) {
+
             var pts = SMI_MAP_POINTS;
             var pt = null;
+
             for (var i = 0; i &lt; pts.length; i++) {
-                if (String(pts[i].id) === String(pointId)) { pt = pts[i]; break; }
+                if (String(pts[i].id) === String(pointId)) {
+                    pt = pts[i];
+                    break;
+                }
             }
-            if (!pt) return;
+
+            if (!pt) {
+                return;
+            }
+
             var body = document.getElementById('panel-body');
             var mats = pt.materials || [];
-            var html = '<div style="margin-bottom:12px;">';
+
+            var html = '';
+
+            html += '<div style="margin-bottom:12px;">';
             html += '<div style="font-weight:600;font-size:15px;">' + pt.name + '</div>';
             html += '<div style="font-size:12px;color:#64748B;">(' + pt.x.toFixed(1) + '%, ' + pt.y.toFixed(1) + '%)</div>';
             html += '</div>';
+
             if (mats.length === 0) {
+
                 html += '<div style="color:#94A3B8;font-size:13px;">Tidak ada bahan di titik ini.</div>';
+
             } else {
+
                 html += '<table style="width:100%;border-collapse:collapse;font-size:13px;">';
-                html += '<thead><tr><th style="text-align:left;padding:4px 0;border-bottom:1px solid #E2E8F0;">Bahan</th><th style="text-align:right;padding:4px 0;border-bottom:1px solid #E2E8F0;">Stok</th></tr></thead><tbody>';
+
+                html += '<thead>';
+                html += '<tr>';
+                html += '<th style="text-align:left;padding:4px 0;border-bottom:1px solid #E2E8F0;">Bahan</th>';
+                html += '<th style="text-align:right;padding:4px 0;border-bottom:1px solid #E2E8F0;">Stok</th>';
+                html += '</tr>';
+                html += '</thead>';
+
+                html += '<tbody>';
+
                 for (var j = 0; j &lt; mats.length; j++) {
+
                     var m = mats[j];
+
                     var badge = m.is_low_stock
                         ? '<span style="display:inline-block;padding:2px 6px;border-radius:10px;font-size:10px;background:#FEE2E2;color:#DC2626;">Sedikit</span>'
                         : '<span style="display:inline-block;padding:2px 6px;border-radius:10px;font-size:10px;background:#D1FAE5;color:#059669;">Aman</span>';
-                    html += '<tr><td style="padding:6px 0;">' + m.name + ' ' + badge + '</td>';
-                    html += '<td style="padding:6px 0;text-align:right;">' + m.total_stok.toFixed(1) + ' ' + (m.uom || '') + '</td></tr>';
+
+                    html += '<tr>';
+
+                    html += '<td style="padding:6px 0;">';
+                    html += m.name + ' ' + badge;
+                    html += '</td>';
+
+                    html += '<td style="padding:6px 0;text-align:right;">';
+                    html += m.total_stok.toFixed(1) + ' ' + (m.uom || '');
+                    html += '</td>';
+
+                    html += '</tr>';
                 }
-                html += '</tbody></table>';
+
+                html += '</tbody>';
+                html += '</table>';
             }
+
             body.innerHTML = html;
         }
+
+        //]]>
         </script>
 
-    </t>
-</template>
+    </template>
+
+    <!-- The full denah page -->
+    <template id="denah_page" name="SMI Denah Gudang">
+
+        <t t-call="inventory_smi.layout">
+
+            <t t-set="page_title">Denah Gudang</t>
+
+            <!-- Toolbar -->
+            <div class="toolbar">
+
+                <form method="get"
+                      action="/smi/stok/denah"
+                      style="display:flex;gap:8px;align-items:center;flex:1;">
+
+                    <label style="font-size:13px;color:var(--text-muted);white-space:nowrap;">
+                        Filter bahan:
+                    </label>
+
+                    <select name="material_id"
+                            class="form-control"
+                            style="max-width:260px;"
+                            onchange="this.form.submit()">
+
+                        <option value="">-- Semua Bahan --</option>
+
+                        <t t-foreach="materials" t-as="mat">
+
+                            <option t-att-value="mat.id"
+                                    t-att-selected="'selected' if selected_material and selected_material.id == mat.id else None"
+                                    t-esc="mat.name"/>
+
+                        </t>
+
+                    </select>
+
+                </form>
+
+                <a href="/smi/stok"
+                   class="btn btn-secondary btn-sm">
+
+                    ← Kembali ke Stok
+
+                </a>
+
+            </div>
+
+            <!-- Main layout -->
+            <div style="display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start;">
+
+                <!-- Map -->
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <span class="card-title">Peta Gudang</span>
+
+                        <div style="display:flex;gap:12px;font-size:11px;color:var(--text-muted);">
+
+                            <span>
+                                <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#10B981;margin-right:4px;"></span>
+                                Aman
+                            </span>
+
+                            <span>
+                                <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#F59E0B;margin-right:4px;"></span>
+                                Sedikit
+                            </span>
+
+                            <span>
+                                <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#EF4444;margin-right:4px;"></span>
+                                Habis
+                            </span>
+
+                            <span>
+                                <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#94A3B8;margin-right:4px;"></span>
+                                Kosong
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="card-body"
+                         style="padding:16px;"
+                         id="smi_map_root">
+
+                    </div>
+
+                </div>
+
+                <!-- Side Panel -->
+                <div class="card" id="point-panel">
+
+                    <div class="card-header">
+                        <span class="card-title">Detail Titik</span>
+                    </div>
+
+                    <div class="card-body" id="panel-body">
+
+                        <div class="empty" style="padding:24px 0;">
+                            Klik titik pada denah untuk melihat detail.
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <t t-call="inventory_smi.warehouse_map_script"/>
+
+        </t>
+
+    </template>
 
 </data>
 </odoo>
