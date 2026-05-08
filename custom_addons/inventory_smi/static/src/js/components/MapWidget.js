@@ -32,7 +32,7 @@ export class MapWidget extends Component {
                  t-on-click="onSvgClick">
 
                 <!-- Static floor plan (inlined for reliability) -->
-                <rect x="0" y="0" width="800" height="500" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="3" rx="4"/>
+                <rect x="2" y="2" width="796" height="496" rx="10" ry="10" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="3" border-radius="10"/>
 
                 <text x="400" y="22" font-family="Inter,system-ui,sans-serif" font-size="13"
                       fill="#64748B" text-anchor="middle" font-weight="600">

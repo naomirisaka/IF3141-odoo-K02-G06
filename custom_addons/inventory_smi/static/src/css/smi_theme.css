@@ -486,7 +486,9 @@
 .smi-map-container {
   position: relative;
   width: 100%;
-  border-radius: 10px;
+  aspect-ratio: 16 / 10;
+  min-height: 0;
+  border-radius: 6px;
   overflow: hidden;
   border: 1px solid var(--smi-border);
   background: #F8FAFC;

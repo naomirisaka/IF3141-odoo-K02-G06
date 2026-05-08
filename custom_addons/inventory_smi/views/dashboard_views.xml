@@ -69,215 +69,205 @@
 
         </div><!-- /stat-grid -->
 
-        <!-- Row 2 - Daftar Bahan (left) + Denah Mini (right) -->
+        <!-- Row 2 - Daftar Bahan (left) + Denah Mini n Orders (right) -->
         <div class="smi-row smi-row--60-40">
-
             <!-- Daftar Bahan -->
-            <div class="smi-card">
-                <div class="smi-card__header">
-                    <span class="smi-card__title">Daftar Bahan</span>
-                    <span style="font-size:12px;color:var(--text-muted);">Prioritas stok rendah</span>
-                </div>
-                <div class="smi-card__body">
-                    <t t-if="top5_bahan">
-                        <table class="smi-table">
-                            <thead>
-                                <tr>
-                                    <th>Nama Bahan</th>
-                                    <th>Total Stok</th>
-                                    <th>Terakhir Ditambahkan</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <t t-foreach="top5_bahan" t-as="mat">
+            <div style="display: flex; flex-direction: column; gap: 24px;">
+                <div class="smi-card" style="height: 100%;">
+                    <div class="smi-card__header">
+                        <span class="smi-card__title">Daftar Bahan</span>
+                        <span style="font-size:12px;color:var(--text-muted);">Prioritas stok rendah</span>
+                    </div>
+                    <div class="smi-card__body">
+                        <t t-if="top5_bahan">
+                            <table class="smi-table">
+                                <thead>
                                     <tr>
-                                        <td>
-                                            <span style="font-weight:500;" t-esc="mat.name"/>
-                                            <div style="font-size:11px;color:var(--text-muted);" t-esc="mat.category_id.name"/>
-                                        </td>
-                                        <td>
-                                            <span t-esc="'%.1f' % mat.total_stok"/>
-                                            <span style="color:var(--text-muted);margin-left:4px;" t-esc="mat.uom_id.name"/>
-                                        </td>
-                                        <td style="color:var(--text-muted);font-size:13px;">
-                                            <t t-if="mat.last_added_date">
-                                                <t t-esc="mat.last_added_date.strftime('%d %b %Y')"/>
-                                            </t>
-                                            <t t-else="">—</t>
-                                        </td>
-                                        <td>
-                                            <t t-if="mat.is_low_stock">
-                                                <span class="smi-badge smi-badge--low-stock">Sisa Sedikit</span>
-                                            </t>
-                                        </td>
+                                        <th>Nama Bahan</th>
+                                        <th>Total Stok</th>
+                                        <th>Terakhir Ditambahkan</th>
+                                        <th>Status</th>
                                     </tr>
-                                </t>
-                            </tbody>
-                        </table>
-                    </t>
-                    <t t-else="">
-                        <div class="empty">Belum ada bahan baku tercatat.</div>
-                    </t>
-                </div>
-                <div class="smi-card__footer">
-                    <t t-if="not is_direktur">
-                        <a href="/smi/stok/tambah" class="smi-btn smi-btn--primary smi-btn--sm">+ Tambah Stok</a>
-                    </t>
-                    <a href="/smi/stok" class="smi-btn smi-btn--secondary smi-btn--sm">Lihat Semua</a>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="top5_bahan" t-as="mat">
+                                        <tr>
+                                            <td>
+                                                <span style="font-weight:500;" t-esc="mat.name"/>
+                                                <div style="font-size:11px;color:var(--text-muted);" t-esc="mat.category_id.name"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="'%.1f' % mat.total_stok"/>
+                                                <span style="color:var(--text-muted);margin-left:4px;" t-esc="mat.uom_id.name"/>
+                                            </td>
+                                            <td style="color:var(--text-muted);font-size:13px;">
+                                                <t t-if="mat.last_added_date">
+                                                    <t t-esc="mat.last_added_date.strftime('%d %b %Y')"/>
+                                                </t>
+                                                <t t-else="">—</t>
+                                            </td>
+                                            <td>
+                                                <t t-if="mat.is_low_stock">
+                                                    <span class="smi-badge smi-badge--low-stock">Sisa Sedikit</span>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+                        <t t-else="">
+                            <div class="empty">Belum ada bahan baku tercatat.</div>
+                        </t>
+                    </div>
+                    <div class="smi-card__footer">
+                        <t t-if="not is_direktur">
+                            <a href="/smi/stok/tambah" class="smi-btn smi-btn--primary smi-btn--sm">+ Tambah Stok</a>
+                        </t>
+                        <a href="/smi/stok" class="smi-btn smi-btn--secondary smi-btn--sm">Lihat Semua</a>
+                    </div>
                 </div>
             </div>
 
-            <!-- Denah Mini -->
-            <div class="smi-card">
-                <div class="smi-card__header">
-                    <span class="smi-card__title">Denah Gudang</span>
-                    <span style="font-size:12px;color:var(--text-muted);">Titik inventori</span>
-                </div>
-                <div class="smi-card__body" style="padding:16px;">
-                    <div style="display:grid;grid-template-columns:1fr 260px;gap:12px;align-items:start;">
-
-                        <!-- MAP ROOT -->
-                        <div id="smi_map_root"
-                            style="width:100%;min-height:520px;">
+            <div style="display: flex; flex-direction: column; gap: 24px;">
+                
+                <!-- Denah Mini -->
+                <div class="smi-card">
+                    <div class="smi-card__header">
+                        <span class="smi-card__title">Denah Gudang</span>
+                        <span style="font-size:12px;color:var(--text-muted);">Titik inventori</span>
+                    </div>
+                    <div class="smi-card__body" style="padding:16px;">
+                        
+                        <div id="smi_map_root" style="width:100%; aspect-ratio:2/1;"></div>
+                        
+                        <div style="display:flex;gap:12px;margin-top:10px;font-size:11px;color:var(--text-muted);">
+                            <span>
+                                <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#10B981;margin-right:4px;"></span>
+                                Aman
+                            </span>
+                            <span>
+                                <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#F59E0B;margin-right:4px;"></span>
+                                Sedikit
+                            </span>
+                            <span>
+                                <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#94A3B8;margin-right:4px;"></span>
+                                Kosong
+                            </span>
                         </div>
                     </div>
-
-                    <!-- Legend -->
-                    <div style="display:flex;gap:12px;margin-top:10px;font-size:11px;color:var(--text-muted);">
-
-                        <span>
-                            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#10B981;margin-right:4px;"></span>
-                            Aman
-                        </span>
-
-                        <span>
-                            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#F59E0B;margin-right:4px;"></span>
-                            Sedikit
-                        </span>
-
-                        <span>
-                            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#94A3B8;margin-right:4px;"></span>
-                            Kosong
-                        </span>
-
+                    <div class="smi-card__footer">
+                        <a href="/smi/stok/denah" class="smi-btn smi-btn--secondary smi-btn--sm">Lihat Denah Lengkap</a>
                     </div>
-
                 </div>
-                
-                <div class="smi-card__footer">
-                    <a href="/smi/stok/denah" class="smi-btn smi-btn--secondary smi-btn--sm">Lihat Denah Lengkap</a>
-                </div>
-            </div>
 
-        </div><!-- /row-60-40 -->
-
-        <!-- ===================================================
-             ROW 3 — Order Terbaru (left) + Aktivitas Terbaru (right)
-        ==================================================== -->
-        <div class="smi-row smi-row--50-50">
-
-            <!-- Order Terbaru -->
-            <div class="smi-card">
-                <div class="smi-card__header">
-                    <span class="smi-card__title">Order Terbaru</span>
-                </div>
-                <div class="smi-card__body">
-                    <t t-if="recent_orders">
-                        <table class="smi-table">
-                            <thead>
-                                <tr>
-                                    <th>Pesanan</th>
-                                    <th>Tanggal</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <t t-foreach="recent_orders" t-as="order">
-                                    <tr style="cursor:pointer;" t-att-data-href="'/smi/order/' + str(order.id)" onclick="window.location=this.dataset.href">
-                                        <td>
-                                            <span style="font-weight:500;" t-esc="order.name"/>
-                                            <t t-if="order.no_spk">
-                                                <div style="font-size:11px;color:var(--text-muted);" t-esc="order.no_spk"/>
-                                            </t>
-                                        </td>
-                                        <td style="font-size:13px;color:var(--text-muted);">
-                                            <t t-esc="order.tanggal.strftime('%d %b %Y') if order.tanggal else '—'"/>
-                                        </td>
-                                        <td>
-                                            <t t-if="order.state == 'draft'">
-                                                <span class="badge badge-grey">Draft</span>
-                                            </t>
-                                            <t t-elif="order.state == 'dikonfirmasi'">
-                                                <span class="badge badge-blue">Dikonfirmasi</span>
-                                            </t>
-                                            <t t-elif="order.state == 'selesai'">
-                                                <span class="badge badge-success">Selesai</span>
-                                            </t>
-                                            <t t-else="">
-                                                <span class="badge badge-danger">Dibatalkan</span>
-                                            </t>
-                                        </td>
+                <!-- Order Terbaru -->
+                <div class="smi-card" style="display: flex; flex-direction: column; flex: 1;">
+                    <div class="smi-card__header">
+                        <span class="smi-card__title">Order Terbaru</span>
+                    </div>
+                    <div class="smi-card__body" style="flex: 1;">
+                        <t t-if="recent_orders">
+                            <table class="smi-table">
+                                <thead>
+                                    <tr>
+                                        <th>Pesanan</th>
+                                        <th>Tanggal</th>
+                                        <th>Status</th>
                                     </tr>
-                                </t>
-                            </tbody>
-                        </table>
-                    </t>
-                    <t t-else="">
-                        <div class="empty">Belum ada order.</div>
-                    </t>
-                </div>
-                <div class="smi-card__footer">
-                    <t t-if="not is_direktur">
-                        <a href="/smi/order/tambah" class="smi-btn smi-btn--primary smi-btn--sm">+ Tambah Order</a>
-                    </t>
-                    <a href="/smi/order" class="smi-btn smi-btn--secondary smi-btn--sm">Lihat Semua</a>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="recent_orders" t-as="order">
+                                        <tr style="cursor:pointer;" t-att-data-href="'/smi/order/' + str(order.id)" onclick="window.location=this.dataset.href">
+                                            <td>
+                                                <span style="font-weight:500;" t-esc="order.name"/>
+                                                <t t-if="order.no_spk">
+                                                    <div style="font-size:11px;color:var(--text-muted);" t-esc="order.no_spk"/>
+                                                </t>
+                                            </td>
+                                            <td style="font-size:13px;color:var(--text-muted);">
+                                                <t t-esc="order.tanggal.strftime('%d %b %Y') if order.tanggal else '—'"/>
+                                            </td>
+                                            <td>
+                                                <t t-if="order.state == 'draft'">
+                                                    <span class="badge badge-grey">Draft</span>
+                                                </t>
+                                                <t t-elif="order.state == 'dikonfirmasi'">
+                                                    <span class="badge badge-blue">Dikonfirmasi</span>
+                                                </t>
+                                                <t t-elif="order.state == 'selesai'">
+                                                    <span class="badge badge-success">Selesai</span>
+                                                </t>
+                                                <t t-else="">
+                                                    <span class="badge badge-danger">Dibatalkan</span>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+                        <t t-else="">
+                            <div class="empty">Belum ada order.</div>
+                        </t>
+                    </div>
+                    <div class="smi-card__footer">
+                        <t t-if="not is_direktur">
+                            <a href="/smi/order/tambah" class="smi-btn smi-btn--primary smi-btn--sm">+ Tambah Order</a>
+                        </t>
+                        <a href="/smi/order" class="smi-btn smi-btn--secondary smi-btn--sm">Lihat Semua</a>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Aktivitas Terbaru -->
+        <!-- Row 3 - Aktivitas Terbaru -->
+        <div class="smi-row">
             <div class="smi-card">
                 <div class="smi-card__header">
                     <span class="smi-card__title">Aktivitas Terbaru</span>
                 </div>
                 <div class="smi-card__body">
-                        <t t-if="recent_activity">
-                            <t t-foreach="recent_activity" t-as="log">
-                                <div class="smi-activity-item">
-                                    <div class="smi-avatar"
-                                         t-att-style="'background:' + ('#3B82F6' if log_index % 3 == 0 else ('#10B981' if log_index % 3 == 1 else '#8B5CF6'))">
-                                        <t t-esc="(log.user_id.name or 'U')[0].upper()"/>
+                    <t t-if="recent_activity">
+                        <t t-foreach="recent_activity" t-as="log">
+                            <div class="smi-activity-item">
+                                <div class="smi-avatar"
+                                     t-att-style="'background:' + ('#3B82F6' if log_index % 3 == 0 else ('#10B981' if log_index % 3 == 1 else '#8B5CF6'))">
+                                    <t t-esc="(log.user_id.name or 'U')[0].upper()"/>
+                                </div>
+                                <div style="flex:1;min-width:0;">
+                                    <div style="font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;">
+                                        <span t-esc="log.user_id.name or '—'"/>
+                                        <t t-if="log.tipe == 'stok_masuk'">
+                                            <span class="smi-badge smi-badge--in" style="font-size:11px;">Stok Masuk</span>
+                                        </t>
+                                        <t t-elif="log.tipe == 'stok_keluar'">
+                                            <span class="smi-badge smi-badge--confirmed" style="font-size:11px;">Stok Keluar</span>
+                                        </t>
+                                        <t t-elif="log.tipe in ('order_dibuat', 'order_selesai')">
+                                            <span class="smi-badge smi-badge--warning" style="font-size:11px;">Order</span>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="smi-badge smi-badge--draft" style="font-size:11px;" t-esc="log.tipe.replace('_', ' ').title()"/>
+                                        </t>
                                     </div>
-                                    <div style="flex:1;min-width:0;">
-                                        <div style="font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;">
-                                            <span t-esc="log.user_id.name or '—'"/>
-                                            <t t-if="log.tipe == 'stok_masuk'">
-                                                <span class="smi-badge smi-badge--in" style="font-size:11px;">Stok Masuk</span>
-                                            </t>
-                                            <t t-elif="log.tipe == 'stok_keluar'">
-                                                <span class="smi-badge smi-badge--confirmed" style="font-size:11px;">Stok Keluar</span>
-                                            </t>
-                                            <t t-elif="log.tipe in ('order_dibuat', 'order_selesai')">
-                                                <span class="smi-badge smi-badge--warning" style="font-size:11px;">Order</span>
-                                            </t>
-                                            <t t-else="">
-                                                <span class="smi-badge smi-badge--draft" style="font-size:11px;" t-esc="log.tipe.replace('_', ' ').title()"/>
-                                            </t>
-                                        </div>
-                                        <div class="activity-desc" t-esc="log.deskripsi"/>
-                                        <div class="activity-meta">
-                                            <t t-if="log.jabatan"><t t-esc="log.jabatan"/> · </t>
-                                            <t t-esc="log.tanggal.strftime('%d %b %Y %H:%M') if log.tanggal else ''"/>
-                                        </div>
+                                    <div class="activity-desc" t-esc="log.deskripsi"/>
+                                    <div class="activity-meta">
+                                        <t t-if="log.jabatan"><t t-esc="log.jabatan"/> · </t>
+                                        <t t-esc="log.tanggal.strftime('%d %b %Y %H:%M') if log.tanggal else ''"/>
                                     </div>
                                 </div>
-                            </t>
+                            </div>
                         </t>
-                    </div>
-                    <div class="smi-card__footer">
-                        <a href="/smi/activity" class="smi-btn smi-btn--secondary smi-btn--sm">Lihat Semua</a>
-                    </div>
+                    </t>
+                    <t t-else="">
+                        <div class="empty">Belum ada aktivitas.</div>
+                    </t>
                 </div>
+                <div class="smi-card__footer">
+                    <a href="/smi/activity" class="smi-btn smi-btn--secondary smi-btn--sm">Lihat Semua</a>
+                </div>
+            </div>
         </div>
 
         <t t-call="inventory_smi.warehouse_map_script"/>
