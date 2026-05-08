@@ -142,8 +142,9 @@
                 </div>
                 <div class="smi-modal__body">
                     <div style="position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--border);">
-                        <img src="/inventory_smi/static/src/img/denah.svg" alt="Denah Gudang"
-                             style="width:100%;display:block;"/>
+                        <div id="smi_map_root"
+                            style="width:100%;min-height:520px;">
+                        </div>
                         <t t-foreach="points" t-as="pt">
                             <div style="position:absolute;cursor:pointer;width:18px;height:18px;
                                         border-radius:50%;background:#3B82F6;border:2px solid #fff;
