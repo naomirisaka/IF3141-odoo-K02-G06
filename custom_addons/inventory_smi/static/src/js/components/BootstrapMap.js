@@ -34,14 +34,15 @@ export class DenahPage extends Component {
                 <div class="smi-card__body" style="padding:16px;">
 
                     <MapWidget mode="state.modeTampilan"
-                            onNewPoint="(coords) => this.handleNewPoint(coords)"
-                            onPointSelected="(p) => this.handlePointSelected(p)"/>
+                               onNewPoint="(coords) => this.handleNewPoint(coords)"
+                               onPointSelected="(p) => this.handlePointSelected(p)"/>
 
                 </div>
 
                 <!-- Legend -->
                 <div style="padding:0 16px 16px;">
-                    <div style="display:flex;gap:12px;margin-top:10px;font-size:11px;color:var(--text-muted);">
+
+                    <div style="display:flex;gap:12px;font-size:11px;color:var(--text-muted);">
 
                         <span>
                             <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#10B981;margin-right:4px;"></span>
@@ -59,10 +60,68 @@ export class DenahPage extends Component {
                         </span>
 
                     </div>
-                    
+
                 </div>
 
             </div>
+
+            <!-- ADD POINT MODAL -->
+            <t t-if="state.showAddModal">
+
+                <div class="smi-modal-overlay open"
+                     t-on-click="closeModalBackdrop">
+
+                    <div class="smi-modal"
+                         t-on-click.stop="() => {}">
+
+                        <div class="smi-modal__header">
+
+                            <span class="smi-modal__title">
+                                Tambah Titik Inventori
+                            </span>
+
+                        </div>
+
+                        <div class="smi-modal__body">
+
+                            <div class="form-group">
+
+                                <label class="form-label">
+                                    Nama Titik
+                                </label>
+
+                                <input type="text"
+                                       class="smi-input"
+                                       placeholder="Contoh: Rak A1"
+                                       t-model="state.newPointName"/>
+
+                            </div>
+
+                            <div style="display:flex;gap:10px;margin-top:20px;">
+
+                                <button class="smi-btn smi-btn--primary"
+                                        t-on-click="savePoint">
+
+                                    Simpan
+
+                                </button>
+
+                                <button class="smi-btn smi-btn--secondary"
+                                        t-on-click="closeModal">
+
+                                    Batal
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </t>
 
         </div>
     `;
@@ -71,25 +130,47 @@ export class DenahPage extends Component {
 
     setup() {
         this.state = useState({
-            modeTampilan: 'view'
+            modeTampilan: 'view',
+            showAddModal: false,
+            pendingCoords: null,
+            newPointName: '',
         });
     }
 
     toggleAddMode() {
-        this.state.modeTampilan = this.state.modeTampilan === 'add_point' ? 'view' : 'add_point';
+        this.state.modeTampilan =
+            this.state.modeTampilan === 'add_point'
+                ? 'view'
+                : 'add_point';
     }
 
-    async handleNewPoint(coords) {
-        const name = prompt("Masukkan Nama Titik Penyimpanan:");
-        if (!name) {
-            this.state.modeTampilan = 'view';
+    handleNewPoint(coords) {
+        this.state.pendingCoords = coords;
+        this.state.showAddModal = true;
+    }
+
+    closeModal() {
+        this.state.showAddModal = false;
+        this.state.newPointName = '';
+        this.state.pendingCoords = null;
+        this.state.modeTampilan = 'view';
+    }
+
+    closeModalBackdrop(ev) {
+        if (ev.target.classList.contains('smi-modal-overlay')) {
+            this.closeModal();
+        }
+    }
+
+    async savePoint() {
+        if (!this.state.newPointName.trim()) {
             return;
         }
 
         const payload = {
-            name: name,
-            koordinat_x: coords.x,
-            koordinat_y: coords.y,
+            name: this.state.newPointName,
+            koordinat_x: this.state.pendingCoords.x,
+            koordinat_y: this.state.pendingCoords.y,
             deskripsi: `Ditambahkan via peta pada ${new Date().toLocaleString()}`
         };
 
@@ -107,12 +188,11 @@ export class DenahPage extends Component {
             if (response.ok) {
                 window.location.reload();
             } else {
-                const err = await response.json();
-                alert("Gagal menambahkan titik: " + (err.error || "Unknown Error"));
+                alert("Gagal menambahkan titik.");
             }
         } catch (error) {
             console.error(error);
-            alert("Koneksi gagal. Pastikan server Odoo berjalan.");
+            alert("Koneksi gagal.");
         }
     }
 
