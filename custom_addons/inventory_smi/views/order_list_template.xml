@@ -7,13 +7,13 @@
         <t t-set="page_title">Daftar Order</t>
 
         <!-- Toolbar -->
-        <div class="toolbar">
+        <div class="smi-toolbar">
             <form method="get" action="/smi/order"
                   style="display:flex;gap:8px;align-items:center;flex:1;">
-                <input type="text" name="search" class="form-control"
+            <input type="text" name="search" class="smi-search"
                        placeholder="Cari nama pesanan..."
                        t-att-value="search"/>
-                <select name="status" class="form-control" style="width:180px;">
+            <select name="status" class="smi-form-select" style="width:180px;">
                     <option value="">Semua Status</option>
                     <option value="draft"
                             t-att-selected="'selected' if status == 'draft' else None">Draft</option>
@@ -24,26 +24,26 @@
                     <option value="dibatalkan"
                             t-att-selected="'selected' if status == 'dibatalkan' else None">Dibatalkan</option>
                 </select>
-                <button type="submit" class="btn btn-secondary btn-sm">Cari</button>
+                <button type="submit" class="smi-btn smi-btn--secondary smi-btn--sm">Cari</button>
             </form>
             <div style="display:flex;gap:8px;">
                 <t t-if="not is_direktur">
-                    <a href="/smi/order/tambah" class="btn btn-primary btn-sm">+ Tambah Order</a>
+                    <a href="/smi/order/tambah" class="smi-btn smi-btn--primary smi-btn--sm">+ Tambah Order</a>
                 </t>
             </div>
         </div>
 
         <!-- Table Card -->
-        <div class="card">
-            <div class="card-header">
-                <span class="card-title">Daftar Order</span>
+        <div class="smi-card">
+            <div class="smi-card__header">
+                <span class="smi-card__title">Daftar Order</span>
                 <span style="font-size:12px;color:var(--text-muted);">
                     <t t-esc="len(orders)"/> order
                 </span>
             </div>
-            <div class="card-body" style="padding:0;">
+            <div class="smi-card__body" style="padding:0;">
                 <t t-if="orders">
-                    <table class="tbl">
+                    <table class="smi-table">
                         <thead>
                             <tr>
                                 <th>Nama Pesanan</th>
@@ -67,21 +67,21 @@
                                     <td style="color:var(--text-muted);" t-esc="order_item.user_id.name"/>
                                     <td>
                                         <t t-if="order_item.state == 'draft'">
-                                            <span class="badge badge-grey">Draft</span>
+                                            <span class="smi-badge smi-badge--draft">Draft</span>
                                         </t>
                                         <t t-elif="order_item.state == 'dikonfirmasi'">
-                                            <span class="badge badge-blue">Dikonfirmasi</span>
+                                            <span class="smi-badge smi-badge--confirmed">Dikonfirmasi</span>
                                         </t>
                                         <t t-elif="order_item.state == 'selesai'">
-                                            <span class="badge badge-success">Selesai</span>
+                                            <span class="smi-badge smi-badge--done">Selesai</span>
                                         </t>
                                         <t t-elif="order_item.state == 'dibatalkan'">
-                                            <span class="badge badge-danger">Dibatalkan</span>
+                                            <span class="smi-badge smi-badge--cancelled">Dibatalkan</span>
                                         </t>
                                     </td>
                                     <td onclick="event.stopPropagation()" style="display:flex;gap:6px;">
                                         <a t-att-href="'/smi/order/' + str(order_item.id)"
-                                           class="btn btn-secondary btn-sm">Detail</a>
+                                           class="smi-btn smi-btn--secondary smi-btn--sm">Detail</a>
                                     </td>
                                 </tr>
                             </t>

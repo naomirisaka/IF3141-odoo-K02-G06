@@ -7,25 +7,25 @@
         <t t-set="page_title" t-value="material.name"/>
 
         <!-- Back + actions -->
-        <div class="toolbar">
-            <a href="/smi/stok" class="btn btn-secondary btn-sm">← Kembali</a>
+        <div class="smi-toolbar">
+            <a href="/smi/stok" class="smi-btn smi-btn--secondary smi-btn--sm">← Kembali</a>
             <t t-if="not is_direktur">
-                <a href="/smi/stok/tambah" class="btn btn-primary btn-sm">+ Tambah Stok</a>
+                <a href="/smi/stok/tambah" class="smi-btn smi-btn--primary smi-btn--sm">+ Tambah Stok</a>
             </t>
         </div>
 
         <!-- Material info card -->
-        <div class="card" style="margin-bottom:20px;">
-            <div class="card-header">
-                <span class="card-title" t-esc="material.name"/>
+        <div class="smi-card" style="margin-bottom:20px;">
+            <div class="smi-card__header">
+                <span class="smi-card__title" t-esc="material.name"/>
                 <t t-if="material.is_low_stock">
-                    <span class="badge badge-danger">Sisa Sedikit</span>
+                    <span class="smi-badge smi-badge--danger">Sisa Sedikit</span>
                 </t>
                 <t t-else="">
-                    <span class="badge badge-success">Stok Aman</span>
+                    <span class="smi-badge smi-badge--done">Stok Aman</span>
                 </t>
             </div>
-            <div class="card-body">
+            <div class="smi-card__body">
                 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;">
                     <div>
                         <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;">Kategori</div>
@@ -59,13 +59,13 @@
         </div>
 
         <!-- Denah section: points that hold this material -->
-        <div class="card" style="margin-bottom:20px;">
-            <div class="card-header">
-                <span class="card-title">Lokasi di Denah Gudang</span>
+        <div class="smi-card" style="margin-bottom:20px;">
+            <div class="smi-card__header">
+                <span class="smi-card__title">Lokasi di Denah Gudang</span>
                 <a t-att-href="'/smi/stok/denah?material_id=' + str(material.id)"
-                   class="btn btn-secondary btn-sm">Lihat Denah Lengkap</a>
+                   class="smi-btn smi-btn--secondary smi-btn--sm">Lihat Denah Lengkap</a>
             </div>
-            <div class="card-body" style="padding:16px;">
+            <div class="smi-card__body" style="padding:16px;">
                 <div class="denah-container" style="position:relative;">
                     <img src="/inventory_smi/static/src/img/denah.svg" alt="Denah Gudang"
                          style="width:100%;border-radius:6px;"/>
@@ -79,16 +79,16 @@
         </div>
 
         <!-- Transaction history (entries) -->
-        <div class="card">
-            <div class="card-header">
-                <span class="card-title">Riwayat Transaksi</span>
+        <div class="smi-card">
+            <div class="smi-card__header">
+                <span class="smi-card__title">Riwayat Transaksi</span>
                 <span style="font-size:12px;color:var(--text-muted);">
                     <t t-esc="len(entries)"/> catatan
                 </span>
             </div>
-            <div class="card-body" style="padding:0;">
+            <div class="smi-card__body" style="padding:0;">
                 <t t-if="entries">
-                    <table class="tbl">
+                    <table class="smi-table">
                         <thead>
                             <tr>
                                 <th>Tanggal Masuk</th>
@@ -117,13 +117,13 @@
                                     </td>
                                     <td>
                                         <t t-if="entry.state == 'tersedia'">
-                                            <span class="badge badge-success">Tersedia</span>
+                                            <span class="smi-badge smi-badge--done">Tersedia</span>
                                         </t>
                                         <t t-elif="entry.state == 'habis'">
-                                            <span class="badge badge-danger">Habis</span>
+                                            <span class="smi-badge smi-badge--cancelled">Habis</span>
                                         </t>
                                         <t t-else="">
-                                            <span class="badge badge-grey" t-esc="entry.state"/>
+                                            <span class="smi-badge smi-badge--draft" t-esc="entry.state"/>
                                         </t>
                                     </td>
                                     <td style="color:var(--text-muted);" t-esc="entry.user_id.name or '—'"/>

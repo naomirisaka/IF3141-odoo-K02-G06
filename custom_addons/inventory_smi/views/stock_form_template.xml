@@ -16,9 +16,9 @@
             Kembali ke Daftar Stok
         </a>
 
-        <div class="card" style="max-width:700px;">
-            <div class="card-header">
-                <span class="card-title">
+        <div class="smi-card" style="max-width:700px;">
+            <div class="smi-card__header">
+                <span class="smi-card__title">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                          style="vertical-align:middle;margin-right:6px;">
@@ -30,11 +30,11 @@
                 </span>
             </div>
 
-            <div class="form-body">
+            <div class="smi-card__body">
 
                 <!-- Error banner -->
                 <t t-if="error">
-                    <div class="alert alert-danger" t-esc="error"/>
+                    <div class="smi-alert smi-alert--danger" t-esc="error"/>
                 </t>
 
                 <form method="post" action="/smi/stok/tambah">
@@ -45,7 +45,7 @@
                         <label class="form-label" for="material_id">
                             Nama Bahan <span style="color:var(--danger);">*</span>
                         </label>
-                        <select name="material_id" class="form-control" required="required" id="material_id">
+                        <select name="material_id" class="smi-form-select" required="required" id="material_id">
                             <option value="">-- Pilih Bahan --</option>
                             <t t-foreach="materials" t-as="mat">
                                 <option t-att-value="mat.id"
@@ -61,7 +61,7 @@
                             Titik Inventori <span style="color:var(--danger);">*</span>
                         </label>
                         <div class="input-group">
-                            <select name="inventory_point_id" class="form-control" required="required" id="inventory_point_id">
+                            <select name="inventory_point_id" class="smi-form-select" required="required" id="inventory_point_id">
                                 <option value="">-- Pilih Lokasi --</option>
                                 <t t-foreach="points" t-as="pt">
                                     <option t-att-value="pt.id"
@@ -69,7 +69,7 @@
                                             t-esc="pt.name"/>
                                 </t>
                             </select>
-                            <button type="button" class="btn btn-secondary"
+                                <button type="button" class="smi-btn smi-btn--secondary"
                                     onclick="document.getElementById('map-modal').classList.add('open')">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -85,8 +85,8 @@
                         <label class="form-label" for="jumlah_awal">
                             Jumlah Masuk <span style="color:var(--danger);">*</span>
                         </label>
-                        <input type="number" name="jumlah_awal" id="jumlah_awal"
-                               class="form-control" min="0.01" step="0.01"
+                           <input type="number" name="jumlah_awal" id="jumlah_awal"
+                               class="smi-input" min="0.01" step="0.01"
                                required="required" placeholder="Masukkan jumlah stok"
                                t-att-value="post.get('jumlah_awal', '')"/>
                     </div>
@@ -94,8 +94,8 @@
                     <!-- Tanggal Masuk -->
                     <div class="form-group">
                         <label class="form-label" for="tanggal_masuk">Tanggal Masuk</label>
-                        <input type="datetime-local" name="tanggal_masuk" id="tanggal_masuk"
-                               class="form-control"
+                           <input type="datetime-local" name="tanggal_masuk" id="tanggal_masuk"
+                               class="smi-input"
                                t-att-value="post.get('tanggal_masuk', '')"/>
                         <span class="form-hint">Kosongkan untuk menggunakan waktu sekarang.</span>
                     </div>
@@ -103,31 +103,31 @@
                     <!-- Catatan -->
                     <div class="form-group">
                         <label class="form-label" for="catatan">Catatan</label>
-                        <textarea name="catatan" id="catatan" class="form-control"
+                        <textarea name="catatan" id="catatan" class="smi-textarea"
                                   rows="3" placeholder="Catatan tambahan (opsional)">
                             <t t-esc="post.get('catatan', '')"/>
                         </textarea>
                     </div>
 
                     <div style="display:flex;gap:10px;margin-top:24px;padding-top:20px;border-top:1px solid var(--border);">
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="smi-btn smi-btn--primary">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                  stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="20 6 9 17 4 12"/>
                             </svg>
                             Simpan Stok
                         </button>
-                        <a href="/smi/stok" class="btn btn-secondary">Batal</a>
+                        <a href="/smi/stok" class="smi-btn smi-btn--secondary">Batal</a>
                     </div>
                 </form>
             </div>
         </div>
 
         <!-- ===== MAP MODAL ===== -->
-        <div id="map-modal" class="modal-overlay">
-            <div class="modal-box">
-                <div class="modal-header">
-                    <span class="modal-title">
+        <div id="map-modal" class="smi-modal-overlay">
+            <div class="smi-modal">
+                <div class="smi-modal__header">
+                    <span class="smi-modal__title">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                              style="vertical-align:middle;margin-right:6px;">
@@ -135,12 +135,12 @@
                         </svg>
                         Pilih Titik dari Denah
                     </span>
-                    <button type="button" class="btn btn-secondary btn-sm"
+                    <button type="button" class="smi-btn smi-btn--secondary smi-btn--sm"
                             onclick="document.getElementById('map-modal').classList.remove('open')">
                         ✕ Tutup
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="smi-modal__body">
                     <div style="position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--border);">
                         <img src="/inventory_smi/static/src/img/denah.svg" alt="Denah Gudang"
                              style="width:100%;display:block;"/>

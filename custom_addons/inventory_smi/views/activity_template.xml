@@ -20,17 +20,17 @@
         </div>
 
         <!-- Toolbar -->
-        <div class="toolbar" style="margin-bottom:16px;">
+        <div class="smi-toolbar" style="margin-bottom:16px;">
             <form method="get" action="/smi/activity"
                   style="display:flex;gap:8px;align-items:center;flex:1;">
                 <input type="hidden" name="tab" t-att-value="tab"/>
-                <input type="text" name="search" class="form-control"
+                <input type="text" name="search" class="smi-search"
                        placeholder="Cari nama pengguna..."
                        t-att-value="search"/>
-                <button type="submit" class="btn btn-secondary btn-sm">Cari</button>
+                <button type="submit" class="smi-btn smi-btn--secondary smi-btn--sm">Cari</button>
                 <t t-if="search">
                     <a t-att-href="'/smi/activity?tab=' + tab"
-                       class="btn btn-secondary btn-sm">Reset</a>
+                       class="smi-btn smi-btn--secondary smi-btn--sm">Reset</a>
                 </t>
             </form>
             <div style="font-size:13px;color:var(--text-muted);align-self:center;">
@@ -40,10 +40,10 @@
         </div>
 
         <!-- Activity Table -->
-        <div class="card">
-            <div class="card-body" style="padding:0;">
+        <div class="smi-card">
+            <div class="smi-card__body" style="padding:0;">
                 <t t-if="logs">
-                    <table class="tbl">
+                    <table class="smi-table">
                         <thead>
                             <tr>
                                 <th>Pengguna</th>
@@ -66,7 +66,7 @@
                                     onclick="openActivityDetailFromRow(this)">
                                     <td>
                                         <div style="display:flex;align-items:center;gap:8px;">
-                                            <div class="avatar"
+                                            <div class="smi-avatar"
                                                  t-att-style="'background:' + (['#3B82F6','#10B981','#F59E0B','#EF4444','#8B5CF6'][log.id % 5]) + ';'">
                                                 <t t-esc="(log.user_id.name or 'U')[0].upper()"/>
                                             </div>
@@ -79,7 +79,7 @@
                                     <td style="color:var(--text-muted);font-size:13px;"
                                         t-esc="log.tanggal"/>
                                     <td>
-                                        <span t-att-class="'badge ' + tipe_info[1]"
+                                        <span t-att-class="'smi-badge ' + tipe_info[1].replace('badge-','smi-badge--')"
                                               t-esc="tipe_info[0]"/>
                                     </td>
                                     <td style="max-width:320px;font-size:13px;
@@ -87,7 +87,7 @@
                                                text-overflow:ellipsis;"
                                         t-esc="log.deskripsi"/>
                                     <td onclick="event.stopPropagation()">
-                                        <button class="btn btn-secondary btn-sm"
+                                        <button class="smi-btn smi-btn--secondary smi-btn--sm"
                                                 t-att-data-user="log.user_id.name or '-'"
                                                 t-att-data-jabatan="log.jabatan or '-'"
                                                 t-att-data-tanggal="str(log.tanggal)"
@@ -144,7 +144,7 @@
                 if (f[0] === 'Deskripsi') {
                     html += '<div style="white-space:pre-wrap;">' + esc(f[1]) + '</div>';
                 } else if (f[0] === 'Tipe Aktivitas') {
-                    html += '<div><span class="badge badge-blue">' + esc(f[1]) + '</span></div>';
+                    html += '<div><span class="smi-badge smi-badge--confirmed">' + esc(f[1]) + '</span></div>';
                 } else {
                     html += '<div>' + esc(f[1]) + '</div>';
                 }

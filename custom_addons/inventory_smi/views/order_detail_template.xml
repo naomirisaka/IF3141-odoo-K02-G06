@@ -20,37 +20,37 @@
         </div>
 
         <!-- Order header card -->
-        <div class="card" style="margin-bottom:16px;">
-            <div class="card-header">
-                <span class="card-title" t-esc="order.name"/>
+        <div class="smi-card" style="margin-bottom:16px;">
+            <div class="smi-card__header">
+                <span class="smi-card__title" t-esc="order.name"/>
                 <div style="display:flex;align-items:center;gap:8px;">
                     <t t-if="order.state == 'draft'">
-                        <span class="badge badge-grey">Draft</span>
+                        <span class="smi-badge smi-badge--draft">Draft</span>
                     </t>
                     <t t-elif="order.state == 'dikonfirmasi'">
-                        <span class="badge badge-blue">Dikonfirmasi</span>
+                        <span class="smi-badge smi-badge--confirmed">Dikonfirmasi</span>
                     </t>
                     <t t-elif="order.state == 'selesai'">
-                        <span class="badge badge-success">Selesai</span>
+                        <span class="smi-badge smi-badge--done">Selesai</span>
                     </t>
                     <t t-elif="order.state == 'dibatalkan'">
-                        <span class="badge badge-danger">Dibatalkan</span>
+                        <span class="smi-badge smi-badge--cancelled">Dibatalkan</span>
                     </t>
 
                     <!-- Action buttons for authorized roles -->
                     <t t-if="not is_direktur">
                         <t t-if="order.state == 'draft'">
                             <a t-att-href="'/smi/order/tambah/step2?order_id=' + str(order.id)"
-                               class="btn btn-secondary btn-sm">Edit Bahan</a>
+                               class="smi-btn smi-btn--secondary smi-btn--sm">Edit Bahan</a>
                             <form method="post"
                                   t-att-action="'/smi/order/' + str(order.id)"
                                   style="display:inline;">
                                 <input type="hidden" name="csrf_token"
                                        t-att-value="request.csrf_token()"/>
                                 <input type="hidden" name="action" value="cancel"/>
-                                <button type="submit" class="btn btn-sm"
-                                        style="background:#FEF2F2;color:var(--danger);
-                                               border:1px solid #FECACA;">
+                                <button type="submit" class="smi-btn smi-btn--sm"
+                                    style="background:#FEF2F2;color:var(--danger);
+                                           border:1px solid #FECACA;">
                                     Batalkan
                                 </button>
                             </form>
@@ -62,7 +62,7 @@
                                 <input type="hidden" name="csrf_token"
                                        t-att-value="request.csrf_token()"/>
                                 <input type="hidden" name="action" value="complete"/>
-                                <button type="submit" class="btn btn-primary btn-sm">
+                                <button type="submit" class="smi-btn smi-btn--primary smi-btn--sm">
                                     Selesaikan
                                 </button>
                             </form>
@@ -72,7 +72,7 @@
                                 <input type="hidden" name="csrf_token"
                                        t-att-value="request.csrf_token()"/>
                                 <input type="hidden" name="action" value="cancel"/>
-                                <button type="submit" class="btn btn-sm"
+                                <button type="submit" class="smi-btn smi-btn--sm"
                                         style="background:#FEF2F2;color:var(--danger);
                                                border:1px solid #FECACA;">
                                     Batalkan
@@ -82,7 +82,7 @@
                     </t>
                 </div>
             </div>
-            <div class="card-body" style="padding:20px;">
+            <div class="smi-card__body" style="padding:20px;">
                 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;">
                     <div>
                         <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;">No. SPK</div>
@@ -107,11 +107,11 @@
         </div>
 
         <!-- Order lines + pick detail -->
-        <div class="card">
-            <div class="card-header">
-                <span class="card-title">Daftar Bahan &amp; Detail Pengambilan</span>
+        <div class="smi-card">
+            <div class="smi-card__header">
+                <span class="smi-card__title">Daftar Bahan &amp; Detail Pengambilan</span>
             </div>
-            <div class="card-body" style="padding:0;">
+            <div class="smi-card__body" style="padding:0;">
                 <t t-if="order.order_line_ids">
                     <t t-foreach="order.order_line_ids" t-as="line">
                         <div style="padding:16px 20px;border-bottom:1px solid var(--border);">
@@ -122,10 +122,10 @@
                                           t-esc="line.material_id.name"/>
                                     <span style="margin-left:10px;">
                                         <t t-if="line.mode_pick == 'auto'">
-                                            <span class="badge badge-blue">Otomatis (FIFO)</span>
+                                            <span class="smi-badge smi-badge--confirmed">Otomatis (FIFO)</span>
                                         </t>
                                         <t t-else="">
-                                            <span class="badge badge-grey">Manual</span>
+                                            <span class="smi-badge smi-badge--draft">Manual</span>
                                         </t>
                                     </span>
                                 </div>
@@ -152,7 +152,7 @@
                                 <div style="margin-top:8px;">
                                     <div style="font-size:12px;color:var(--text-muted);
                                                 font-weight:600;margin-bottom:6px;">Detail Pengambilan:</div>
-                                    <table class="tbl" style="font-size:13px;">
+                                    <table class="smi-table" style="font-size:13px;">
                                         <thead>
                                             <tr>
                                                 <th>Titik Penyimpanan</th>

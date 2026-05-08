@@ -31,8 +31,8 @@
         </div>
 
         <!-- Order summary header -->
-        <div class="card" style="margin-bottom:16px;padding:16px 20px;
-                                  display:flex;gap:24px;align-items:center;">
+        <div class="smi-card" style="margin-bottom:16px;padding:16px 20px;
+                      display:flex;gap:24px;align-items:center;">
             <div>
                 <div style="font-size:12px;color:var(--text-muted);">Nama Pesanan</div>
                 <div style="font-size:15px;font-weight:600;" t-esc="order.name"/>
@@ -48,13 +48,13 @@
         </div>
 
         <!-- Existing order lines -->
-        <div class="card" style="margin-bottom:16px;">
-            <div class="card-header">
-                <span class="card-title">Bahan yang Dibutuhkan</span>
+        <div class="smi-card" style="margin-bottom:16px;">
+            <div class="smi-card__header">
+                <span class="smi-card__title">Bahan yang Dibutuhkan</span>
             </div>
-            <div class="card-body" style="padding:0;">
+            <div class="smi-card__body" style="padding:0;">
                 <t t-if="order.order_line_ids">
-                    <table class="tbl">
+                    <table class="smi-table">
                         <thead>
                             <tr>
                                 <th>Bahan</th>
@@ -82,18 +82,18 @@
                                     </td>
                                     <td>
                                         <t t-if="line.mode_pick == 'auto'">
-                                            <span class="badge badge-blue">Otomatis (FIFO)</span>
+                                            <span class="smi-badge smi-badge--confirmed">Otomatis (FIFO)</span>
                                         </t>
                                         <t t-else="">
-                                            <span class="badge badge-grey">Manual</span>
+                                            <span class="smi-badge smi-badge--draft">Manual</span>
                                         </t>
                                     </td>
                                     <td>
                                         <t t-if="line.is_sufficient">
-                                            <span class="badge badge-success">Stok Cukup</span>
+                                            <span class="smi-badge smi-badge--done">Stok Cukup</span>
                                         </t>
                                         <t t-else="">
-                                            <span class="badge badge-danger">Stok Tidak Cukup</span>
+                                            <span class="smi-badge smi-badge--cancelled">Stok Tidak Cukup</span>
                                         </t>
                                     </td>
                                     <td>
@@ -131,9 +131,9 @@
                                                                     <input type="hidden" name="action" value="remove_manual_pick"/>
                                                                     <input type="hidden" name="pick_id"
                                                                            t-att-value="str(pick.id)"/>
-                                                                    <button type="submit" class="btn btn-sm"
+                                                                        <button type="submit" class="smi-btn smi-btn--sm"
                                                                             style="padding:2px 8px;font-size:11px;
-                                                                                   color:var(--danger);background:none;border:none;">✕</button>
+                                                                               color:var(--danger);background:none;border:none;">✕</button>
                                                                 </form>
                                                             </div>
                                                         </t>
@@ -152,7 +152,7 @@
                                                         <input type="hidden" name="line_id"
                                                                t-att-value="str(line.id)"/>
                                                         <div style="display:flex;gap:6px;flex-wrap:wrap;">
-                                                            <select name="stock_entry_id" class="form-control"
+                                                                <select name="stock_entry_id" class="smi-form-select"
                                                                     style="width:auto;font-size:12px;">
                                                                 <t t-foreach="points_with_stock" t-as="pt">
                                                                     <t t-foreach="pt.stock_entry_ids.filtered(lambda e: e.material_id.id == line.material_id.id and e.state == 'tersedia')" t-as="se">
@@ -164,11 +164,11 @@
                                                                     </t>
                                                                 </t>
                                                             </select>
-                                                            <input type="number" name="jumlah_diambil"
-                                                                   class="form-control"
+                                                                <input type="number" name="jumlah_diambil"
+                                                                    class="smi-input"
                                                                    style="width:80px;font-size:12px;"
                                                                    placeholder="Jumlah" min="0.01" step="0.01"/>
-                                                            <button type="submit" class="btn btn-primary btn-sm">Tambah</button>
+                                                                <button type="submit" class="smi-btn smi-btn--primary smi-btn--sm">Tambah</button>
                                                         </div>
                                                     </form>
                                                 </details>
@@ -182,9 +182,9 @@
                                                    t-att-value="request.csrf_token()"/>
                                             <input type="hidden" name="action" value="remove_line"/>
                                             <input type="hidden" name="line_id" t-att-value="str(line.id)"/>
-                                            <button type="submit" class="btn btn-sm"
+                                                <button type="submit" class="smi-btn smi-btn--sm"
                                                     style="color:var(--danger);background:none;border:none;
-                                                           font-size:16px;cursor:pointer;">✕</button>
+                                                       font-size:16px;cursor:pointer;">✕</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -199,11 +199,11 @@
         </div>
 
         <!-- Add material line form -->
-        <div class="card" style="margin-bottom:16px;">
-            <div class="card-header">
-                <span class="card-title">Tambah Bahan</span>
+        <div class="smi-card" style="margin-bottom:16px;">
+            <div class="smi-card__header">
+                <span class="smi-card__title">Tambah Bahan</span>
             </div>
-            <div class="card-body" style="padding:20px;">
+            <div class="smi-card__body" style="padding:20px;">
                 <form method="post"
                       t-att-action="'/smi/order/tambah/step2?order_id=' + str(order.id)">
                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
@@ -212,7 +212,7 @@
                         <div style="flex:2;min-width:180px;">
                             <label style="display:block;font-size:12px;font-weight:500;
                                           color:var(--text-muted);margin-bottom:4px;">Bahan</label>
-                            <select name="material_id" class="form-control">
+                            <select name="material_id" class="smi-form-select">
                                 <option value="">— Pilih Bahan —</option>
                                 <t t-foreach="materials" t-as="mat">
                                     <option t-att-value="str(mat.id)">
@@ -225,19 +225,19 @@
                         <div style="flex:1;min-width:100px;">
                             <label style="display:block;font-size:12px;font-weight:500;
                                           color:var(--text-muted);margin-bottom:4px;">Jumlah</label>
-                            <input type="number" name="jumlah_dibutuhkan" class="form-control"
+                            <input type="number" name="jumlah_dibutuhkan" class="smi-input"
                                    placeholder="0" min="0.01" step="0.01"/>
                         </div>
                         <div style="flex:1;min-width:140px;">
                             <label style="display:block;font-size:12px;font-weight:500;
                                           color:var(--text-muted);margin-bottom:4px;">Mode Pengambilan</label>
-                            <select name="mode_pick" class="form-control">
+                            <select name="mode_pick" class="smi-form-select">
                                 <option value="auto">Otomatis (FIFO)</option>
                                 <option value="manual">Manual</option>
                             </select>
                         </div>
                         <div>
-                            <button type="submit" class="btn btn-primary">+ Tambah</button>
+                            <button type="submit" class="smi-btn smi-btn--primary">+ Tambah</button>
                         </div>
                     </div>
                 </form>
@@ -246,13 +246,13 @@
 
         <!-- Navigation -->
         <div style="display:flex;gap:8px;">
-            <a t-att-href="'/smi/order/tambah'" class="btn btn-secondary">← Kembali</a>
+            <a t-att-href="'/smi/order/tambah'" class="smi-btn smi-btn--secondary">← Kembali</a>
             <form method="post"
                   t-att-action="'/smi/order/tambah/step2?order_id=' + str(order.id)"
                   style="display:inline;">
                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                 <input type="hidden" name="action" value="next"/>
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="smi-btn smi-btn--primary">
                     Lanjut ke Konfirmasi →
                 </button>
             </form>

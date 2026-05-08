@@ -7,37 +7,37 @@
         <t t-set="page_title">Stok Bahan Baku</t>
 
         <!-- Toolbar -->
-        <div class="toolbar">
+        <div class="smi-toolbar">
             <form method="get" action="/smi/stok" style="display:flex;gap:8px;align-items:center;flex:1;">
-                <input type="text" name="search" class="form-control"
+                <input type="text" name="search" class="smi-search"
                        placeholder="Cari nama bahan..."
                        t-att-value="search"/>
-                <select name="sort" class="form-control" style="width:180px;">
+                <select name="sort" class="smi-form-select" style="width:180px;">
                     <option value="name" t-att-selected="'selected' if sort == 'name' else None">Nama A–Z</option>
                     <option value="stok_asc" t-att-selected="'selected' if sort == 'stok_asc' else None">Stok Terendah</option>
                     <option value="stok_desc" t-att-selected="'selected' if sort == 'stok_desc' else None">Stok Tertinggi</option>
                 </select>
-                <button type="submit" class="btn btn-secondary btn-sm">Cari</button>
+                <button type="submit" class="smi-btn smi-btn--secondary smi-btn--sm">Cari</button>
             </form>
             <div style="display:flex;gap:8px;">
                 <t t-if="not is_direktur">
-                    <a href="/smi/stok/tambah" class="btn btn-primary btn-sm">+ Tambah Stok</a>
+                    <a href="/smi/stok/tambah" class="smi-btn smi-btn--primary smi-btn--sm">+ Tambah Stok</a>
                 </t>
-                <a href="/smi/stok/denah" class="btn btn-secondary btn-sm">Lihat Denah</a>
+                <a href="/smi/stok/denah" class="smi-btn smi-btn--secondary smi-btn--sm">Lihat Denah</a>
             </div>
         </div>
 
         <!-- Table Card -->
-        <div class="card">
-            <div class="card-header">
-                <span class="card-title">Daftar Bahan Baku</span>
+        <div class="smi-card">
+            <div class="smi-card__header">
+                <span class="smi-card__title">Daftar Bahan Baku</span>
                 <span style="font-size:12px;color:var(--text-muted);">
                     <t t-esc="len(materials)"/> bahan aktif
                 </span>
             </div>
-            <div class="card-body" style="padding:0;">
+            <div class="smi-card__body" style="padding:0;">
                 <t t-if="materials">
-                    <table class="tbl">
+                    <table class="smi-table">
                         <thead>
                             <tr>
                                 <th>Nama Bahan</th>
@@ -63,15 +63,15 @@
                                     <td t-esc="'%.1f' % (mat.stok_minimum or 0.0)"/>
                                     <td>
                                         <t t-if="mat.is_low_stock">
-                                            <span class="badge badge-danger">Sisa Sedikit</span>
+                                            <span class="smi-badge smi-badge--danger">Sisa Sedikit</span>
                                         </t>
                                         <t t-else="">
-                                            <span class="badge badge-success">Aman</span>
+                                            <span class="smi-badge smi-badge--done">Aman</span>
                                         </t>
                                     </td>
                                     <td onclick="event.stopPropagation()">
                                         <a t-att-href="'/smi/stok/' + str(mat.id)"
-                                           class="btn btn-secondary btn-sm">Detail</a>
+                                           class="smi-btn smi-btn--secondary smi-btn--sm">Detail</a>
                                     </td>
                                 </tr>
                             </t>
