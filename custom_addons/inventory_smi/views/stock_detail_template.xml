@@ -67,6 +67,7 @@
             </div>
             <div class="smi-card__body" style="padding:16px;">
                 <div class="denah-container" style="position:relative;">
+                    <div id="smi_map_data" t-att-data-points="map_points_json" t-att-data-can-manage="'1' if can_manage_points else '0'" style="display:none"></div>
                     <div id="smi_map_root"
                             style="width:100%;min-height:520px;">
                     </div>
@@ -99,6 +100,8 @@
                                 <th>Status</th>
                                 <th>Dicatat Oleh</th>
                             </tr>
+
+                                <t t-call="inventory_smi.warehouse_map_script"/>
                         </thead>
                         <tbody>
                             <t t-foreach="entries" t-as="entry">

@@ -114,11 +114,17 @@ class SmiStockController(http.Controller):
         )
         points_with_stock = entries.mapped('inventory_point_id')
 
+        # provide map points JSON for the frontend detail panel
+        map_points = self._get_map_points(material)
+
         values = {
             'material': material,
             'total_stok': material.total_stok,
             'entries': entries,
             'points_with_stock': points_with_stock,
+            'map_points': map_points,
+            'map_points_json': json.dumps(map_points),
+            'can_manage_points': user.has_group('inventory_smi.group_kepala_produksi'),
             'is_direktur': user.has_group('inventory_smi.group_direktur'),
             'is_kepala': user.has_group('inventory_smi.group_kepala_produksi'),
             'is_admin': user.has_group('inventory_smi.group_admin'),
@@ -151,6 +157,7 @@ class SmiStockController(http.Controller):
             'selected_material': selected_material,
             'map_points': map_points,
             'map_points_json': json.dumps(map_points),
+            'can_manage_points': user.has_group('inventory_smi.group_kepala_produksi'),
             'is_direktur': user.has_group('inventory_smi.group_direktur'),
             'is_kepala': user.has_group('inventory_smi.group_kepala_produksi'),
             'is_admin': user.has_group('inventory_smi.group_admin'),

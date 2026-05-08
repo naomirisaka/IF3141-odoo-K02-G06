@@ -1,7 +1,7 @@
 /** @odoo-module **/
 import { Component, useState, mount, whenReady, xml } from "@odoo/owl";
 import { templates } from "@web/core/assets";
-import { MapWidget } from "@inventory_smi/js/components/MapWidget";
+import { MapWidget } from "./MapWidget";
 
 export class DenahPage extends Component {
     static template = xml`
@@ -17,6 +17,7 @@ export class DenahPage extends Component {
                     </span>
 
                     <button class="smi-btn smi-btn--sm"
+                            t-if="canManage"
                             t-att-class="state.modeTampilan === 'add_point'
                                 ? 'smi-btn smi-btn--danger smi-btn--sm'
                                 : 'smi-btn smi-btn--primary smi-btn--sm'"
@@ -33,7 +34,7 @@ export class DenahPage extends Component {
                 <!-- Body -->
                 <div class="smi-card__body" style="padding:16px;">
 
-                    <MapWidget mode="state.modeTampilan"
+                    <MapWidget onReady="(api) => this.registerMapApi(api)" mode="state.modeTampilan"
                                onNewPoint="(coords) => this.handleNewPoint(coords)"
                                onPointSelected="(p) => this.handlePointSelected(p)"/>
 
@@ -135,6 +136,23 @@ export class DenahPage extends Component {
             pendingCoords: null,
             newPointName: '',
         });
+        this.mapApi = null;
+        try {
+            var dataEl = document.getElementById('smi_map_data');
+            this.canManage = dataEl && dataEl.dataset && dataEl.dataset.canManage === '1';
+        } catch (e) {
+            this.canManage = false;
+        }
+    }
+
+    refreshMap() {
+        try {
+            if (this.mapApi && typeof this.mapApi.refresh === 'function') {
+                this.mapApi.refresh();
+            }
+        } catch (e) {
+            // ignore
+        }
     }
 
     toggleAddMode() {
@@ -142,6 +160,10 @@ export class DenahPage extends Component {
             this.state.modeTampilan === 'add_point'
                 ? 'view'
                 : 'add_point';
+    }
+
+    registerMapApi(api) {
+        this.mapApi = api;
     }
 
     handleNewPoint(coords) {
@@ -206,23 +228,83 @@ export class DenahPage extends Component {
 whenReady(() => {
     // mount for Dashboard Page
     const dashTarget = document.getElementById('smi_map_root');
+    let dashInstance = null;
     if (dashTarget) {
-        mount(MapWidget, dashTarget, {
+        dashInstance = mount(MapWidget, dashTarget, {
             templates,
             props: {
                 mode: 'view',
                 onPointSelected: (point) => {
-                    if (window.showPointPanel) {
-                        window.showPointPanel(point.id);
+                    try {
+                        try { window.__smi_map_selected_point = point; } catch (e) {}
+                        if (typeof window.selectInventoryPoint === 'function') {
+                            window.selectInventoryPoint(String(point.id), point.name || '');
+                        } else if (typeof window.showPointPanel === 'function') {
+                            window.showPointPanel(point.id);
+                        }
+                    } catch (e) {
+                        console.error('onPointSelected handler error', e);
                     }
                 }
             }
         });
+
     }
 
     // mount for Denah Page
     const fullTarget = document.getElementById('smi_full_map_root');
+    let fullInstance = null;
     if (fullTarget) {
-        mount(DenahPage, fullTarget, { templates });
+        fullInstance = mount(DenahPage, fullTarget, { templates });
+    }
+
+    function handlePointDeletedShared(payload) {
+        var refreshed = false;
+        try {
+            if (dashInstance && typeof dashInstance.refresh === 'function') {
+                dashInstance.refresh();
+                refreshed = true;
+            }
+        } catch (e) {}
+        try {
+            if (fullInstance && typeof fullInstance.refreshMap === 'function') {
+                fullInstance.refreshMap();
+                refreshed = true;
+            }
+        } catch (e) {}
+        if (!refreshed) {
+            window.location.reload();
+        }
+    }
+
+    function trySubscribeBusShared() {
+        try {
+            const candidates = [window.bus, (window.odoo && window.odoo.bus), (window.core && window.core.bus)];
+            for (const b of candidates) {
+                if (b && typeof b.on === 'function') {
+                    b.on('notification', null, function(msg) {
+                        try {
+                            var payload = null;
+                            if (Array.isArray(msg) && msg[1] && msg[1].payload) payload = msg[1].payload;
+                            else if (Array.isArray(msg) && msg[1]) payload = msg[1];
+                            else if (msg && msg.payload) payload = msg.payload;
+                            if (payload && payload.type === 'point_deleted') {
+                                handlePointDeletedShared(payload);
+                            }
+                        } catch (e) {}
+                    });
+                    return true;
+                }
+            }
+        } catch (e) {}
+        return false;
+    }
+
+    if (!trySubscribeBusShared()) {
+        // polling fallback: try to refresh maps periodically
+        setInterval(function() {
+            try { if (dashInstance && typeof dashInstance.refresh === 'function') dashInstance.refresh(); } catch (e) {}
+            try { if (fullInstance && typeof fullInstance.refreshMap === 'function') fullInstance.refreshMap(); } catch (e) {}
+        }, 12000);
     }
 });

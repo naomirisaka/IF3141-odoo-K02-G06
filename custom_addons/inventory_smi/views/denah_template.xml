@@ -6,14 +6,25 @@
         <script type="text/javascript">
         //<![CDATA[
 
-        var SMI_MAP_POINTS = <t t-out="map_points_json"/>;
+        var SMI_MAP_POINTS = [];
+        try {
+            var dataEl = document.getElementById('smi_map_data');
+            if (dataEl && dataEl.dataset && dataEl.dataset.points) {
+                SMI_MAP_POINTS = JSON.parse(dataEl.dataset.points);
+            } else {
+                SMI_MAP_POINTS = [];
+            }
+        } catch (e) {
+            SMI_MAP_POINTS = [];
+        }
+        window.SMI_MAP_POINTS = SMI_MAP_POINTS;
 
-        function showPointPanel(pointId) {
+        window.showPointPanel = function(pointId) {
 
             var pts = SMI_MAP_POINTS;
             var pt = null;
 
-            for (var i = 0; i &lt; pts.length; i++) {
+            for (var i = 0; i < pts.length; i++) {
                 if (String(pts[i].id) === String(pointId)) {
                     pt = pts[i];
                     break;
@@ -31,7 +42,6 @@
 
             html += '<div style="margin-bottom:12px;">';
             html += '<div style="font-weight:600;font-size:15px;">' + pt.name + '</div>';
-            html += '<div style="font-size:12px;color:#64748B;">(' + pt.x.toFixed(1) + '%, ' + pt.y.toFixed(1) + '%)</div>';
             html += '</div>';
 
             if (mats.length === 0) {
@@ -51,7 +61,7 @@
 
                 html += '<tbody>';
 
-                for (var j = 0; j &lt; mats.length; j++) {
+                for (var j = 0; j < mats.length; j++) {
 
                     var m = mats[j];
 
@@ -59,26 +69,133 @@
                         ? '<span style="display:inline-block;padding:2px 6px;border-radius:10px;font-size:10px;background:#FEE2E2;color:#DC2626;">Sedikit</span>'
                         : '<span style="display:inline-block;padding:2px 6px;border-radius:10px;font-size:10px;background:#D1FAE5;color:#059669;">Aman</span>';
 
-                    html += '<tr>';
+                    html += '<tr>' +
+                        '<td style="padding:6px 0;">' +
+                            '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">' +
+                                '<span>' + (m.name || '') + '</span>' +
+                                badge +
+                            '</div>' +
+                        '</td>' +
 
-                    html += '<td style="padding:6px 0;">';
-                    html += m.name + ' ' + badge;
-                    html += '</td>';
+                        '<td style="padding:6px 0;text-align:right;">' +
+                            (m.total_stok || 0).toFixed(1) + ' ' + (m.uom || '') +
+                        '</td>' +
+                    '</tr>';
 
-                    html += '<td style="padding:6px 0;text-align:right;">';
-                    html += m.total_stok.toFixed(1) + ' ' + (m.uom || '');
-                    html += '</td>';
-
-                    html += '</tr>';
+                    html += '<tr>' +
+                        '<td colspan="2" style="padding:0 0 10px;">' +
+                            '<a href="/smi/stok/' + m.id + '" ' +
+                            'class="smi-btn smi-btn--secondary smi-btn--sm" ' +
+                            'style="width:100%;justify-content:center;">' +
+                            'Lihat Detail Stok' +
+                            '</a>' +
+                        '</td>' +
+                    '</tr>';
                 }
 
-                html += '</tbody>';
-                html += '</table>';
+                html += '</tbody></table>';
             }
+
+            // if user can manage points, add delete button
+            try {
+                var dataEl = document.getElementById('smi_map_data');
+                var canManage = dataEl && dataEl.dataset && dataEl.dataset.canManage === '1';
+                if (canManage) {
+                    html += '<div style="margin-top:12px;display:flex;gap:8px;">';
+                    html += '<button class="smi-btn smi-btn--danger" onclick="window.showDeleteConfirm(' + pt.id + ')">Hapus Titik</button>';
+                    html += '</div>';
+                }
+            } catch (e) {}
 
             body.innerHTML = html;
         }
 
+        window.showDeleteConfirm = function(pointId) {
+            // lookup point details
+            var pt = null;
+            for (var i = 0; i < SMI_MAP_POINTS.length; i++) {
+                if (String(SMI_MAP_POINTS[i].id) === String(pointId)) { pt = SMI_MAP_POINTS[i]; break; }
+            }
+
+            // if point has materials, show reminder modal instead of delete
+            if (pt && pt.materials && pt.materials.length > 0) {
+                var overlay2 = document.createElement('div');
+                overlay2.className = 'smi-modal-overlay open';
+                overlay2.style.zIndex = 9999;
+                overlay2.addEventListener('click', function(ev){ if (ev.target === overlay2) document.body.removeChild(overlay2); });
+
+                var modal2 = document.createElement('div');
+                modal2.className = 'smi-modal';
+                var listHtml = '<ul style="margin:8px 0;padding-left:18px;font-size:13px;">';
+                for (var k = 0; k < pt.materials.length; k++) {
+                    var mm = pt.materials[k];
+                    listHtml += '<li>' + (mm.material_name || mm.name || '') + ' — ' + (mm.jumlah_tersisa || 0) + ' ' + (mm.satuan || '') + '</li>';
+                }
+                listHtml += '</ul>';
+
+                modal2.innerHTML = '<div class="smi-modal__header"><span class="smi-modal__title">Titik masih memiliki stok</span></div>' +
+                    '<div class="smi-modal__body">' +
+                    '<div style="margin-bottom:8px;">Sebelum menghapus titik ini, pindahkan semua stok yang masih tersisa ke titik lain.</div>' +
+                    listHtml +
+                    '<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">' +
+                    '<button class="smi-btn smi-btn--secondary" id="smi_close_remind">Tutup</button>' +
+                    '</div></div>';
+
+                overlay2.appendChild(modal2);
+                document.body.appendChild(overlay2);
+
+                document.getElementById('smi_close_remind').addEventListener('click', function(){ if (overlay2.parentNode) overlay2.parentNode.removeChild(overlay2); });
+                return;
+            }
+
+            // create confirm modal for deletion
+            var overlay = document.createElement('div');
+            overlay.className = 'smi-modal-overlay open';
+            overlay.style.zIndex = 9999;
+
+            overlay.addEventListener('click', function(ev){
+                if (ev.target === overlay) document.body.removeChild(overlay);
+            });
+
+            var modal = document.createElement('div');
+            modal.className = 'smi-modal';
+            modal.innerHTML = '<div class="smi-modal__header"><span class="smi-modal__title">Hapus Titik</span></div>' +
+                '<div class="smi-modal__body"><div style="margin-bottom:12px;">Yakin ingin menghapus titik ini? Titik akan dihapus secara permanen.</div>' +
+                '<div style="display:flex;gap:8px;justify-content:flex-end;">' +
+                '<button class="smi-btn smi-btn--secondary" id="smi_cancel_delete">Batal</button>' +
+                '<button class="smi-btn smi-btn--danger" id="smi_confirm_delete">Hapus</button>' +
+                '</div></div>';
+
+            overlay.appendChild(modal);
+            document.body.appendChild(overlay);
+
+            document.getElementById('smi_cancel_delete').addEventListener('click', function(){
+                if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+            });
+
+            document.getElementById('smi_confirm_delete').addEventListener('click', function(){
+                // call archive API
+                fetch('/smi/api/inventory_points/' + pointId + '/archive', {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                }).then(function(resp){
+                    return resp.json().catch(function(){ return {} });
+                }).then(function(data){
+                    // simple behavior: reload page on success
+                    if (data && data.success) {
+                        window.location.reload();
+                    } else {
+                        alert((data && data.error) || 'Gagal menghapus titik');
+                        if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+                    }
+                }).catch(function(err){
+                    console.error(err);
+                    alert('Gagal menghapus titik');
+                    if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+                });
+            });
+        };
         //]]>
         </script>
 
@@ -134,6 +251,7 @@
             <div style="display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start;">
 
                 <!-- OWL Mount -->
+                <div id="smi_map_data" t-att-data-points="map_points_json" t-att-data-can-manage="'1' if can_manage_points else '0'" style="display:none"></div>
                 <div id="smi_full_map_root"></div>
 
                 <!-- Side Panel -->
@@ -154,9 +272,9 @@
                 </div>
 
             </div>
-            <t t-call="inventory_smi.warehouse_map_script"/>
 
         </t>
+            <t t-call="inventory_smi.warehouse_map_script"/>
 
     </template>
 

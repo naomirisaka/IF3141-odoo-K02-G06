@@ -135,42 +135,31 @@
                         </svg>
                         Pilih Titik dari Denah
                     </span>
-                    <button type="button" class="smi-btn smi-btn--secondary smi-btn--sm"
-                            onclick="document.getElementById('map-modal').classList.remove('open')">
-                        ✕ Tutup
-                    </button>
                 </div>
                 <div class="smi-modal__body">
-                    <div style="position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--border);">
-                        <div id="smi_map_root"
-                            style="width:100%;min-height:520px;">
-                        </div>
-                        <t t-foreach="points" t-as="pt">
-                            <div style="position:absolute;cursor:pointer;width:18px;height:18px;
-                                        border-radius:50%;background:#3B82F6;border:2px solid #fff;
-                                        box-shadow:0 2px 6px rgba(0,0,0,0.25);
-                                        transform:translate(-50%,-50%);transition:transform 0.15s,background 0.15s;"
-                                 t-att-title="pt.name"
-                                 t-att-data-id="pt.id"
-                                 t-att-data-name="pt.name"
-                                 t-att-style="'position:absolute;cursor:pointer;width:18px;height:18px;border-radius:50%;background:#3B82F6;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.25);transform:translate(-50%,-50%);transition:transform 0.15s;left:' + str(pt.koordinat_x) + '%;top:' + str(pt.koordinat_y) + '%;'"
-                                 onmouseenter="this.style.transform='translate(-50%,-50%) scale(1.3)'"
-                                 onmouseleave="this.style.transform='translate(-50%,-50%) scale(1)'"
-                                 onclick="selectInventoryPoint(this.dataset.id, this.dataset.name)">
-                            </div>
-                        </t>
+                    <div style="position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--border);display:inline-block;">
+                        <div id="smi_map_root" style="width:100%;display:block;"></div>
+                    </div>
+                    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
+                        <button type="button" id="smi_confirm_point" class="smi-btn smi-btn--primary smi-btn--sm" disabled="disabled">
+                            Pilih Titik
+                        </button>
+                        <button type="button" id="smi_modal_close_footer" class="smi-btn smi-btn--secondary smi-btn--sm">
+                            Tutup
+                        </button>
                     </div>
                     <p style="margin-top:12px;font-size:13px;color:var(--text-muted);">
-                        Klik titik biru pada denah untuk memilih lokasi inventori.
+                        Klik titik pada denah untuk memilih lokasi inventori.
                     </p>
                 </div>
             </div>
         </div>
 
         <script type="text/javascript">
+        //<![CDATA[
         function selectInventoryPoint(id, name) {
             var sel = document.getElementById('inventory_point_id');
-            for (var i = 0; i &lt; sel.options.length; i++) {
+            for (var i = 0; i < sel.options.length; i++) {
                 if (sel.options[i].value == id) {
                     sel.selectedIndex = i;
                     // Visual feedback
@@ -183,14 +172,49 @@
                     break;
                 }
             }
+            // close modal
             document.getElementById('map-modal').classList.remove('open');
         }
 
-        // Close modal when clicking backdrop
+        // close modal when clicking backdrop
         document.getElementById('map-modal').addEventListener('click', function(e) {
             if (e.target === this) this.classList.remove('open');
         });
-        </script>
+
+        (function(){
+            var confirmBtn = document.getElementById('smi_confirm_point');
+            var footerClose = document.getElementById('smi_modal_close_footer');
+
+            function updateConfirmState() {
+                try {
+                    var pt = window.__smi_map_selected_point || null;
+                    if (pt && pt.id) {
+                        confirmBtn.removeAttribute('disabled');
+                    } else {
+                        confirmBtn.setAttribute('disabled', 'disabled');
+                    }
+                } catch (e) { confirmBtn.setAttribute('disabled', 'disabled'); }
+            }
+
+            var poll = setInterval(updateConfirmState, 300);
+
+            confirmBtn.addEventListener('click', function(){
+                try {
+                    var pt = window.__smi_map_selected_point;
+                    if (pt && pt.id) {
+                        selectInventoryPoint(String(pt.id), pt.name || '');
+                    }
+                } catch (e) { console.error(e); }
+            });
+
+            footerClose.addEventListener('click', function(){
+                document.getElementById('map-modal').classList.remove('open');
+            });
+           
+            window.addEventListener('beforeunload', function(){ clearInterval(poll); });
+            })();
+            //]]>
+            </script>
 
     </t>
 </template>
