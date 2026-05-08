@@ -141,7 +141,7 @@
                         
                         <div id="smi_map_root" style="width:100%; aspect-ratio:2/1;"></div>
                         
-                        <div style="display:flex;gap:12px;margin-top:10px;font-size:11px;color:var(--text-muted);">
+                        <div id="legend" style="display:flex;gap:12px;margin-top:10px;font-size:11px;color:var(--text-muted);">
                             <span>
                                 <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#10B981;margin-right:4px;"></span>
                                 Aman

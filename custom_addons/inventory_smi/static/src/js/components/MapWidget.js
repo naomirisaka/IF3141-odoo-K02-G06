@@ -223,7 +223,7 @@ export class MapWidget extends Component {
                 this.state.points = data.points || [];
             }
         } catch (e) {
-            console.error('MapWidget: gagal memuat titik inventori', e);
+            console.error(e);
         } finally {
             this.state.loading = false;
         }

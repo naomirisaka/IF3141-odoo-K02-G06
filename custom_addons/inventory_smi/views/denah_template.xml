@@ -6,7 +6,7 @@
         <script type="text/javascript">
         //<![CDATA[
 
-        var SMI_MAP_POINTS = <t t-raw="map_points_json"/>;
+        var SMI_MAP_POINTS = <t t-out="map_points_json"/>;
 
         function showPointPanel(pointId) {
 
@@ -133,41 +133,8 @@
             <!-- Main layout -->
             <div style="display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start;">
 
-                <!-- Map -->
-                <div class="smi-card">
-
-                    <div class="smi-card__header">
-
-                        <span class="smi-card__title">Peta Gudang</span>
-
-                        <div style="display:flex;gap:12px;font-size:11px;color:var(--text-muted);">
-
-                            <span>
-                                <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#10B981;margin-right:4px;"></span>
-                                Aman
-                            </span>
-
-                            <span>
-                                <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#F59E0B;margin-right:4px;"></span>
-                                Sedikit
-                            </span>
-
-                            <span>
-                                <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#94A3B8;margin-right:4px;"></span>
-                                Kosong
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                    <div class="smi-card__body"
-                        style="padding:16px;"
-                        id="smi_map_root">
-
-                    </div>
-
-                </div>
+                <!-- OWL Mount -->
+                <div id="smi_full_map_root"></div>
 
                 <!-- Side Panel -->
                 <div class="smi-card" id="point-panel">
@@ -187,7 +154,6 @@
                 </div>
 
             </div>
-
             <t t-call="inventory_smi.warehouse_map_script"/>
 
         </t>
