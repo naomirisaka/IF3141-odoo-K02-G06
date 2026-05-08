@@ -67,8 +67,9 @@
             </div>
             <div class="smi-card__body" style="padding:16px;">
                 <div class="denah-container" style="position:relative;">
-                    <img src="/inventory_smi/static/src/img/denah.svg" alt="Denah Gudang"
-                         style="width:100%;border-radius:6px;"/>
+                    <div id="smi_map_root"
+                            style="width:100%;min-height:520px;">
+                    </div>
                     <t t-foreach="points_with_stock" t-as="pt">
                         <div style="position:absolute;border-radius:50%;background:#3B82F6;width:14px;height:14px;transform:translate(-50%,-50%);"
                              t-att-title="pt.name"
