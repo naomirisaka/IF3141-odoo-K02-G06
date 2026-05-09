@@ -230,23 +230,30 @@ whenReady(() => {
     const dashTarget = document.getElementById('smi_map_root');
     let dashInstance = null;
     if (dashTarget) {
-        dashInstance = mount(MapWidget, dashTarget, {
-            templates,
-            props: {
-                mode: 'view',
-                onPointSelected: (point) => {
-                    try {
-                        try { window.__smi_map_selected_point = point; } catch (e) {}
-                        if (typeof window.selectInventoryPoint === 'function') {
-                            window.selectInventoryPoint(String(point.id), point.name || '');
-                        } else if (typeof window.showPointPanel === 'function') {
-                            window.showPointPanel(point.id);
+            dashInstance = mount(MapWidget, dashTarget, {
+                templates,
+                props: {
+                    mode: 'view',
+                    onPointSelected: (point) => {
+                        try {
+                            try { window.__smi_map_selected_point = point; } catch (e) {}
+                            var modalEl = document.getElementById('map-modal');
+                            var modalOpen = modalEl && modalEl.classList && modalEl.classList.contains('open');
+
+                            if (modalOpen) {
+                                return;
+                            }
+                            
+                            if (typeof window.selectInventoryPoint === 'function') {
+                                window.selectInventoryPoint(String(point.id), point.name || '');
+                            } else if (typeof window.showPointPanel === 'function') {
+                                window.showPointPanel(point.id);
+                            }
+                        } catch (e) {
+                            console.error('onPointSelected handler error', e);
                         }
-                    } catch (e) {
-                        console.error('onPointSelected handler error', e);
                     }
                 }
-            }
         });
 
     }

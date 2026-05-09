@@ -500,8 +500,14 @@
 .smi-map-container--add-point { cursor: crosshair; }
 .smi-map-svg {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
+}
+
+#map-modal .smi-modal__body > div { display: block; }
+#map-modal .smi-map-container {
+  aspect-ratio: auto;
+  height: 320px;
 }
 .smi-map-overlay {
   position: absolute;
