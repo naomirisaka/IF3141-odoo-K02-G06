@@ -228,9 +228,8 @@ export class MapWidget extends Component {
     }
 
     onPointHover(point, ev) {
-        const rect = ev.currentTarget.closest('.smi-map-container').getBoundingClientRect();
-        const x = ev.clientX - rect.left + 16;
-        const y = ev.clientY - rect.top + 16;
+        const x = ev.clientX + 12;
+        const y = ev.clientY + 12;
         this.state.tooltip = { point, x, y };
     }
 

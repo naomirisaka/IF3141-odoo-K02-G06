@@ -519,14 +519,14 @@
 
 /* Tooltip */
 .smi-map-tooltip {
-  position: absolute;
+  position: fixed;
   background: var(--smi-surface);
   border: 1px solid var(--smi-border);
   border-radius: 8px;
   padding: 10px 14px;
   font-size: 13px;
   pointer-events: none;
-  z-index: 10;
+  z-index: 1000;
   max-width: 240px;
   box-shadow: var(--smi-shadow-md);
   white-space: nowrap;
