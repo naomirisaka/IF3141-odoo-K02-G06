@@ -7,10 +7,6 @@ from odoo.exceptions import AccessError, ValidationError
 
 class SmiStockController(http.Controller):
 
-    # ------------------------------------------------------------------
-    # Stock list
-    # ------------------------------------------------------------------
-
     @http.route('/smi/stok', type='http', auth='user', website=False)
     def stock_list(self, search='', sort='name', **kwargs):
         user = request.env.user
@@ -61,7 +57,10 @@ class SmiStockController(http.Controller):
                     'catatan': catatan,
                 }
                 if tanggal_masuk:
-                    vals['tanggal_masuk'] = tanggal_masuk
+                    try:
+                        vals['tanggal_masuk'] = tanggal_masuk.replace('T', ' ')
+                    except ValueError:
+                        raise ValidationError("Format tanggal tidak valid.")
 
                 request.env['smi.stock_entry'].create(vals)
                 return request.redirect('/smi/stok')
