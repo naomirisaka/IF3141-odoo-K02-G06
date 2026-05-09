@@ -27,6 +27,7 @@ class SmiActivityLog(models.Model):
             ('order_dibatalkan', 'Order Dibatalkan'),
             ('user_dibuat', 'Pengguna Dibuat'),
             ('titik_ditambah', 'Titik Inventori Ditambah'),
+            ('titik_dihapus', 'Titik Inventori Dihapus'),
         ],
         string='Tipe Aktivitas',
         required=True,

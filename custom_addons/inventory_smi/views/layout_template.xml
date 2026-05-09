@@ -3,14 +3,18 @@
 <data>
 
 <template id="layout" name="SMI Layout">
-<html lang="id">
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Sistem Manajemen Inventaris</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com"/>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+    <html lang="id">
+        <head>
+            <meta charset="UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <title>Sistem Manajemen Inventaris</title>
+            
+            <t t-call-assets="web.assets_frontend" t-js="true" t-css="true"/>
+
+            <link rel="preconnect" href="https://fonts.googleapis.com"/>    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    
+    <!-- TODO: remove this style n masukin ke smi_theme.css -->
     <style>
     /* ============================================================
        SMI Design System — D-inventy inspired
@@ -152,9 +156,10 @@
         margin-left: var(--sidebar-w);
         margin-top: var(--topbar-h);
         padding: 24px;
-        min-height: calc(100vh - var(--topbar-h));
-    }
 
+        height: calc(100vh - var(--topbar-h));
+        overflow-y: auto;
+    }
     /* ---- Password expiry banner --------------------------- */
     .expiry-banner {
         background: #FFFBEB; border: 1px solid #FDE68A;
@@ -470,12 +475,6 @@
     <!-- ===== TOPBAR ===== -->
     <header class="topbar">
         <span class="topbar-title" t-esc="page_title or 'Dashboard'"/>
-        <div class="topbar-search">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-            </svg>
-            <input type="text" placeholder="Cari..."/>
-        </div>
         <div class="topbar-notif">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>

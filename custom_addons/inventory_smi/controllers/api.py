@@ -175,10 +175,39 @@ class SmiMapApiController(http.Controller):
         if not point.exists():
             return _json_response({'error': 'Titik tidak ditemukan'}, 404)
 
+        # prevent deletion if there are still available stock entries in this point
+        entries_available = point.stock_entry_ids.filtered(lambda e: e.state == 'tersedia')
+        if entries_available:
+            return _json_response({'error': 'Titik masih memiliki stok, pindahkan stok terlebih dahulu'}, 400)
+
         try:
             point.write({'active': False})
         except AccessError:
             return _json_response({'error': 'Akses ditolak'}, 403)
+
+        # log point deletion in activity log
+        try:
+            request.env['smi.activity.log']._log(
+                'titik_dihapus',
+                'Menghapus titik inventori: %s' % (point.name or ''),
+                ref_model='smi.inventory_point',
+                ref_id=point.id,
+            )
+        except Exception:
+            pass
+
+        # notify clients to update map
+        try:
+            request.env['bus.bus']._sendone(
+                'smi_point_change',
+                {
+                    'type': 'point_deleted',
+                    'id': point.id,
+                    'name': point.name,
+                },
+            )
+        except Exception:
+            pass
 
         return _json_response({'success': True, 'id': point_id})
 

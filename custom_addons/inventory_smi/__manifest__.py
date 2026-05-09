@@ -32,9 +32,10 @@
         'views/pengguna_template.xml',
     ],
     'assets': {
-        'web.assets_backend': [
+        'web.assets_frontend': [
             'inventory_smi/static/src/css/smi_theme.css',
             'inventory_smi/static/src/js/components/MapWidget.js',
+            'inventory_smi/static/src/js/components/BootstrapMap.js'
         ],
     },
     'installable': True,

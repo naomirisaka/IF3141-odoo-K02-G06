@@ -38,17 +38,17 @@
         </t>
 
         <!-- Ringkasan order summary -->
-        <div class="card" style="margin-bottom:16px;">
-            <div class="card-header">
-                <span class="card-title">Ringkasan Pesanan</span>
+        <div class="smi-card" style="margin-bottom:16px;">
+            <div class="smi-card__header">
+                <span class="smi-card__title">Ringkasan Pesanan</span>
                 <t t-if="all_sufficient">
-                    <span class="badge badge-success">Semua Stok Cukup</span>
+                    <span class="smi-badge smi-badge--done">Semua Stok Cukup</span>
                 </t>
                 <t t-else="">
-                    <span class="badge badge-warning">Ada Stok Tidak Cukup</span>
+                    <span class="smi-badge smi-badge--warning">Ada Stok Tidak Cukup</span>
                 </t>
             </div>
-            <div class="card-body" style="padding:20px;">
+            <div class="smi-card__body" style="padding:20px;">
                 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;">
                     <div>
                         <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;">Nama Pesanan</div>
@@ -66,7 +66,7 @@
 
                 <!-- Order lines summary -->
                 <t t-if="order.order_line_ids">
-                    <table class="tbl">
+                    <table class="smi-table">
                         <thead>
                             <tr>
                                 <th>Bahan</th>
@@ -92,18 +92,18 @@
                                     </td>
                                     <td>
                                         <t t-if="line.mode_pick == 'auto'">
-                                            <span class="badge badge-blue">Otomatis (FIFO)</span>
+                                            <span class="smi-badge smi-badge--confirmed">Otomatis (FIFO)</span>
                                         </t>
                                         <t t-else="">
-                                            <span class="badge badge-grey">Manual</span>
+                                            <span class="smi-badge smi-badge--draft">Manual</span>
                                         </t>
                                     </td>
                                     <td>
                                         <t t-if="line.is_sufficient">
-                                            <span class="badge badge-success">✓ Cukup</span>
+                                            <span class="smi-badge smi-badge--done">✓ Cukup</span>
                                         </t>
                                         <t t-else="">
-                                            <span class="badge badge-danger">✗ Tidak Cukup</span>
+                                            <span class="smi-badge smi-badge--cancelled">✗ Tidak Cukup</span>
                                         </t>
                                     </td>
                                 </tr>
@@ -128,12 +128,12 @@
 
         <!-- Action buttons -->
         <div style="display:flex;gap:8px;">
-            <form method="post"
+                                <form method="post"
                   t-att-action="'/smi/order/tambah/step3?order_id=' + str(order.id)"
                   style="display:inline;">
                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                 <input type="hidden" name="action" value="back"/>
-                <button type="submit" class="btn btn-secondary">← Kembali</button>
+                <button type="submit" class="smi-btn smi-btn--secondary">← Kembali</button>
             </form>
 
             <t t-if="all_sufficient and order.order_line_ids">
@@ -142,14 +142,14 @@
                       style="display:inline;">
                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                     <input type="hidden" name="action" value="confirm"/>
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="smi-btn smi-btn--primary">
                         Konfirmasi Order ✓
                     </button>
                 </form>
             </t>
             <t t-else="">
                 <a t-att-href="'/smi/order/' + str(order.id)"
-                   class="btn btn-secondary">Simpan sebagai Draft</a>
+                   class="smi-btn smi-btn--secondary">Simpan sebagai Draft</a>
             </t>
         </div>
 

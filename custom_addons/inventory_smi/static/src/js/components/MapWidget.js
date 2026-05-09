@@ -32,7 +32,7 @@ export class MapWidget extends Component {
                  t-on-click="onSvgClick">
 
                 <!-- Static floor plan (inlined for reliability) -->
-                <rect x="0" y="0" width="800" height="500" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="3" rx="4"/>
+                <rect x="2" y="2" width="796" height="496" rx="10" ry="10" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="3" border-radius="10"/>
 
                 <text x="400" y="22" font-family="Inter,system-ui,sans-serif" font-size="13"
                       fill="#64748B" text-anchor="middle" font-weight="600">
@@ -60,22 +60,23 @@ export class MapWidget extends Component {
                 <text x="315" y="366" font-family="Inter,system-ui,sans-serif" font-size="12" fill="#475569" text-anchor="middle" font-weight="600">Mesin Foil</text>
                 <text x="315" y="384" font-family="Inter,system-ui,sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">Hot Stamping</text>
 
-                <rect x="570" y="50"  width="195" height="150" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1.5" rx="6"/>
-                <text x="667" y="121" font-family="Inter,system-ui,sans-serif" font-size="12" fill="#3B82F6" text-anchor="middle" font-weight="600">Area Penyimpanan</text>
-                <text x="667" y="140" font-family="Inter,system-ui,sans-serif" font-size="10" fill="#93C5FD" text-anchor="middle">Gudang Bahan</text>
+                <rect x="600" y="40" width="160" height="110" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1.5" rx="6"/>
+                <text x="680" y="88" font-family="Inter,system-ui,sans-serif" font-size="12" fill="#3B82F6" text-anchor="middle" font-weight="600">Gudang Bahan</text>
+                <text x="680" y="106" font-family="Inter,system-ui,sans-serif" font-size="10" fill="#93C5FD" text-anchor="middle">Area Penyimpanan</text>
 
                 <rect x="450" y="330" width="160" height="80" fill="#E2E8F0" stroke="#94A3B8" stroke-width="1.5" rx="6"/>
                 <text x="530" y="366" font-family="Inter,system-ui,sans-serif" font-size="12" fill="#475569" text-anchor="middle" font-weight="600">Area Finishing</text>
                 <text x="530" y="384" font-family="Inter,system-ui,sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">Packaging</text>
 
-                <rect x="450" y="190" width="140" height="80" fill="#E2E8F0" stroke="#94A3B8" stroke-width="1.5" rx="6"/>
-                <text x="520" y="226" font-family="Inter,system-ui,sans-serif" font-size="12" fill="#475569" text-anchor="middle" font-weight="600">Area QC</text>
-                <text x="520" y="244" font-family="Inter,system-ui,sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">Quality Control</text>
+                <rect x="600" y="40" width="160" height="220" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1.5" rx="6"/>
+                <text x="680" y="138" font-family="Inter,system-ui,sans-serif" font-size="12" fill="#3B82F6" text-anchor="middle" font-weight="600">Gudang Bahan</text>
+                <text x="680" y="156" font-family="Inter,system-ui,sans-serif" font-size="10" fill="#93C5FD" text-anchor="middle">Area Penyimpanan</text>
 
                 <!-- Walkways -->
                 <line x1="215" y1="50" x2="215" y2="450" stroke="#E2E8F0" stroke-width="2" stroke-dasharray="6,4"/>
                 <line x1="430" y1="50" x2="430" y2="450" stroke="#E2E8F0" stroke-width="2" stroke-dasharray="6,4"/>
-                <line x1="40"  y1="160" x2="765" y2="160" stroke="#E2E8F0" stroke-width="2" stroke-dasharray="6,4"/>
+                <line x1="40" y1="160" x2="590" y2="160" stroke="#E2E8F0" stroke-width="2" stroke-dasharray="6,4"/>
+                <line x1="770" y1="160" x2="765" y2="160" stroke="#E2E8F0" stroke-width="2" stroke-dasharray="6,4"/>
                 <line x1="40"  y1="295" x2="765" y2="295" stroke="#E2E8F0" stroke-width="2" stroke-dasharray="6,4"/>
 
                 <!-- Inventory points overlay -->
@@ -133,25 +134,6 @@ export class MapWidget extends Component {
                      style="font-size:12px;color:#94A3B8;">Tidak ada stok</div>
             </div>
 
-            <!-- Side panel (view mode) -->
-            <div t-if="props.mode === 'view' and state.selectedPoint"
-                 class="smi-map-panel">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-                    <strong t-esc="state.selectedPoint.name"/>
-                    <button class="smi-btn--icon" t-on-click="() => { state.selectedPoint = null; state.selectedId = null; }">✕</button>
-                </div>
-                <div t-if="state.selectedPoint.materials.length === 0"
-                     style="font-size:13px;color:#94A3B8;">Tidak ada stok di titik ini.</div>
-                <div t-foreach="state.selectedPoint.materials" t-as="m" t-key="m.material_id"
-                     style="padding:8px 0;border-bottom:1px solid #E2E8F0;">
-                    <div style="font-size:13px;font-weight:600;" t-esc="m.material_name"/>
-                    <div style="font-size:12px;color:#64748B;">
-                        Tersisa: <b t-esc="m.jumlah_tersisa"/> <t t-esc="m.satuan"/>
-                        <span t-if="m.is_low_stock" class="smi-badge smi-badge--low-stock" style="margin-left:6px;">Sisa Sedikit</span>
-                    </div>
-                </div>
-            </div>
-
             <!-- pick_output: "Ambil berapa?" input overlay -->
             <div t-if="props.mode === 'pick_output' and state.pickOutputPoint"
                  class="smi-map-panel">
@@ -187,6 +169,7 @@ export class MapWidget extends Component {
         materialId: { type: Number, optional: true },
         onPointSelected: { type: Function, optional: true },
         onNewPoint: { type: Function, optional: true },
+        onReady: { type: Function, optional: true },
     };
 
     static defaultProps = {
@@ -199,7 +182,6 @@ export class MapWidget extends Component {
             loading: true,
             points: [],
             selectedId: null,
-            selectedPoint: null,
             pickOutputPoint: null,
             pickQty: {},
             tooltip: null,
@@ -207,6 +189,14 @@ export class MapWidget extends Component {
         });
         onWillStart(async () => {
             await this._loadPoints();
+        });
+
+        onMounted(() => {
+            try {
+                if (this.props.onReady && typeof this.props.onReady === 'function') {
+                    this.props.onReady({ refresh: this.refresh.bind(this) });
+                }
+            } catch (e) {}
         });
     }
 
@@ -222,7 +212,7 @@ export class MapWidget extends Component {
                 this.state.points = data.points || [];
             }
         } catch (e) {
-            console.error('MapWidget: gagal memuat titik inventori', e);
+            console.error(e);
         } finally {
             this.state.loading = false;
         }
@@ -268,7 +258,6 @@ export class MapWidget extends Component {
 
         if (mode === 'view') {
             this.state.selectedId = point.id;
-            this.state.selectedPoint = point;
             this.props.onPointSelected?.(point);
 
         } else if (mode === 'pick_input') {

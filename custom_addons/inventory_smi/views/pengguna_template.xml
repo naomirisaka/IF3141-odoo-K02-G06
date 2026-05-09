@@ -7,15 +7,15 @@
         <t t-set="page_title">Manajemen Pengguna</t>
 
         <!-- Toolbar -->
-        <div class="toolbar" style="margin-bottom:16px;">
+        <div class="smi-toolbar" style="margin-bottom:16px;">
             <form method="get" action="/smi/pengguna"
                   style="display:flex;gap:8px;align-items:center;flex:1;">
-                <input type="text" name="search" class="form-control"
+                <input type="text" name="search" class="smi-search"
                        placeholder="Cari nama pengguna..."
                        t-att-value="search"/>
-                <button type="submit" class="btn btn-secondary btn-sm">Cari</button>
+                <button type="submit" class="smi-btn smi-btn--secondary smi-btn--sm">Cari</button>
                 <t t-if="search">
-                    <a href="/smi/pengguna" class="btn btn-secondary btn-sm">Reset</a>
+                    <a href="/smi/pengguna" class="smi-btn smi-btn--secondary smi-btn--sm">Reset</a>
                 </t>
             </form>
             <div style="font-size:13px;color:var(--text-muted);align-self:center;">
@@ -24,13 +24,13 @@
         </div>
 
         <!-- Users table -->
-        <div class="card">
-            <div class="card-header">
-                <span class="card-title">Daftar Pengguna</span>
+        <div class="smi-card">
+            <div class="smi-card__header">
+                <span class="smi-card__title">Daftar Pengguna</span>
             </div>
-            <div class="card-body" style="padding:0;">
+            <div class="smi-card__body" style="padding:0;">
                 <t t-if="users_data">
-                    <table class="tbl">
+                    <table class="smi-table">
                         <thead>
                             <tr>
                                 <th>Nama</th>
@@ -45,8 +45,8 @@
                                 <tr>
                                     <td>
                                         <div style="display:flex;align-items:center;gap:8px;">
-                                            <div class="avatar"
-                                                 t-att-style="'background:' + (['#3B82F6','#10B981','#F59E0B','#EF4444','#8B5CF6'][ud['user'].id % 5]) + ';'">
+                                                <div class="smi-avatar"
+                                                    t-att-style="'background:' + (['#3B82F6','#10B981','#F59E0B','#EF4444','#8B5CF6'][ud['user'].id % 5]) + ';'">
                                                 <t t-esc="(ud['user'].name or 'U')[0].upper()"/>
                                             </div>
                                             <span style="font-weight:500;"
@@ -57,19 +57,19 @@
                                         t-esc="ud['user'].login"/>
                                     <td>
                                         <t t-if="ud['role'] == 'Admin'">
-                                            <span class="badge badge-blue">Admin</span>
+                                            <span class="smi-badge smi-badge--confirmed">Admin</span>
                                         </t>
                                         <t t-elif="ud['role'] == 'Kepala Produksi'">
-                                            <span class="badge badge-success">Kepala Produksi</span>
+                                            <span class="smi-badge smi-badge--done">Kepala Produksi</span>
                                         </t>
                                         <t t-elif="ud['role'] == 'Staf Produksi'">
-                                            <span class="badge badge-grey">Staf Produksi</span>
+                                            <span class="smi-badge smi-badge--draft">Staf Produksi</span>
                                         </t>
                                         <t t-elif="ud['role'] == 'Direktur'">
-                                            <span class="badge badge-warning">Direktur</span>
+                                            <span class="smi-badge smi-badge--warning">Direktur</span>
                                         </t>
                                         <t t-else="">
-                                            <span class="badge badge-grey">
+                                            <span class="smi-badge smi-badge--draft">
                                                 <t t-esc="ud['role']"/>
                                             </span>
                                         </t>
@@ -79,10 +79,10 @@
                                     </td>
                                     <td>
                                         <t t-if="ud['user'].active">
-                                            <span class="badge badge-success">Aktif</span>
+                                            <span class="smi-badge smi-badge--done">Aktif</span>
                                         </t>
                                         <t t-else="">
-                                            <span class="badge badge-danger">Nonaktif</span>
+                                            <span class="smi-badge smi-badge--cancelled">Nonaktif</span>
                                         </t>
                                     </td>
                                 </tr>

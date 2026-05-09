@@ -30,11 +30,11 @@
             </div>
         </div>
 
-        <div class="card" style="max-width:600px;">
-            <div class="card-header">
-                <span class="card-title">Informasi Pesanan</span>
+        <div class="smi-card" style="max-width:600px;">
+            <div class="smi-card__header">
+                <span class="smi-card__title">Informasi Pesanan</span>
             </div>
-            <div class="card-body" style="padding:24px;">
+            <div class="smi-card__body" style="padding:24px;">
 
                 <t t-if="error">
                     <div style="background:#FEF2F2;border:1px solid #FECACA;color:#991B1B;
@@ -51,7 +51,7 @@
                                       color:var(--text);margin-bottom:6px;">
                             Nama Pesanan <span style="color:var(--danger);">*</span>
                         </label>
-                        <input type="text" name="name" class="form-control"
+                           <input type="text" name="name" class="smi-input"
                                placeholder="e.g. Cetak Brosur PT. XYZ"
                                t-att-value="post.get('name', '')" required="required"/>
                     </div>
@@ -59,7 +59,7 @@
                     <div style="margin-bottom:16px;">
                         <label style="display:block;font-size:13px;font-weight:500;
                                       color:var(--text);margin-bottom:6px;">No. SPK</label>
-                        <input type="text" name="no_spk" class="form-control"
+                           <input type="text" name="no_spk" class="smi-input"
                                placeholder="e.g. SPK-001"
                                t-att-value="post.get('no_spk', '')"/>
                     </div>
@@ -69,22 +69,22 @@
                                       color:var(--text);margin-bottom:6px;">
                             Tanggal <span style="color:var(--danger);">*</span>
                         </label>
-                        <input type="date" name="tanggal" class="form-control"
+                           <input type="date" name="tanggal" class="smi-input"
                                t-att-value="post.get('tanggal', today)"/>
                     </div>
 
                     <div style="margin-bottom:24px;">
                         <label style="display:block;font-size:13px;font-weight:500;
                                       color:var(--text);margin-bottom:6px;">Catatan</label>
-                        <textarea name="catatan" class="form-control" rows="3"
+                        <textarea name="catatan" class="smi-textarea" rows="3"
                                   placeholder="Catatan tambahan (opsional)">
                             <t t-esc="post.get('catatan', '')"/>
                         </textarea>
                     </div>
 
                     <div style="display:flex;gap:8px;">
-                        <a href="/smi/order" class="btn btn-secondary">Batal</a>
-                        <button type="submit" class="btn btn-primary">
+                        <a href="/smi/order" class="smi-btn smi-btn--secondary">Batal</a>
+                        <button type="submit" class="smi-btn smi-btn--primary">
                             Lanjut →
                         </button>
                     </div>
