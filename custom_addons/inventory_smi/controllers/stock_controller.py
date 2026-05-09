@@ -61,7 +61,7 @@ class SmiStockController(http.Controller):
                     'catatan': catatan,
                 }
                 if tanggal_masuk:
-                    vals['tanggal_masuk'] = tanggal_masuk
+                    vals['tanggal_masuk'] = tanggal_masuk.replace('T', ' ')
 
                 request.env['smi.stock_entry'].create(vals)
                 return request.redirect('/smi/stok')
