@@ -36,7 +36,6 @@
                                 <th>Nama</th>
                                 <th>Login</th>
                                 <th>Jabatan / Role</th>
-                                <th>Email</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
@@ -74,9 +73,6 @@
                                             </span>
                                         </t>
                                     </td>
-                                    <td style="color:var(--text-muted);">
-                                        <t t-esc="ud['user'].email or '-'"/>
-                                    </td>
                                     <td>
                                         <t t-if="ud['user'].active">
                                             <span class="smi-badge smi-badge--done">Aktif</span>
@@ -94,14 +90,6 @@
                     <div class="empty">Tidak ada pengguna ditemukan.</div>
                 </t>
             </div>
-        </div>
-
-        <div style="margin-top:16px;padding:12px 16px;background:#EFF6FF;
-                    border:1px solid #BFDBFE;border-radius:8px;font-size:13px;color:#1E40AF;">
-            ℹ️ Manajemen pengguna lengkap tersedia di
-            <a href="/odoo/settings/users" style="color:#1D4ED8;font-weight:600;">
-                Odoo Settings → Users
-            </a>.
         </div>
 
     </t>
