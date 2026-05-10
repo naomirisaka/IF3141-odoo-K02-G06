@@ -2,11 +2,21 @@
 <odoo>
 <data>
 
+  <!-- Actions -->
+  <record id="action_smi_material_stok_minimum" model="ir.actions.act_url">
+    <field name="name">Pengaturan Stok Minimum</field>
+    <field name="url">/smi/material/kelola-stok-minimum</field>
+    <field name="target">self</field>
+  </record>
+
+  <!-- Menu Items -->
   <menuitem id="menu_smi_root" name="Inventaris SMI" sequence="10" groups="inventory_smi.group_admin,inventory_smi.group_kepala_produksi,inventory_smi.group_staf_produksi,inventory_smi.group_direktur"/>
 
   <menuitem id="menu_smi_stok" name="Stok" parent="menu_smi_root" sequence="10" groups="inventory_smi.group_admin,inventory_smi.group_kepala_produksi,inventory_smi.group_staf_produksi"/>
 
   <menuitem id="menu_smi_material" name="Bahan Baku" parent="menu_smi_stok" action="action_smi_material" sequence="10"/>
+
+  <menuitem id="menu_smi_stok_minimum" name="Kelola Stok Minimum" parent="menu_smi_stok" action="action_smi_material_stok_minimum" sequence="15" groups="inventory_smi.group_kepala_produksi,inventory_smi.group_admin"/>
 
   <menuitem id="menu_smi_stock_entry" name="Riwayat Stok" parent="menu_smi_stok" action="action_smi_stock_entry" sequence="20"/>
 

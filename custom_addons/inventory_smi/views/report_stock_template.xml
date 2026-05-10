@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <template id="report_stock_template" name="Stock Report">
+      <html>
+        <head>
+          <meta charset="utf-8"/>
+          <title>Laporan Stok</title>
+          <style>
+            @page { size: A4; margin: 20mm; }
+            body { font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 12px; color: #222; margin: 0; }
+            h1 { font-size: 20px; margin: 0 0 12px 0; }
+            .meta { margin-bottom: 16px; color: #555; font-size: 13px; }
+            table { width: 100%; border-collapse: collapse; }
+            th, td { border: 1px solid #999; padding: 8px; text-align: left; }
+            th { background-color: #e8e8e8; font-weight: bold; font-size: 12px; }
+            td { font-size: 11px; }
+            td.right { text-align: right; }
+            .footer { text-align: center; font-size: 10px; color: #888; margin-top: 24px; }
+          </style>
+        </head>
+        <body>
+          <h1>Laporan Stok SMI</h1>
+          <div class="meta">
+            Periode: <strong t-esc="date_from or '—'"/> sampai <strong t-esc="date_to or '—'"/>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>Material</th>
+                <th>Titik Stok</th>
+                <th class="right">Awal</th>
+                <th class="right">Tersisa</th>
+                <th>Status</th>
+                <th>Catatan</th>
+              </tr>
+            </thead>
+            <tbody>
+              <t t-foreach="rows" t-as="r">
+                <tr>
+                  <td><t t-esc="r['tanggal_masuk']"/></td>
+                  <td><t t-esc="r['material']"/></td>
+                  <td><t t-esc="r['inventory_point']"/></td>
+                  <td class="right"><t t-esc="r['jumlah_awal']"/></td>
+                  <td class="right"><t t-esc="r['jumlah_tersisa']"/></td>
+                  <td><t t-esc="r['state']"/></td>
+                  <td><t t-esc="r.get('catatan') or ''"/></td>
+                </tr>
+              </t>
+            </tbody>
+          </table>
+
+          <div class="footer">
+            Sistem Manajemen Inventaris SMI — Generated <t t-esc="generated_on or '-'"/>
+          </div>
+        </body>
+      </html>
+    </template>
+  </data>
+</odoo>

@@ -46,14 +46,14 @@
                                 <th>Satuan</th>
                                 <th>Stok Minimum</th>
                                 <th>Status</th>
-                                <th style="width:80px;"></th>
+                                <th style="width:120px;"></th>
                             </tr>
                         </thead>
                         <tbody>
                             <t t-foreach="materials" t-as="mat">
                                 <tr style="cursor:pointer;"
                                     t-att-data-href="'/smi/stok/' + str(mat.id)"
-                                    onclick="window.location=this.dataset.href">
+                                    onclick="if(event.target.classList.contains('smi-skip-nav')){return;} window.location=this.dataset.href">
                                     <td style="font-weight:500;" t-esc="mat.name"/>
                                     <td style="color:var(--text-muted);" t-esc="mat.category_id.name"/>
                                     <td>
@@ -69,9 +69,17 @@
                                             <span class="smi-badge smi-badge--done">Aman</span>
                                         </t>
                                     </td>
-                                    <td onclick="event.stopPropagation()">
+                                    <td style="display:flex;gap:4px;" onclick="event.stopPropagation()">
+                                        <t t-if="can_manage_points">
+                                            <button class="smi-btn smi-btn--primary smi-btn--sm smi-skip-nav"
+                                                    t-att-data-material-id="mat.id"
+                                                    t-att-data-stok-min="'%.1f' % (mat.stok_minimum or 0.0)"
+                                                    onclick="window.openStokMinModal(this)">
+                                                Edit Min
+                                            </button>
+                                        </t>
                                         <a t-att-href="'/smi/stok/' + str(mat.id)"
-                                           class="smi-btn smi-btn--secondary smi-btn--sm">Detail</a>
+                                           class="smi-btn smi-btn--secondary smi-btn--sm smi-skip-nav">Detail</a>
                                     </td>
                                 </tr>
                             </t>
@@ -83,6 +91,97 @@
                 </t>
             </div>
         </div>
+
+        <!-- Modal Edit Stok Minimum -->
+        <div id="stokMinModalOverlay" class="smi-modal-overlay">
+            <div class="smi-modal">
+                <div class="smi-modal__header">
+                    <h3 class="smi-modal__title" id="stokMinModalTitle">Edit Stok Minimum</h3>
+                    <button type="button" class="smi-modal__close" onclick="window.closeStokMinModal()">×</button>
+                </div>
+                <div class="smi-modal__body">
+                    <div style="margin-bottom:16px;">
+                        <label class="smi-label">Stok Minimum (unit)</label>
+                        <input type="number" id="stokMinInput" class="smi-input" min="0" step="0.1" style="width:100%;"/>
+                    </div>
+                </div>
+                <div class="smi-modal__footer">
+                    <button type="button" class="smi-btn smi-btn--secondary" onclick="window.closeStokMinModal()">Batal</button>
+                    <button type="button" class="smi-btn smi-btn--primary" onclick="window.saveStokMin()">Simpan</button>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+        <![CDATA[
+        window.currentMaterialId = null;
+
+        window.openStokMinModal = function(button) {
+            window.currentMaterialId = parseInt(button.dataset.materialId);
+            var materialName = button.closest('tr').querySelector('td').textContent;
+            var currentValue = parseFloat(button.dataset.stokMin) || 0;
+            
+            document.getElementById('stokMinModalTitle').textContent = 'Edit Stok Minimum - ' + materialName;
+            document.getElementById('stokMinInput').value = currentValue;
+            document.getElementById('stokMinModalOverlay').classList.add('open');
+            document.getElementById('stokMinInput').focus();
+        };
+
+        window.closeStokMinModal = function() {
+            document.getElementById('stokMinModalOverlay').classList.remove('open');
+            window.currentMaterialId = null;
+        };
+
+        window.saveStokMin = function() {
+            if (!window.currentMaterialId) return;
+            
+            var value = parseFloat(document.getElementById('stokMinInput').value) || 0;
+            var formData = new FormData();
+            formData.append('stok_minimum', value);
+            
+            fetch('/smi/api/material/' + window.currentMaterialId + '/stok-minimum', {
+                method: 'POST',
+                body: formData,
+                credentials: 'same-origin'
+            })
+            .then(function(resp) {
+                if (resp.ok) {
+                    // Update nilai di tabel tanpa reload
+                    var rows = document.querySelectorAll('tbody tr');
+                    rows.forEach(function(row) {
+                        var btn = row.querySelector('[data-material-id]');
+                        if (btn && parseInt(btn.dataset.materialId) === window.currentMaterialId) {
+                            row.querySelectorAll('td')[4].textContent = value.toFixed(1);
+                            btn.dataset.stokMin = value.toFixed(1);
+                        }
+                    });
+                    window.closeStokMinModal();
+                } else {
+                    alert('Gagal memperbarui stok minimum');
+                }
+            })
+            .catch(function(err) {
+                console.error(err);
+                alert('Koneksi gagal');
+            });
+        };
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function(e) {
+            var overlay = document.getElementById('stokMinModalOverlay');
+            if (e.target === overlay) {
+                window.closeStokMinModal();
+            }
+        });
+
+        // Allow Enter key to save
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && document.getElementById('stokMinModalOverlay').classList.contains('open')) {
+                window.saveStokMin();
+            }
+        });
+        ]]>
+        </script>
 
     </t>
 </template>

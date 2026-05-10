@@ -20,6 +20,7 @@
         'views/stock_detail_template.xml',
         'views/denah_template.xml',
         'views/material_views.xml',
+        'views/material_stok_minimum_template.xml',
         'views/stock_views.xml',
         'views/menu_views.xml',
         'views/order_views.xml',
@@ -29,13 +30,15 @@
         'views/order_form_step3_template.xml',
         'views/order_detail_template.xml',
         'views/activity_template.xml',
+        'views/report_stock_template.xml',
         'views/pengguna_template.xml',
     ],
     'assets': {
         'web.assets_frontend': [
             'inventory_smi/static/src/css/smi_theme.css',
             'inventory_smi/static/src/js/components/MapWidget.js',
-            'inventory_smi/static/src/js/components/BootstrapMap.js'
+                'inventory_smi/static/src/js/components/BootstrapMap.js',
+                'inventory_smi/static/src/js/report_download.js'
         ],
     },
     'installable': True,
