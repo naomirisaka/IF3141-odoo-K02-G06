@@ -36,7 +36,8 @@
         'web.assets_frontend': [
             'inventory_smi/static/src/css/smi_theme.css',
             'inventory_smi/static/src/js/components/MapWidget.js',
-            'inventory_smi/static/src/js/components/BootstrapMap.js'
+                'inventory_smi/static/src/js/components/BootstrapMap.js',
+                'inventory_smi/static/src/js/report_download.js'
         ],
     },
     'installable': True,
