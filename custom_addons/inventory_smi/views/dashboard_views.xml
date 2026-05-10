@@ -6,16 +6,33 @@
     <t t-call="inventory_smi.layout">
         <t t-set="page_title">Dashboard</t>
 
-        <div class="toolbar" style="margin-top:12px;">
-            <div style="margin-left:auto;display:flex;gap:8px;align-items:center;">
-                <label class="form-label" style="font-size:13px;color:var(--text-muted);margin-right:6px;">Dari</label>
-                <input id="report_from" type="date" class="form-control" style="width:150px;" />
-                <label class="form-label" style="font-size:13px;color:var(--text-muted);margin:0 6px;">Sampai</label>
-                <input id="report_to" type="date" class="form-control" style="width:150px;" />
-                <button id="download_csv" class="smi-btn smi-btn--secondary smi-btn--sm">Unduh CSV</button>
-                <button id="download_pdf" class="smi-btn smi-btn--primary smi-btn--sm">Unduh PDF</button>
+        <t t-if="is_direktur">
+            <div class="smi-card" style="margin-bottom:24px;border-left:4px solid #0066cc;">
+                <div class="smi-card__header">
+                    <div>
+                        <div class="smi-card__title" style="font-size:16px;">Unduh Laporan Stok</div>
+                        <div style="font-size:13px;color:var(--text-muted);margin-top:4px;">Ekspor data stok dalam format CSV atau PDF sesuai periode yang dipilih</div>
+                    </div>
+                </div>
+                <div class="smi-card__body">
+                    <div style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;">
+                        <div>
+                            <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;">Dari</div>
+                            <input id="report_from" type="date" class="form-control" style="width:150px;" />
+                        </div>
+                        <div>
+                            <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;">Sampai</div>
+                            <input id="report_to" type="date" class="form-control" style="width:150px;" />
+                        </div>
+                        <button id="download_csv" class="smi-btn smi-btn--secondary" style="margin-left:auto;"><span>Unduh CSV</span></button>
+                        <button id="download_pdf" class="smi-btn smi-btn--primary"><span>Unduh PDF</span></button>
+                    </div>
+                    <div style="font-size:11px;color:#666;margin-top:12px;">
+                        Default menampilkan data 30 hari terakhir. Ubah tanggal untuk mengekspor periode lain.
+                    </div>
+                </div>
             </div>
-        </div>
+        </t>
 
         <!-- Row 1 - Stat Cards -->
         <div class="smi-stat-grid">
