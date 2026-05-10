@@ -171,6 +171,7 @@ cd IF3141-odoo-K02-G06
 ### 2. Jalankan Docker Services
 
 ```bash
+docker compose build --pull --no-cache web
 docker compose up -d
 ```
 
