@@ -46,14 +46,14 @@
                   <td class="right"><t t-esc="r['jumlah_awal']"/></td>
                   <td class="right"><t t-esc="r['jumlah_tersisa']"/></td>
                   <td><t t-esc="r['state']"/></td>
-                  <td><t t-esc="r['catatan']"/></td>
+                  <td><t t-esc="r.get('catatan') or ''"/></td>
                 </tr>
               </t>
             </tbody>
           </table>
 
           <div class="footer">
-            Sistem Manajemen Inventaris SMI — Generated <t t-esc="date.today().strftime('%d %B %Y')"/>
+            Sistem Manajemen Inventaris SMI — Generated <t t-esc="generated_on or '-'"/>
           </div>
         </body>
       </html>

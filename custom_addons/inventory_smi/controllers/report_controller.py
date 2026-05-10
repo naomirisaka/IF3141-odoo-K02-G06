@@ -6,8 +6,16 @@ import subprocess
 import tempfile
 import os
 import logging
+from datetime import datetime
+from werkzeug.exceptions import NotFound
 
 _logger = logging.getLogger(__name__)
+
+
+def _clean_text(value):
+    text = str(value or '')
+    text = text.replace('\r', ' ').replace('\n', ' ').strip()
+    return text
 
 
 class ReportController(http.Controller):
@@ -16,7 +24,7 @@ class ReportController(http.Controller):
         user = request.env.user
         if not user.has_group('inventory_smi.group_direktur'):
             _logger.warning(f'Unauthorized report access attempt by {user.name}')
-            return request.not_found()
+            raise NotFound()
 
         fmt = kw.get('format', 'csv').lower()
         date_from = kw.get('from')
@@ -37,21 +45,29 @@ class ReportController(http.Controller):
             for e in entries:
                 rows.append({
                     'tanggal_masuk': e.tanggal_masuk or '',
-                    'material': e.material_id.name if e.material_id else '',
-                    'inventory_point': e.inventory_point_id.name if e.inventory_point_id else '',
+                    'material': _clean_text(e.material_id.name if e.material_id else ''),
+                    'inventory_point': _clean_text(e.inventory_point_id.name if e.inventory_point_id else ''),
                     'jumlah_awal': e.jumlah_awal,
                     'jumlah_tersisa': e.jumlah_tersisa,
-                    'state': e.state,
-                    'catatan': e.catatan or '',
+                    'state': _clean_text(e.state),
+                    'catatan': _clean_text(getattr(e, 'catatan', '')),
                 })
 
             if fmt == 'csv':
-                sio = io.StringIO()
-                writer = csv.writer(sio)
+                sio = io.StringIO(newline='')
+                writer = csv.writer(sio, lineterminator='\n')
                 writer.writerow(['Tanggal Masuk', 'Material', 'Titik', 'Jumlah Awal', 'Jumlah Tersisa', 'State', 'Catatan'])
                 for r in rows:
-                    writer.writerow([r['tanggal_masuk'], r['material'], r['inventory_point'], r['jumlah_awal'], r['jumlah_tersisa'], r['state'], r['catatan']])
-                data = sio.getvalue().encode('utf-8')
+                    writer.writerow([
+                        r['tanggal_masuk'],
+                        r['material'],
+                        r['inventory_point'],
+                        r['jumlah_awal'],
+                        r['jumlah_tersisa'],
+                        r['state'],
+                        r['catatan'],
+                    ])
+                data = sio.getvalue().encode('utf-8-sig')
                 headers = [
                     ('Content-Type', 'text/csv; charset=utf-8'),
                     ('Content-Disposition', 'attachment; filename=stock_report.csv'),
@@ -71,18 +87,25 @@ class ReportController(http.Controller):
                 
                 if not wkpath:
                     _logger.error('wkhtmltopdf binary not found in any candidate location')
-                    return request.not_found()
+                    raise NotFound()
 
-                # Render QWeb template to HTML
                 try:
-                    html = request.env['ir.ui.view'].render_template(
+                    html = request.env['ir.qweb']._render(
                         'inventory_smi.report_stock_template',
-                        {'entries': entries, 'rows': rows, 'date_from': date_from, 'date_to': date_to}
+                        {
+                            'entries': entries,
+                            'rows': rows,
+                            'date_from': date_from,
+                            'date_to': date_to,
+                            'generated_on': datetime.now().strftime('%d %B %Y %H:%M'),
+                        }
                     )
+                    if isinstance(html, bytes):
+                        html = html.decode('utf-8', errors='ignore')
                     _logger.info(f'Template rendered successfully ({len(html)} chars)')
                 except Exception as e:
                     _logger.error(f'Template render error: {str(e)}', exc_info=True)
-                    return request.not_found()
+                    raise NotFound()
 
                 # Convert to PDF
                 with tempfile.NamedTemporaryFile(suffix='.html', delete=False, mode='w', encoding='utf-8') as tf_html:
@@ -103,7 +126,7 @@ class ReportController(http.Controller):
                         _logger.error(f'wkhtmltopdf failed with code {result.returncode}')
                         _logger.error(f'stderr: {result.stderr}')
                         _logger.error(f'stdout: {result.stdout}')
-                        return request.not_found()
+                        raise NotFound()
 
                     with open(pdf_path, 'rb') as f:
                         pdf_bytes = f.read()
@@ -122,8 +145,10 @@ class ReportController(http.Controller):
                     except Exception as e:
                         _logger.warning(f'Failed to cleanup temp files: {str(e)}')
 
+        except NotFound:
+            raise
         except Exception as e:
             _logger.error(f'Unexpected error in stock_report: {str(e)}', exc_info=True)
-            return request.not_found()
+            raise NotFound()
 
-        return request.not_found()
+        raise NotFound()
