@@ -29,6 +29,7 @@
         'views/order_form_step3_template.xml',
         'views/order_detail_template.xml',
         'views/activity_template.xml',
+        'views/report_stock_template.xml',
         'views/pengguna_template.xml',
     ],
     'assets': {
