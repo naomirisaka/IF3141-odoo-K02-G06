@@ -6,3 +6,4 @@ from . import order_controller
 from . import activity_controller
 from . import user_controller
 from . import report_controller
+from . import material_controller

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+<template id="material_stok_minimum_page" name="Kelola Stok Minimum">
+    <t t-call="inventory_smi.layout">
+        <t t-set="page_title">Kelola Stok Minimum</t>
+
+        <div class="page-header">
+            <div class="page-header-title">Pengaturan Stok Minimum Bahan</div>
+        </div>
+
+        <div class="smi-card">
+            <div class="smi-card__header">
+                <span class="smi-card__title">Daftar Bahan &amp; Stok Minimum</span>
+                <span style="font-size:12px;color:var(--text-muted);">Atur jumlah minimum untuk alert restock</span>
+            </div>
+            <div class="smi-card__body">
+                <table class="smi-table">
+                    <thead>
+                        <tr>
+                            <th>Nama Bahan</th>
+                            <th>Kategori</th>
+                            <th>Satuan</th>
+                            <th>Total Stok</th>
+                            <th style="text-align:right;">Stok Minimum</th>
+                            <th style="text-align:center;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="materials" t-as="mat">
+                            <tr>
+                                <td>
+                                    <span style="font-weight:500;" t-esc="mat.name"/>
+                                    <t t-if="mat.warna">
+                                        <div style="font-size:11px;color:var(--text-muted);" t-esc="mat.warna"/>
+                                    </t>
+                                </td>
+                                <td style="color:var(--text-muted);font-size:13px;" t-esc="mat.category_id.name"/>
+                                <td style="color:var(--text-muted);font-size:13px;" t-esc="mat.uom_id.name"/>
+                                <td>
+                                    <t t-esc="'%.1f' % mat.total_stok"/>
+                                    <span style="color:var(--text-muted);margin-left:4px;" t-esc="mat.uom_id.name"/>
+                                </td>
+                                <td style="text-align:right;">
+                                    <input type="number" 
+                                           class="smi-input" 
+                                           style="width:100px;text-align:right;"
+                                           t-att-id="'stok_min_' + str(mat.id)"
+                                           t-att-value="'%.1f' % mat.stok_minimum"
+                                           min="0" 
+                                           step="0.1"
+                                           t-att-data-material-id="mat.id"/>
+                                </td>
+                                <td style="text-align:center;">
+                                    <button class="smi-btn smi-btn--primary smi-btn--sm"
+                                            t-att-onclick="'window.saveSiokMin(' + str(mat.id) + ')'"
+                                            style="width:80px;">
+                                        Simpan
+                                    </button>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+        <![CDATA[
+        window.saveSiokMin = function(materialId) {
+            var input = document.getElementById('stok_min_' + materialId);
+            if (!input) return;
+            var value = parseFloat(input.value) || 0;
+            
+            var formData = new FormData();
+            formData.append('stok_minimum', value);
+            
+            fetch('/smi/api/material/' + materialId + '/stok-minimum', {
+                method: 'POST',
+                body: formData,
+                credentials: 'same-origin'
+            })
+            .then(function(resp) {
+                if (resp.ok) {
+                    alert('Stok minimum diperbarui');
+                } else {
+                    alert('Gagal memperbarui stok minimum');
+                }
+            })
+            .catch(function(err) {
+                console.error(err);
+                alert('Koneksi gagal');
+            });
+        };
+        ]]>
+        </script>
+
+    </t>
+</template>
+
+</data>
+</odoo>

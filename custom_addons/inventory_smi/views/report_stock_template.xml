@@ -2,7 +2,6 @@
 <odoo>
   <data>
     <template id="report_stock_template" name="Stock Report">
-      <!DOCTYPE html>
       <html>
         <head>
           <meta charset="utf-8"/>
@@ -47,7 +46,7 @@
                   <td class="right"><t t-esc="r['jumlah_awal']"/></td>
                   <td class="right"><t t-esc="r['jumlah_tersisa']"/></td>
                   <td><t t-esc="r['state']"/></td>
-                  <td><t t-esc="r['keterangan']"/></td>
+                  <td><t t-esc="r['catatan']"/></td>
                 </tr>
               </t>
             </tbody>

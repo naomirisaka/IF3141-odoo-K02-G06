@@ -42,15 +42,15 @@ class ReportController(http.Controller):
                     'jumlah_awal': e.jumlah_awal,
                     'jumlah_tersisa': e.jumlah_tersisa,
                     'state': e.state,
-                    'keterangan': e.keterangan or '',
+                    'catatan': e.catatan or '',
                 })
 
             if fmt == 'csv':
                 sio = io.StringIO()
                 writer = csv.writer(sio)
-                writer.writerow(['Tanggal Masuk', 'Material', 'Titik', 'Jumlah Awal', 'Jumlah Tersisa', 'State', 'Keterangan'])
+                writer.writerow(['Tanggal Masuk', 'Material', 'Titik', 'Jumlah Awal', 'Jumlah Tersisa', 'State', 'Catatan'])
                 for r in rows:
-                    writer.writerow([r['tanggal_masuk'], r['material'], r['inventory_point'], r['jumlah_awal'], r['jumlah_tersisa'], r['state'], r['keterangan']])
+                    writer.writerow([r['tanggal_masuk'], r['material'], r['inventory_point'], r['jumlah_awal'], r['jumlah_tersisa'], r['state'], r['catatan']])
                 data = sio.getvalue().encode('utf-8')
                 headers = [
                     ('Content-Type', 'text/csv; charset=utf-8'),

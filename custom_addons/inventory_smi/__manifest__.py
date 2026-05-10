@@ -20,6 +20,7 @@
         'views/stock_detail_template.xml',
         'views/denah_template.xml',
         'views/material_views.xml',
+        'views/material_stok_minimum_template.xml',
         'views/stock_views.xml',
         'views/menu_views.xml',
         'views/order_views.xml',
