@@ -112,7 +112,40 @@ class SmiStockController(http.Controller):
             [('material_id', '=', material_id)],
             order='tanggal_masuk desc',
         )
+        order_usage = []
+        try:
+            order_lines = request.env['smi.order.line'].search(
+                [
+                    ('material_id', '=', material_id),
+                    ('order_id.state', 'in', ['dikonfirmasi', 'selesai']),
+                ],
+                order='id desc',
+            )
+            ordered_lines = sorted(
+                order_lines,
+                key=lambda line: (
+                    line.order_id.tanggal or line.create_date,
+                    line.order_id.id or 0,
+                    line.id or 0,
+                ),
+                reverse=True,
+            )
+            for line in ordered_lines:
+                order_usage.append({
+                    'order_id': line.order_id.id,
+                    'order_name': line.order_id.name,
+                    'no_spk': line.order_id.no_spk or '-',
+                    'tanggal': line.order_id.tanggal,
+                    'state': line.order_id.state,
+                    'jumlah_dibutuhkan': line.jumlah_dibutuhkan,
+                    'jumlah_terpenuhi': line.jumlah_terpenuhi,
+                    'mode_pick': line.mode_pick,
+                    'pick_count': len(line.order_pick_ids),
+                })
+        except Exception:
+            order_usage = []
         points_with_stock = entries.mapped('inventory_point_id')
+        inventory_points = request.env['smi.inventory_point'].search([('active', '=', True)], order='name asc')
 
         # provide map points JSON for the frontend detail panel
         map_points = self._get_map_points(material)
@@ -121,10 +154,12 @@ class SmiStockController(http.Controller):
             'material': material,
             'total_stok': material.total_stok,
             'entries': entries,
+            'order_usage': order_usage,
             'points_with_stock': points_with_stock,
+            'inventory_points': inventory_points,
             'map_points': map_points,
             'map_points_json': json.dumps(map_points),
-            'can_manage_points': user.has_group('inventory_smi.group_kepala_produksi'),
+            'can_manage_points': user.has_group('inventory_smi.group_kepala_produksi') or user.has_group('inventory_smi.group_admin'),
             'is_direktur': user.has_group('inventory_smi.group_direktur'),
             'is_kepala': user.has_group('inventory_smi.group_kepala_produksi'),
             'is_admin': user.has_group('inventory_smi.group_admin'),
@@ -132,6 +167,49 @@ class SmiStockController(http.Controller):
             'active_menu': 'stok',
         }
         return request.render('inventory_smi.stock_detail_page', values)
+
+    @http.route('/smi/stok/<int:material_id>/stok-minimum', type='http', auth='user', website=False, methods=['POST'])
+    def update_stock_minimum(self, material_id, **post):
+        user = request.env.user
+        if not (user.has_group('inventory_smi.group_kepala_produksi') or user.has_group('inventory_smi.group_admin')):
+            return request.not_found()
+
+        material = request.env['smi.material'].browse(material_id)
+        if not material.exists():
+            return request.redirect('/smi/stok')
+
+        try:
+            stok_minimum = float(post.get('stok_minimum', material.stok_minimum or 0.0))
+        except (TypeError, ValueError):
+            stok_minimum = material.stok_minimum or 0.0
+
+        if stok_minimum < 0:
+            stok_minimum = 0.0
+
+        material.sudo().write({'stok_minimum': stok_minimum})
+        return request.redirect(f'/smi/stok/{material_id}')
+
+    @http.route('/smi/stok/entry/<int:entry_id>/lokasi', type='http', auth='user', website=False, methods=['POST'])
+    def update_stock_location(self, entry_id, **post):
+        user = request.env.user
+        if not (user.has_group('inventory_smi.group_kepala_produksi') or user.has_group('inventory_smi.group_admin')):
+            return request.not_found()
+
+        entry = request.env['smi.stock_entry'].browse(entry_id)
+        if not entry.exists():
+            return request.redirect('/smi/stok')
+
+        try:
+            inventory_point_id = int(post.get('inventory_point_id', 0))
+        except (TypeError, ValueError):
+            inventory_point_id = 0
+
+        point = request.env['smi.inventory_point'].browse(inventory_point_id)
+        if not point.exists() or not point.active:
+            return request.redirect(f'/smi/stok/{entry.material_id.id}')
+
+        entry.sudo().write({'inventory_point_id': point.id})
+        return request.redirect(f'/smi/stok/{entry.material_id.id}')
 
     # ------------------------------------------------------------------
     # Denah fullscreen
@@ -157,7 +235,7 @@ class SmiStockController(http.Controller):
             'selected_material': selected_material,
             'map_points': map_points,
             'map_points_json': json.dumps(map_points),
-            'can_manage_points': user.has_group('inventory_smi.group_kepala_produksi'),
+            'can_manage_points': user.has_group('inventory_smi.group_kepala_produksi') or user.has_group('inventory_smi.group_admin'),
             'is_direktur': user.has_group('inventory_smi.group_direktur'),
             'is_kepala': user.has_group('inventory_smi.group_kepala_produksi'),
             'is_admin': user.has_group('inventory_smi.group_admin'),
