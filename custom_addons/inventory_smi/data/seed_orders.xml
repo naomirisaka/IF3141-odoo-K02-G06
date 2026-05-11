@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ═══════════════════════════════════════════════════════════
+             Orders — seeding pesanan produksi
+             ═══════════════════════════════════════════════════════════ -->
+
+        <record id="order_01" model="smi.order">
+            <field name="name">Cetak Kartu Nama PT Maju</field>
+            <field name="no_spk">SPK-2025-001</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=14)"/>
+            <field name="user_id" ref="user_kepala_produksi"/>
+            <field name="state">selesai</field>
+            <field name="catatan">Order kartu nama 2 sisi full colour</field>
+        </record>
+
+        <record id="order_02" model="smi.order">
+            <field name="name">Cetak Brosur Hotel Sejahtera</field>
+            <field name="no_spk">SPK-2025-002</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=10)"/>
+            <field name="user_id" ref="user_staf_produksi"/>
+            <field name="state">dikonfirmasi</field>
+            <field name="catatan">Brosur A4 lipat 3, laminasi glossy</field>
+        </record>
+
+        <record id="order_03" model="smi.order">
+            <field name="name">Cetak Amplop Resmi Pemda</field>
+            <field name="no_spk">SPK-2025-003</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=7)"/>
+            <field name="user_id" ref="user_staf_produksi_2"/>
+            <field name="state">dikonfirmasi</field>
+            <field name="catatan">Amplop resmi dengan logo pemda</field>
+        </record>
+
+        <record id="order_04" model="smi.order">
+            <field name="name">Cetak Packaging Kopi Nusantara</field>
+            <field name="no_spk">SPK-2025-004</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=5)"/>
+            <field name="user_id" ref="user_kepala_produksi"/>
+            <field name="state">draft</field>
+            <field name="catatan">Packaging kemasan kopi dengan foil gold</field>
+        </record>
+
+        <record id="order_05" model="smi.order">
+            <field name="name">Cetak Undangan Pernikan</field>
+            <field name="no_spk">SPK-2025-005</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=3)"/>
+            <field name="user_id" ref="user_staf_produksi_3"/>
+            <field name="state">draft</field>
+            <field name="catatan">Undangan pernikahan premium, dupleks 300gsm + laminasi doff + foil</field>
+        </record>
+
+        <record id="order_06" model="smi.order">
+            <field name="name">Cetak ID Card Karyawan</field>
+            <field name="no_spk">SPK-2025-006</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=25)"/>
+            <field name="user_id" ref="user_staf_produksi"/>
+            <field name="state">dibatalkan</field>
+            <field name="catatan">Dibatalkan karena perubahan desain dari klien</field>
+        </record>
+
+        <record id="order_07" model="smi.order">
+            <field name="name">Cetat Bukti Nota Restoran</field>
+            <field name="no_spk">SPK-2025-007</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=2)"/>
+            <field name="user_id" ref="user_staf_produksi_4"/>
+            <field name="state">draft</field>
+            <field name="catatan">Nota kecil untuk restoran</field>
+        </record>
+
+        <record id="order_08" model="smi.order">
+            <field name="name">Cetak Poster Event Musik</field>
+            <field name="no_spk">SPK-2025-008</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=1)"/>
+            <field name="user_id" ref="user_kepala_produksi_2"/>
+            <field name="state">dikonfirmasi</field>
+            <field name="catatan">Poster A2 full colour untuk event musik jazz</field>
+        </record>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             Order Lines — seeding baris kebutuhan bahan per order
+             ═══════════════════════════════════════════════════════════ -->
+
+        <!-- Order 1 lines (selesai) -->
+        <record id="order_01_line_01" model="smi.order.line">
+            <field name="order_id" ref="order_01"/>
+            <field name="material_id" ref="mat_kertas_art_120"/>
+            <field name="jumlah_dibutuhkan">200.0</field>
+            <field name="mode_pick">auto</field>
+        </record>
+
+        <record id="order_01_line_02" model="smi.order.line">
+            <field name="order_id" ref="order_01"/>
+            <field name="material_id" ref="mat_tinta_hitam"/>
+            <field name="jumlah_dibutuhkan">2.0</field>
+            <field name="mode_pick">auto</field>
+        </record>
+
+        <record id="order_01_line_03" model="smi.order.line">
+            <field name="order_id" ref="order_01"/>
+            <field name="material_id" ref="mat_laminasi_glossy"/>
+            <field name="jumlah_dibutuhkan">1.0</field>
+            <field name="mode_pick">auto</field>
+        </record>
+
+        <!-- Order 2 lines (dikonfirmasi) -->
+        <record id="order_02_line_01" model="smi.order.line">
+            <field name="order_id" ref="order_02"/>
+            <field name="material_id" ref="mat_kertas_art_150"/>
+            <field name="jumlah_dibutuhkan">300.0</field>
+            <field name="mode_pick">auto</field>
+        </record>
+
+        <record id="order_02_line_02" model="smi.order.line">
+            <field name="order_id" ref="order_02"/>
+            <field name="material_id" ref="mat_tinta_cyan"/>
+            <field name="jumlah_dibutuhkan">1.5</field>
+            <field name="mode_pick">auto</field>
+        </record>
+
+        <record id="order_02_line_03" model="smi.order.line">
+            <field name="order_id" ref="order_02"/>
+            <field name="material_id" ref="mat_tinta_magenta"/>
+            <field name="jumlah_dibutuhkan">1.5</field>
+            <field name="mode_pick">auto</field>
+        </record>
+
+        <record id="order_02_line_04" model="smi.order.line">
+            <field name="order_id" ref="order_02"/>
+            <field name="material_id" ref="mat_tinta_yellow"/>
+            <field name="jumlah_dibutuhkan">1.0</field>
+            <field name="mode_pick">auto</field>
+        </record>
+
+        <record id="order_02_line_05" model="smi.order.line">
+            <field name="order_id" ref="order_02"/>
+            <field name="material_id" ref="mat_laminasi_glossy"/>
+            <field name="jumlah_dibutuhkan">2.0</field>
+            <field name="mode_pick">manual</field>
+        </record>
+
+        <!-- Order 3 lines (dikonfirmasi) -->
+        <record id="order_03_line_01" model="smi.order.line">
+            <field name="order_id" ref="order_03"/>
+            <field name="material_id" ref="mat_kertas_art_120"/>
+            <field name="jumlah_dibutuhkan">500.0</field>
+            <field name="mode_pick">auto</field>
+        </record>
+
+        <record id="order_03_line_02" model="smi.order.line">
+            <field name="order_id" ref="order_03"/>
+            <field name="material_id" ref="mat_tinta_hitam"/>
+            <field name="jumlah_dibutuhkan">3.0</field>
+            <field name="mode_pick">auto</field>
+        </record>
+
+        <!-- Order 4 lines (draft) -->
+        <record id="order_04_line_01" model="smi.order.line">
+            <field name="order_id" ref="order_04"/>
+            <field name="material_id" ref="mat_kertas_dupleks"/>
+            <field name="jumlah_dibutuhkan">100.0</field>
+            <field name="mode_pick">auto</field>
+        </record>
+
+        <record id="order_04_line_02" model="smi.order.line">
+            <field name="order_id" ref="order_04"/>
+            <field name="material_id" ref="mat_tinta_hitam"/>
+            <field name="jumlah_dibutuhkan">1.5</field>
+            <field name="mode_pick">auto</field>
+        </record>
+
+        <record id="order_04_line_03" model="smi.order.line">
+            <field name="order_id" ref="order_04"/>
+            <field name="material_id" ref="mat_tinta_cyan"/>
+            <field name="jumlah_dibutuhkan">0.8</field>
+            <field name="mode_pick">auto</field>
+        </record>
+
+        <record id="order_04_line_04" model="smi.order.line">
+            <field name="order_id" ref="order_04"/>
+            <field name="material_id" ref="mat_tinta_magenta"/>
+            <field name="jumlah_dibutuhkan">0.8</field>
+            <field name="mode_pick">auto</field>
+        </record>
+
+        <record id="order_04_line_05" model="smi.order.line">
+            <field name="order_id" ref="order_04"/>
+            <field name="material_id" ref="mat_foil_gold"/>
+            <field name="jumlah_dibutuhkan">1.0</field>
+            <field name="mode_pick">manual</field>
+        </record>
+
+        <record id="order_04_line_06" model="smi.order.line">
+            <field name="order_id" ref="order_04"/>
+            <field name="material_id" ref="mat_laminasi_doff"/>
+            <field name="jumlah_dibutuhkan">0.5</field>
+            <field name="mode_pick">manual</field>
+        </record>
+
+        <!-- Order 5 lines (draft) -->
+        <record id="order_05_line_01" model="smi.order.line">
+            <field name="order_id" ref="order_05"/>
+            <field name="material_id" ref="mat_kertas_dupleks"/>
+            <field name="jumlah_dibutuhkan">150.0</field>
+            <field name="mode_pick">auto</field>
+        </record>
+
+        <record id="order_05_line_02" model="smi.order.line">
+            <field name="order_id" ref="order_05"/>
+            <field name="material_id" ref="mat_foil_gold"/>
+            <field name="jumlah_dibutuhkan">0.5</field>
+            <field name="mode_pick">auto</field>
+        </record>
+
+        <record id="order_05_line_03" model="smi.order.line">
+            <field name="order_id" ref="order_05"/>
+            <field name="material_id" ref="mat_laminasi_doff"/>
+            <field name="jumlah_dibutuhkan">1.0</field>
+            <field name="mode_pick">auto</field>
+        </record>
+
+        <!-- Order 6 lines (dibatalkan) -->
+        <record id="order_06_line_01" model="smi.order.line">
+            <field name="order_id" ref="order_06"/>
+            <field name="material_id" ref="mat_kertas_art_120"/>
+            <field name="jumlah_dibutuhkan">100.0</field>
+            <field name="mode_pick">auto</field>
+        </record>
+
+        <!-- Order 7 lines (draft) -->
+        <record id="order_07_line_01" model="smi.order.line">
+            <field name="order_id" ref="order_07"/>
+            <field name="material_id" ref="mat_kertas_hvs_80"/>
+            <field name="jumlah_dibutuhkan">5.0</field>
+            <field name="mode_pick">auto</field>
+        </record>
+
+        <record id="order_07_line_02" model="smi.order.line">
+            <field name="order_id" ref="order_07"/>
+            <field name="material_id" ref="mat_tinta_hitam"/>
+            <field name="jumlah_dibutuhkan">0.5</field>
+            <field name="mode_pick">auto</field>
+        </record>
+
+        <!-- Order 8 lines (dikonfirmasi) -->
+        <record id="order_08_line_01" model="smi.order.line">
+            <field name="order_id" ref="order_08"/>
+            <field name="material_id" ref="mat_kertas_art_150"/>
+            <field name="jumlah_dibutuhkan">200.0</field>
+            <field name="mode_pick">auto</field>
+        </record>
+
+        <record id="order_08_line_02" model="smi.order.line">
+            <field name="order_id" ref="order_08"/>
+            <field name="material_id" ref="mat_tinta_hitam"/>
+            <field name="jumlah_dibutuhkan">2.0</field>
+            <field name="mode_pick">auto</field>
+        </record>
+
+        <record id="order_08_line_03" model="smi.order.line">
+            <field name="order_id" ref="order_08"/>
+            <field name="material_id" ref="mat_tinta_cyan"/>
+            <field name="jumlah_dibutuhkan">1.0</field>
+            <field name="mode_pick">auto</field>
+        </record>
+
+        <record id="order_08_line_04" model="smi.order.line">
+            <field name="order_id" ref="order_08"/>
+            <field name="material_id" ref="mat_tinta_magenta"/>
+            <field name="jumlah_dibutuhkan">1.0</field>
+            <field name="mode_pick">auto</field>
+        </record>
+
+        <record id="order_08_line_05" model="smi.order.line">
+            <field name="order_id" ref="order_08"/>
+            <field name="material_id" ref="mat_tinta_yellow"/>
+            <field name="jumlah_dibutuhkan">0.5</field>
+            <field name="mode_pick">auto</field>
+        </record>
+
+        <record id="order_08_line_06" model="smi.order.line">
+            <field name="order_id" ref="order_08"/>
+            <field name="material_id" ref="mat_laminasi_glossy"/>
+            <field name="jumlah_dibutuhkan">0.5</field>
+            <field name="mode_pick">manual</field>
+        </record>
+
+    </data>
+</odoo>

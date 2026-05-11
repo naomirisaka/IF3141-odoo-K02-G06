@@ -119,5 +119,37 @@
             <field name="stok_minimum">2.0</field>
         </record>
 
+        <!-- ── Titik Inventori ── -->
+        <record id="point_gudang_a1" model="smi.inventory_point">
+            <field name="name">Gudang A1</field>
+            <field name="koordinat_x">12.5</field>
+            <field name="koordinat_y">18.0</field>
+            <field name="deskripsi">Rak depan dekat pintu masuk.</field>
+        </record>
+        <record id="point_gudang_a2" model="smi.inventory_point">
+            <field name="name">Gudang A2</field>
+            <field name="koordinat_x">28.0</field>
+            <field name="koordinat_y">22.5</field>
+            <field name="deskripsi">Rak depan sisi kanan.</field>
+        </record>
+        <record id="point_gudang_b1" model="smi.inventory_point">
+            <field name="name">Gudang B1</field>
+            <field name="koordinat_x">46.5</field>
+            <field name="koordinat_y">40.0</field>
+            <field name="deskripsi">Area tengah dekat jalur forklift.</field>
+        </record>
+        <record id="point_gudang_b2" model="smi.inventory_point">
+            <field name="name">Gudang B2</field>
+            <field name="koordinat_x">62.0</field>
+            <field name="koordinat_y">55.0</field>
+            <field name="deskripsi">Rak tengah sisi kiri.</field>
+        </record>
+        <record id="point_gudang_c1" model="smi.inventory_point">
+            <field name="name">Gudang C1</field>
+            <field name="koordinat_x">82.0</field>
+            <field name="koordinat_y">72.5</field>
+            <field name="deskripsi">Area belakang dekat loading dock.</field>
+        </record>
+
     </data>
 </odoo>

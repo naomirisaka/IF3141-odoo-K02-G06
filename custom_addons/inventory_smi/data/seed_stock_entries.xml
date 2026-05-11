@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ═══════════════════════════════════════════════════════════
+             Stock Entries — seeding stok bahan baku di tiap titik inventori
+             ═══════════════════════════════════════════════════════════ -->
+
+        <!-- Kertas Art Paper 120gsm -->
+        <record id="se_kertas_art120_a1" model="smi.stock_entry">
+            <field name="material_id" ref="mat_kertas_art_120"/>
+            <field name="inventory_point_id" ref="point_gudang_a1"/>
+            <field name="jumlah_awal">2000.0</field>
+            <field name="jumlah_tersisa">1800.0</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=30)"/>
+            <field name="user_id" ref="user_staf_produksi"/>
+            <field name="state">tersedia</field>
+            <field name="catatan">Beli dari supplier Cikarang</field>
+        </record>
+
+        <record id="se_kertas_art120_b1" model="smi.stock_entry">
+            <field name="material_id" ref="mat_kertas_art_120"/>
+            <field name="inventory_point_id" ref="point_gudang_b1"/>
+            <field name="jumlah_awal">1500.0</field>
+            <field name="jumlah_tersisa">1200.0</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=20)"/>
+            <field name="user_id" ref="user_staf_produksi_2"/>
+            <field name="state">tersedia</field>
+            <field name="catatan">Stok tambahan untuk order besar</field>
+        </record>
+
+        <!-- Kertas Art Paper 150gsm -->
+        <record id="se_kertas_art150_a2" model="smi.stock_entry">
+            <field name="material_id" ref="mat_kertas_art_150"/>
+            <field name="inventory_point_id" ref="point_gudang_a2"/>
+            <field name="jumlah_awal">1000.0</field>
+            <field name="jumlah_tersisa">750.0</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=25)"/>
+            <field name="user_id" ref="user_staf_produksi"/>
+            <field name="state">tersedia</field>
+            <field name="catatan">Kertas premium untuk cetakan berkualitas tinggi</field>
+        </record>
+
+        <record id="se_kertas_art150_c1" model="smi.stock_entry">
+            <field name="material_id" ref="mat_kertas_art_150"/>
+            <field name="inventory_point_id" ref="point_gudang_c1"/>
+            <field name="jumlah_awal">800.0</field>
+            <field name="jumlah_tersisa">500.0</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=15)"/>
+            <field name="user_id" ref="user_staf_produksi_3"/>
+            <field name="state">tersedia</field>
+        </record>
+
+        <!-- Kertas HVS 80gsm -->
+        <record id="se_kertas_hvs_a1" model="smi.stock_entry">
+            <field name="material_id" ref="mat_kertas_hvs_80"/>
+            <field name="inventory_point_id" ref="point_gudang_a1"/>
+            <field name="jumlah_awal">50.0</field>
+            <field name="jumlah_tersisa">35.0</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=28)"/>
+            <field name="user_id" ref="user_staf_produksi_2"/>
+            <field name="state">tersedia</field>
+        </record>
+
+        <record id="se_kertas_hvs_b2" model="smi.stock_entry">
+            <field name="material_id" ref="mat_kertas_hvs_80"/>
+            <field name="inventory_point_id" ref="point_gudang_b2"/>
+            <field name="jumlah_awal">30.0</field>
+            <field name="jumlah_tersisa">12.0</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=10)"/>
+            <field name="user_id" ref="user_staf_produksi_4"/>
+            <field name="state">tersedia</field>
+            <field name="catatan">Stok menipis, perlu restok segera</field>
+        </record>
+
+        <!-- Kertas Dupleks 300gsm -->
+        <record id="se_kertas_dupleks_a2" model="smi.stock_entry">
+            <field name="material_id" ref="mat_kertas_dupleks"/>
+            <field name="inventory_point_id" ref="point_gudang_a2"/>
+            <field name="jumlah_awal">500.0</field>
+            <field name="jumlah_tersisa">350.0</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=22)"/>
+            <field name="user_id" ref="user_staf_produksi"/>
+            <field name="state">tersedia</field>
+        </record>
+
+        <record id="se_kertas_dupleks_b1" model="smi.stock_entry">
+            <field name="material_id" ref="mat_kertas_dupleks"/>
+            <field name="inventory_point_id" ref="point_gudang_b1"/>
+            <field name="jumlah_awal">300.0</field>
+            <field name="jumlah_tersisa">180.0</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=12)"/>
+            <field name="user_id" ref="user_staf_produksi_3"/>
+            <field name="state">tersedia</field>
+        </record>
+
+        <!-- Tinta Hitam -->
+        <record id="se_tinta_hitam_a1" model="smi.stock_entry">
+            <field name="material_id" ref="mat_tinta_hitam"/>
+            <field name="inventory_point_id" ref="point_gudang_a1"/>
+            <field name="jumlah_awal">25.0</field>
+            <field name="jumlah_tersisa">18.0</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=18)"/>
+            <field name="user_id" ref="user_staf_produksi_5"/>
+            <field name="state">tersedia</field>
+            <field name="catatan">Tinta hitam standar untuk cetakan mono</field>
+        </record>
+
+        <record id="se_tinta_hitam_c1" model="smi.stock_entry">
+            <field name="material_id" ref="mat_tinta_hitam"/>
+            <field name="inventory_point_id" ref="point_gudang_c1"/>
+            <field name="jumlah_awal">15.0</field>
+            <field name="jumlah_tersisa">8.0</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=5)"/>
+            <field name="user_id" ref="user_staf_produksi"/>
+            <field name="state">tersedia</field>
+        </record>
+
+        <!-- Tinta Cyan -->
+        <record id="se_tinta_cyan_a2" model="smi.stock_entry">
+            <field name="material_id" ref="mat_tinta_cyan"/>
+            <field name="inventory_point_id" ref="point_gudang_a2"/>
+            <field name="jumlah_awal">12.0</field>
+            <field name="jumlah_tersisa">9.5</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=21)"/>
+            <field name="user_id" ref="user_staf_produksi_2"/>
+            <field name="state">tersedia</field>
+        </record>
+
+        <record id="se_tinta_cyan_b2" model="smi.stock_entry">
+            <field name="material_id" ref="mat_tinta_cyan"/>
+            <field name="inventory_point_id" ref="point_gudang_b2"/>
+            <field name="jumlah_awal">10.0</field>
+            <field name="jumlah_tersisa">3.0</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=7)"/>
+            <field name="user_id" ref="user_staf_produksi_4"/>
+            <field name="state">tersedia</field>
+            <field name="catatan">Stok rendah, perlu pemesanan ulang</field>
+        </record>
+
+        <!-- Tinta Magenta -->
+        <record id="se_tinta_magenta_b1" model="smi.stock_entry">
+            <field name="material_id" ref="mat_tinta_magenta"/>
+            <field name="inventory_point_id" ref="point_gudang_b1"/>
+            <field name="jumlah_awal">14.0</field>
+            <field name="jumlah_tersisa">10.0</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=19)"/>
+            <field name="user_id" ref="user_staf_produksi"/>
+            <field name="state">tersedia</field>
+        </record>
+
+        <!-- Tinta Yellow -->
+        <record id="se_tinta_yellow_a1" model="smi.stock_entry">
+            <field name="material_id" ref="mat_tinta_yellow"/>
+            <field name="inventory_point_id" ref="point_gudang_a1"/>
+            <field name="jumlah_awal">11.0</field>
+            <field name="jumlah_tersisa">7.0</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=16)"/>
+            <field name="user_id" ref="user_staf_produksi_3"/>
+            <field name="state">tersedia</field>
+        </record>
+
+        <!-- Laminasi Glossy -->
+        <record id="se_laminasi_glossy_a2" model="smi.stock_entry">
+            <field name="material_id" ref="mat_laminasi_glossy"/>
+            <field name="inventory_point_id" ref="point_gudang_a2"/>
+            <field name="jumlah_awal">8.0</field>
+            <field name="jumlah_tersisa">5.0</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=14)"/>
+            <field name="user_id" ref="user_staf_produksi"/>
+            <field name="state">tersedia</field>
+        </record>
+
+        <record id="se_laminasi_glossy_c1" model="smi.stock_entry">
+            <field name="material_id" ref="mat_laminasi_glossy"/>
+            <field name="inventory_point_id" ref="point_gudang_c1"/>
+            <field name="jumlah_awal">6.0</field>
+            <field name="jumlah_tersisa">2.0</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=3)"/>
+            <field name="user_id" ref="user_staf_produksi_5"/>
+            <field name="state">tersedia</field>
+        </record>
+
+        <!-- Laminasi Doff -->
+        <record id="se_laminasi_doff_b1" model="smi.stock_entry">
+            <field name="material_id" ref="mat_laminasi_doff"/>
+            <field name="inventory_point_id" ref="point_gudang_b1"/>
+            <field name="jumlah_awal">7.0</field>
+            <field name="jumlah_tersisa">4.5</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=11)"/>
+            <field name="user_id" ref="user_staf_produksi_2"/>
+            <field name="state">tersedia</field>
+        </record>
+
+        <record id="se_laminasi_doff_a1" model="smi.stock_entry">
+            <field name="material_id" ref="mat_laminasi_doff"/>
+            <field name="inventory_point_id" ref="point_gudang_a1"/>
+            <field name="jumlah_awal">5.0</field>
+            <field name="jumlah_tersisa">1.5</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=2)"/>
+            <field name="user_id" ref="user_staf_produksi_4"/>
+            <field name="state">tersedia</field>
+        </record>
+
+        <!-- Foil Gold -->
+        <record id="se_foil_gold_c1" model="smi.stock_entry">
+            <field name="material_id" ref="mat_foil_gold"/>
+            <field name="inventory_point_id" ref="point_gudang_c1"/>
+            <field name="jumlah_awal">5.0</field>
+            <field name="jumlah_tersisa">3.0</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=17)"/>
+            <field name="user_id" ref="user_staf_produksi_3"/>
+            <field name="state">tersedia</field>
+        </record>
+
+        <record id="se_foil_gold_b2" model="smi.stock_entry">
+            <field name="material_id" ref="mat_foil_gold"/>
+            <field name="inventory_point_id" ref="point_gudang_b2"/>
+            <field name="jumlah_awal">4.0</field>
+            <field name="jumlah_tersisa">1.5</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=4)"/>
+            <field name="user_id" ref="user_staf_produksi"/>
+            <field name="state">tersedia</field>
+        </record>
+
+        <!-- Foil Silver -->
+        <record id="se_foil_silver_a2" model="smi.stock_entry">
+            <field name="material_id" ref="mat_foil_silver"/>
+            <field name="inventory_point_id" ref="point_gudang_a2"/>
+            <field name="jumlah_awal">6.0</field>
+            <field name="jumlah_tersisa">4.0</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=13)"/>
+            <field name="user_id" ref="user_staf_produksi_5"/>
+            <field name="state">tersedia</field>
+        </record>
+
+        <record id="se_foil_silver_b1" model="smi.stock_entry">
+            <field name="material_id" ref="mat_foil_silver"/>
+            <field name="inventory_point_id" ref="point_gudang_b1"/>
+            <field name="jumlah_awal">3.0</field>
+            <field name="jumlah_tersisa">0.0</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=35)"/>
+            <field name="user_id" ref="user_staf_produksi_2"/>
+            <field name="state">habis</field>
+        </record>
+
+        <!-- Habis entries for testing -->
+        <record id="se_kertas_art120_h" model="smi.stock_entry">
+            <field name="material_id" ref="mat_kertas_art_120"/>
+            <field name="inventory_point_id" ref="point_gudang_c1"/>
+            <field name="jumlah_awal">500.0</field>
+            <field name="jumlah_tersisa">0.0</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=60)"/>
+            <field name="user_id" ref="user_staf_produksi"/>
+            <field name="state">habis</field>
+            <field name="catatan">Sudah habis terpakai</field>
+        </record>
+
+        <record id="se_tinta_hitam_h" model="smi.stock_entry">
+            <field name="material_id" ref="mat_tinta_hitam"/>
+            <field name="inventory_point_id" ref="point_gudang_b2"/>
+            <field name="jumlah_awal">20.0</field>
+            <field name="jumlah_tersisa">0.0</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=90)"/>
+            <field name="user_id" ref="user_staf_produksi_4"/>
+            <field name="state">habis</field>
+        </record>
+
+    </data>
+</odoo>
