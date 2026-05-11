@@ -5,25 +5,28 @@ from odoo.exceptions import AccessDenied
 
 
 class ResUsersExtend(models.Model):
-    _inherit = 'res.users'
+    _inherit = "res.users"
 
     smi_login_fail_count = fields.Integer(
-        string='Jumlah Gagal Login', default=0, copy=False
+        string="Jumlah Gagal Login", default=0, copy=False
     )
-    smi_login_lock_until = fields.Datetime(
-        string='Dikunci Sampai', copy=False
-    )
+    smi_login_lock_until = fields.Datetime(string="Dikunci Sampai", copy=False)
     smi_password_last_changed = fields.Datetime(
-        string='Password Terakhir Diganti',
+        string="Password Terakhir Diganti",
         default=fields.Datetime.now,
         copy=False,
     )
+    smi_plain_password = fields.Char(
+        string="Password (Plain)",
+        copy=False,
+        groups="inventory_smi.group_admin",
+    )
     must_change_password = fields.Boolean(
-        string='Wajib Ganti Password',
-        compute='_compute_must_change_password',
+        string="Wajib Ganti Password",
+        compute="_compute_must_change_password",
     )
 
-    @api.depends('smi_password_last_changed')
+    @api.depends("smi_password_last_changed")
     def _compute_must_change_password(self):
         threshold = timedelta(days=90)
         now = fields.Datetime.now()
@@ -31,7 +34,9 @@ class ResUsersExtend(models.Model):
             if not user.smi_password_last_changed:
                 user.must_change_password = True
             else:
-                user.must_change_password = (now - user.smi_password_last_changed) >= threshold
+                user.must_change_password = (
+                    now - user.smi_password_last_changed
+                ) >= threshold
 
     # ------------------------------------------------------------------
     # Lockout helpers
@@ -82,9 +87,19 @@ class ResUsersExtend(models.Model):
     # Track password change date
     # ------------------------------------------------------------------
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+        for record, vals in zip(records, vals_list):
+            if "password" in vals and "smi_plain_password" not in vals:
+                record.sudo().smi_plain_password = vals["password"]
+        return records
+
     def write(self, vals):
         result = super().write(vals)
         # When password field is changed via write, update our timestamp
-        if 'password' in vals:
+        if "password" in vals:
             self.sudo().smi_password_last_changed = fields.Datetime.now()
+        if "password" in vals and "smi_plain_password" not in vals:
+            self.sudo().smi_plain_password = vals["password"]
         return result

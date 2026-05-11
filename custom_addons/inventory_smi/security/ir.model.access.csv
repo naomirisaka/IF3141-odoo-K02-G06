@@ -39,6 +39,10 @@ access_smi_order_pick_kepala,smi.order.pick kepala,model_smi_order_pick,inventor
 access_smi_order_pick_staf,smi.order.pick staf,model_smi_order_pick,inventory_smi.group_staf_produksi,1,1,1,1
 access_smi_order_pick_direktur,smi.order.pick direktur,model_smi_order_pick,inventory_smi.group_direktur,1,0,0,0
 
+access_res_users_extend_admin,res.users extend admin,base.model_res_users,inventory_smi.group_admin,1,1,1,0
+access_res_users_extend_kepala,res.users extend kepala,base.model_res_users,inventory_smi.group_kepala_produksi,1,0,0,0
+access_res_users_extend_staf,res.users extend staf,base.model_res_users,inventory_smi.group_staf_produksi,1,0,0,0
+access_res_users_extend_direktur,res.users extend direktur,base.model_res_users,inventory_smi.group_direktur,1,0,0,0
 access_smi_activity_log_admin,smi.activity.log admin,model_smi_activity_log,inventory_smi.group_admin,1,1,1,1
 access_smi_activity_log_kepala,smi.activity.log kepala,model_smi_activity_log,inventory_smi.group_kepala_produksi,1,1,1,0
 access_smi_activity_log_staf,smi.activity.log staf,model_smi_activity_log,inventory_smi.group_staf_produksi,1,1,1,0

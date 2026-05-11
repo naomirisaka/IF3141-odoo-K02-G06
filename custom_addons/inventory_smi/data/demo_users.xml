@@ -2,33 +2,95 @@
 <odoo>
     <data noupdate="0">
 
-        <!-- Demo users for development / UAT -->
-
+        <!-- Admin users -->
         <record id="user_admin_smi" model="res.users">
             <field name="name">Admin SMI</field>
             <field name="login">admin_smi</field>
             <field name="password">admin123</field>
+            <field name="smi_plain_password">admin123</field>
             <field name="groups_id" eval="[(4, ref('inventory_smi.group_admin')), (4, ref('base.group_user'))]"/>
         </record>
 
+        <record id="user_admin_smi_2" model="res.users">
+            <field name="name">Rina Admin</field>
+            <field name="login">rina_admin</field>
+            <field name="password">rina123</field>
+            <field name="smi_plain_password">rina123</field>
+            <field name="groups_id" eval="[(4, ref('inventory_smi.group_admin')), (4, ref('base.group_user'))]"/>
+        </record>
+
+        <!-- Kepala Produksi users -->
         <record id="user_kepala_produksi" model="res.users">
             <field name="name">Kepala Produksi</field>
             <field name="login">kepala</field>
             <field name="password">kepala123</field>
+            <field name="smi_plain_password">kepala123</field>
             <field name="groups_id" eval="[(4, ref('inventory_smi.group_kepala_produksi')), (4, ref('base.group_user'))]"/>
         </record>
 
+        <record id="user_kepala_produksi_2" model="res.users">
+            <field name="name">Budi Kepala</field>
+            <field name="login">budi_kepala</field>
+            <field name="password">budi123</field>
+            <field name="smi_plain_password">budi123</field>
+            <field name="groups_id" eval="[(4, ref('inventory_smi.group_kepala_produksi')), (4, ref('base.group_user'))]"/>
+        </record>
+
+        <!-- Staf Produksi users -->
         <record id="user_staf_produksi" model="res.users">
             <field name="name">Staf Produksi</field>
             <field name="login">staf1</field>
             <field name="password">staf123</field>
+            <field name="smi_plain_password">staf123</field>
             <field name="groups_id" eval="[(4, ref('inventory_smi.group_staf_produksi')), (4, ref('base.group_user'))]"/>
         </record>
 
+        <record id="user_staf_produksi_2" model="res.users">
+            <field name="name">Andi Staf</field>
+            <field name="login">andi_staf</field>
+            <field name="password">andi123</field>
+            <field name="smi_plain_password">andi123</field>
+            <field name="groups_id" eval="[(4, ref('inventory_smi.group_staf_produksi')), (4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="user_staf_produksi_3" model="res.users">
+            <field name="name">Sari Staf</field>
+            <field name="login">sari_staf</field>
+            <field name="password">sari123</field>
+            <field name="smi_plain_password">sari123</field>
+            <field name="groups_id" eval="[(4, ref('inventory_smi.group_staf_produksi')), (4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="user_staf_produksi_4" model="res.users">
+            <field name="name">Dewi Staf</field>
+            <field name="login">dewi_staf</field>
+            <field name="password">dewi123</field>
+            <field name="smi_plain_password">dewi123</field>
+            <field name="groups_id" eval="[(4, ref('inventory_smi.group_staf_produksi')), (4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="user_staf_produksi_5" model="res.users">
+            <field name="name">Rizal Staf</field>
+            <field name="login">rizal_staf</field>
+            <field name="password">rizal123</field>
+            <field name="smi_plain_password">rizal123</field>
+            <field name="groups_id" eval="[(4, ref('inventory_smi.group_staf_produksi')), (4, ref('base.group_user'))]"/>
+        </record>
+
+        <!-- Direktur users -->
         <record id="user_direktur" model="res.users">
             <field name="name">Direktur</field>
             <field name="login">direktur</field>
             <field name="password">direktur123</field>
+            <field name="smi_plain_password">direktur123</field>
+            <field name="groups_id" eval="[(4, ref('inventory_smi.group_direktur')), (4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="user_direktur_2" model="res.users">
+            <field name="name">Hendra Direktur</field>
+            <field name="login">hendra_dir</field>
+            <field name="password">hendra123</field>
+            <field name="smi_plain_password">hendra123</field>
             <field name="groups_id" eval="[(4, ref('inventory_smi.group_direktur')), (4, ref('base.group_user'))]"/>
         </record>
 

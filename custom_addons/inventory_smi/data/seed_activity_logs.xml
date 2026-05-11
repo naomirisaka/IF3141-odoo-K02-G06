@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ═══════════════════════════════════════════════════════════
+             Activity Logs — seeding log aktivitas pengguna
+             ═══════════════════════════════════════════════════════════ -->
+
+        <record id="log_01" model="smi.activity.log">
+            <field name="user_id" ref="user_admin_smi"/>
+            <field name="jabatan">Admin</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=30)"/>
+            <field name="tipe">stok_masuk</field>
+            <field name="deskripsi">Menambahkan 2000 Lembar Kertas Art Paper 120gsm ke Gudang A1</field>
+            <field name="ref_model">smi.stock_entry</field>
+            <field name="ref_id" eval="1"/>
+        </record>
+
+        <record id="log_02" model="smi.activity.log">
+            <field name="user_id" ref="user_staf_produksi"/>
+            <field name="jabatan">Staf Produksi</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=29)"/>
+            <field name="tipe">stok_masuk</field>
+            <field name="deskripsi">Menambahkan 1500 Lembar Kertas Art Paper 120gsm ke Gudang B1</field>
+            <field name="ref_model">smi.stock_entry</field>
+            <field name="ref_id" eval="2"/>
+        </record>
+
+        <record id="log_03" model="smi.activity.log">
+            <field name="user_id" ref="user_staf_produksi_2"/>
+            <field name="jabatan">Staf Produksi</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=25)"/>
+            <field name="tipe">stok_masuk</field>
+            <field name="deskripsi">Menambahkan 1000 Lembar Kertas Art Paper 150gsm ke Gudang A2</field>
+            <field name="ref_model">smi.stock_entry</field>
+            <field name="ref_id" eval="3"/>
+        </record>
+
+        <record id="log_04" model="smi.activity.log">
+            <field name="user_id" ref="user_staf_produksi_3"/>
+            <field name="jabatan">Staf Produksi</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=20)"/>
+            <field name="tipe">stok_masuk</field>
+            <field name="deskripsi">Menambahkan 1500 Lembar Kertas Art Paper 120gsm ke Gudang B1</field>
+            <field name="ref_model">smi.stock_entry</field>
+            <field name="ref_id" eval="4"/>
+        </record>
+
+        <record id="log_05" model="smi.activity.log">
+            <field name="user_id" ref="user_kepala_produksi"/>
+            <field name="jabatan">Kepala Produksi</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=14)"/>
+            <field name="tipe">order_dibuat</field>
+            <field name="deskripsi">Membuat order "Cetak Kartu Nama PT Maju" (SPK: SPK-2025-001)</field>
+            <field name="ref_model">smi.order</field>
+            <field name="ref_id" eval="1"/>
+        </record>
+
+        <record id="log_06" model="smi.activity.log">
+            <field name="user_id" ref="user_staf_produksi"/>
+            <field name="jabatan">Staf Produksi</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=14)"/>
+            <field name="tipe">stok_masuk</field>
+            <field name="deskripsi">Menambahkan 25 Kg Tinta Hitam ke Gudang A1</field>
+            <field name="ref_model">smi.stock_entry</field>
+            <field name="ref_id" eval="5"/>
+        </record>
+
+        <record id="log_07" model="smi.activity.log">
+            <field name="user_id" ref="user_staf_produksi"/>
+            <field name="jabatan">Staf Produksi</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=10)"/>
+            <field name="tipe">order_dibuat</field>
+            <field name="deskripsi">Membuat order "Cetak Brosur Hotel Sejahtera" (SPK: SPK-2025-002)</field>
+            <field name="ref_model">smi.order</field>
+            <field name="ref_id" eval="2"/>
+        </record>
+
+        <record id="log_08" model="smi.activity.log">
+            <field name="user_id" ref="user_staf_produksi_2"/>
+            <field name="jabatan">Staf Produksi</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=7)"/>
+            <field name="tipe">order_dibuat</field>
+            <field name="deskripsi">Membuat order "Cetak Amplop Resmi Pemda" (SPK: SPK-2025-003)</field>
+            <field name="ref_model">smi.order</field>
+            <field name="ref_id" eval="3"/>
+        </record>
+
+        <record id="log_09" model="smi.activity.log">
+            <field name="user_id" ref="user_kepala_produksi"/>
+            <field name="jabatan">Kepala Produksi</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=5)"/>
+            <field name="tipe">order_dibuat</field>
+            <field name="deskripsi">Membuat order "Cetak Packaging Kopi Nusantara" (SPK: SPK-2025-004)</field>
+            <field name="ref_model">smi.order</field>
+            <field name="ref_id" eval="4"/>
+        </record>
+
+        <record id="log_10" model="smi.activity.log">
+            <field name="user_id" ref="user_staf_produksi_5"/>
+            <field name="jabatan">Staf Produksi</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=3)"/>
+            <field name="tipe">stok_masuk</field>
+            <field name="deskripsi">Menambahkan 6 Rol Laminasi Glossy ke Gudang C1</field>
+            <field name="ref_model">smi.stock_entry</field>
+            <field name="ref_id" eval="6"/>
+        </record>
+
+        <record id="log_11" model="smi.activity.log">
+            <field name="user_id" ref="user_staf_produksi_3"/>
+            <field name="jabatan">Staf Produksi</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=3)"/>
+            <field name="tipe">order_dibuat</field>
+            <field name="deskripsi">Membuat order "Cetak Undangan Pernikan" (SPK: SPK-2025-005)</field>
+            <field name="ref_model">smi.order</field>
+            <field name="ref_id" eval="5"/>
+        </record>
+
+        <record id="log_12" model="smi.activity.log">
+            <field name="user_id" ref="user_staf_produksi"/>
+            <field name="jabatan">Staf Produksi</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=25)"/>
+            <field name="tipe">order_dibatalkan</field>
+            <field name="deskripsi">Order "Cetak ID Card Karyawan" (SPK: SPK-2025-006) dibatalkan</field>
+            <field name="ref_model">smi.order</field>
+            <field name="ref_id" eval="6"/>
+        </record>
+
+        <record id="log_13" model="smi.activity.log">
+            <field name="user_id" ref="user_staf_produksi_4"/>
+            <field name="jabatan">Staf Produksi</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=2)"/>
+            <field name="tipe">stok_masuk</field>
+            <field name="deskripsi">Menambahkan 50 Rim Kertas HVS 80gsm ke Gudang A1</field>
+            <field name="ref_model">smi.stock_entry</field>
+            <field name="ref_id" eval="7"/>
+        </record>
+
+        <record id="log_14" model="smi.activity.log">
+            <field name="user_id" ref="user_kepala_produksi_2"/>
+            <field name="jabatan">Kepala Produksi</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=1)"/>
+            <field name="tipe">order_dibuat</field>
+            <field name="deskripsi">Membuat order "Cetak Poster Event Musik" (SPK: SPK-2025-008)</field>
+            <field name="ref_model">smi.order</field>
+            <field name="ref_id" eval="8"/>
+        </record>
+
+        <record id="log_15" model="smi.activity.log">
+            <field name="user_id" ref="user_admin_smi"/>
+            <field name="jabatan">Admin</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=28)"/>
+            <field name="tipe">titik_ditambah</field>
+            <field name="deskripsi">Menambahkan titik inventori baru: Gudang A1</field>
+            <field name="ref_model">smi.inventory_point</field>
+            <field name="ref_id" eval="1"/>
+        </record>
+
+        <record id="log_16" model="smi.activity.log">
+            <field name="user_id" ref="user_admin_smi"/>
+            <field name="jabatan">Admin</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=27)"/>
+            <field name="tipe">titik_ditambah</field>
+            <field name="deskripsi">Menambahkan titik inventori baru: Gudang A2</field>
+            <field name="ref_model">smi.inventory_point</field>
+            <field name="ref_id" eval="2"/>
+        </record>
+
+        <record id="log_17" model="smi.activity.log">
+            <field name="user_id" ref="user_staf_produksi_2"/>
+            <field name="jabatan">Staf Produksi</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=12)"/>
+            <field name="tipe">stok_masuk</field>
+            <field name="deskripsi">Menambahkan 14 Kg Tinta Magenta ke Gudang B1</field>
+            <field name="ref_model">smi.stock_entry</field>
+            <field name="ref_id" eval="8"/>
+        </record>
+
+        <record id="log_18" model="smi.activity.log">
+            <field name="user_id" ref="user_staf_produksi"/>
+            <field name="jabatan">Staf Produksi</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=13)"/>
+            <field name="tipe">order_selesai</field>
+            <field name="deskripsi">Order "Cetak Kartu Nama PT Maju" (SPK: SPK-2025-001) diselesaikan</field>
+            <field name="ref_model">smi.order</field>
+            <field name="ref_id" eval="1"/>
+        </record>
+
+        <record id="log_19" model="smi.activity.log">
+            <field name="user_id" ref="user_staf_produksi_4"/>
+            <field name="jabatan">Staf Produksi</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(days=2)"/>
+            <field name="tipe">stok_masuk</field>
+            <field name="deskripsi">Menambahkan 5 Rol Laminasi Doff ke Gudang A1</field>
+            <field name="ref_model">smi.stock_entry</field>
+            <field name="ref_id" eval="9"/>
+        </record>
+
+        <record id="log_20" model="smi.activity.log">
+            <field name="user_id" ref="user_staf_produksi_5"/>
+            <field name="jabatan">Staf Produksi</field>
+            <field name="tanggal" eval="DateTime.now() - timedelta(hours=6)"/>
+            <field name="tipe">stok_masuk</field>
+            <field name="deskripsi">Menambahkan 6 Rol Foil Silver ke Gudang A2</field>
+            <field name="ref_model">smi.stock_entry</field>
+            <field name="ref_id" eval="10"/>
+        </record>
+
+    </data>
+</odoo>
