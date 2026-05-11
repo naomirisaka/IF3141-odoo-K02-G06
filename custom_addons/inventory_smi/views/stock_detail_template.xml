@@ -157,15 +157,16 @@
             </div>
             <div class="smi-card__body" style="padding:16px;">
                 <div class="denah-container" style="position:relative;">
-                    <div id="smi_map_data" t-att-data-points="map_points_json" t-att-data-can-manage="'1' if can_manage_points else '0'" style="display:none"></div>
-                    <div id="smi_map_root"
-                            style="width:100%;min-height:520px;">
+                    <div id="smi_map_data"
+                        t-att-data-points="map_points_json"
+                        t-att-data-can-manage="'1' if can_manage_points else '0'"
+                        style="display:none">
                     </div>
-                    <t t-foreach="points_with_stock" t-as="pt">
-                        <div style="position:absolute;border-radius:50%;background:#3B82F6;width:14px;height:14px;transform:translate(-50%,-50%);"
-                             t-att-title="pt.name"
-                             t-att-style="'position:absolute;border-radius:50%;background:#3B82F6;width:14px;height:14px;transform:translate(-50%,-50%);left:' + str(pt.koordinat_x) + '%;top:' + str(pt.koordinat_y) + '%;'"/>
-                    </t>
+
+                    <div id="smi_map_root"
+                        t-att-data-material-id="material.id"
+                        style="width:100%;min-height:520px;">
+                    </div>
                 </div>
             </div>
         </div>
