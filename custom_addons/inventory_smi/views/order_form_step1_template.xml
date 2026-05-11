@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <div class="smi-card" style="max-width:600px;">
+        <div class="smi-card" style="width:100%">
             <div class="smi-card__header">
                 <span class="smi-card__title">Informasi Pesanan</span>
             </div>
@@ -76,10 +76,8 @@
                     <div style="margin-bottom:24px;">
                         <label style="display:block;font-size:13px;font-weight:500;
                                       color:var(--text);margin-bottom:6px;">Catatan</label>
-                        <textarea name="catatan" class="smi-textarea" rows="3"
-                                  placeholder="Catatan tambahan (opsional)">
-                            <t t-esc="post.get('catatan', '')"/>
-                        </textarea>
+                            <textarea name="catatan" class="smi-textarea" rows="3"
+                                placeholder="Catatan tambahan (opsional)"><t t-esc="post.get('catatan', '').strip()"/></textarea>
                     </div>
 
                     <div style="display:flex;gap:8px;">

@@ -16,7 +16,7 @@
             Kembali ke Daftar Stok
         </a>
 
-        <div class="smi-card" style="max-width:700px;">
+        <div class="smi-card" style="width:100%">
             <div class="smi-card__header">
                 <span class="smi-card__title">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -103,10 +103,8 @@
                     <!-- Catatan -->
                     <div class="form-group">
                         <label class="form-label" for="catatan">Catatan</label>
-                        <textarea name="catatan" id="catatan" class="smi-textarea"
-                                  rows="3" placeholder="Catatan tambahan (opsional)">
-                            <t t-esc="post.get('catatan', '')"/>
-                        </textarea>
+                            <textarea name="catatan" class="smi-textarea" rows="3"
+                                    placeholder="Catatan tambahan (opsional)"><t t-esc="post.get('catatan', '').strip()"/></textarea>
                     </div>
 
                     <div style="display:flex;gap:10px;margin-top:24px;padding-top:20px;border-top:1px solid var(--border);">
