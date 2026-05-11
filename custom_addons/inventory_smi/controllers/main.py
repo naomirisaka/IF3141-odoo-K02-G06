@@ -125,12 +125,10 @@ class SmiMainController(http.Controller):
             entries = p.stock_entry_ids.filtered(lambda e: e.state == 'tersedia')
             if not entries:
                 color = '#94A3B8'
-            elif all(e.material_id.is_low_stock for e in entries):
-                color = '#EF4444'
             elif any(e.material_id.is_low_stock for e in entries):
-                color = '#F59E0B'
+                color = '#CE3737'
             else:
-                color = '#10B981'
+                color = "#239670"
             result.append({
                 'id': p.id,
                 'name': p.name,

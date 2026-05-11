@@ -220,11 +220,9 @@ export class MapWidget extends Component {
 
     pointColor(point) {
         if (!point.materials || point.materials.length === 0) return '#94A3B8';
-        const allEmpty = point.materials.every(m => m.jumlah_tersisa === 0);
-        if (allEmpty) return '#EF4444';
         const hasLow = point.materials.some(m => m.is_low_stock);
-        if (hasLow) return '#F59E0B';
-        return '#10B981';
+        if (hasLow) return '#CE3737';
+        return '#239670';
     }
 
     onPointHover(point, ev) {

@@ -46,13 +46,13 @@ export class DenahPage extends Component {
                     <div style="display:flex;gap:12px;font-size:11px;color:var(--text-muted);">
 
                         <span>
-                            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#10B981;margin-right:4px;"></span>
+                            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#239670;margin-right:4px;"></span>
                             Aman
                         </span>
 
                         <span>
-                            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#F59E0B;margin-right:4px;"></span>
-                            Sedikit
+                            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#CE3737;margin-right:4px;"></span>
+                            Sisa Sedikit
                         </span>
 
                         <span>
