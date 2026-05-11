@@ -63,10 +63,10 @@
                                     <td t-esc="'%.1f' % (mat.stok_minimum or 0.0)"/>
                                     <td>
                                         <t t-if="mat.is_low_stock">
-                                            <span class="smi-badge smi-badge--danger">Sisa Sedikit</span>
+                                            <span class="smi-badge smi-badge--low-stock">Sisa Sedikit</span>
                                         </t>
                                         <t t-else="">
-                                            <span class="smi-badge smi-badge--done">Aman</span>
+                                            <span class="smi-badge smi-badge--aman">Aman</span>
                                         </t>
                                     </td>
                                     <td style="display:flex;gap:4px;" onclick="event.stopPropagation()">

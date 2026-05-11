@@ -138,6 +138,9 @@
                                                 <t t-if="mat.is_low_stock">
                                                     <span class="smi-badge smi-badge--low-stock">Sisa Sedikit</span>
                                                 </t>
+                                                <t t-else="">
+                                                    <span class="smi-badge smi-badge--aman">Aman</span>
+                                                </t>
                                             </td>
                                         </tr>
                                     </t>
@@ -171,12 +174,12 @@
                         
                         <div id="legend" style="display:flex;gap:12px;margin-top:10px;font-size:11px;color:var(--text-muted);">
                             <span>
-                                <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#10B981;margin-right:4px;"></span>
+                                <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#239670;margin-right:4px;"></span>
                                 Aman
                             </span>
                             <span>
-                                <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#F59E0B;margin-right:4px;"></span>
-                                Sedikit
+                                <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#CE3737;margin-right:4px;"></span>
+                                Sisa Sedikit
                             </span>
                             <span>
                                 <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#94A3B8;margin-right:4px;"></span>

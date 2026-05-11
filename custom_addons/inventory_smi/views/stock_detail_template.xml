@@ -20,10 +20,10 @@
                 <span class="smi-card__title">Detail Stok</span>
                 <span style="font-size:13px;color:var(--text-muted);font-weight:500;" t-esc="material.name"/>
                 <t t-if="material.is_low_stock">
-                    <span class="smi-badge smi-badge--danger">Sisa Sedikit</span>
+                    <span class="smi-badge smi-badge--low-stock">Sisa Sedikit</span>
                 </t>
                 <t t-else="">
-                    <span class="smi-badge smi-badge--done">Stok Aman</span>
+                    <span class="smi-badge smi-badge--aman">Stok Aman</span>
                 </t>
             </div>
             <div class="smi-card__body">

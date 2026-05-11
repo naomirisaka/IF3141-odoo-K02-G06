@@ -66,7 +66,7 @@
                     var m = mats[j];
 
                     var badge = m.is_low_stock
-                        ? '<span class="smi-badge smi-badge--low-stock">Sedikit</span>'
+                        ? '<span class="smi-badge smi-badge--low-stock">Sisa Sedikit</span>'
                         : '<span class="smi-badge smi-badge--aman">Aman</span>';
 
                     html += '<tr>' +

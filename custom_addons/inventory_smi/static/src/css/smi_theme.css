@@ -370,6 +370,7 @@
 .smi-badge {
   display: inline-flex;
   align-items: center;
+  text-align: center;
   padding: 3px 10px;
   border-radius: 999px;
   font-size: 12px;
