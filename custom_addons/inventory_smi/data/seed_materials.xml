@@ -119,6 +119,14 @@
             <field name="stok_minimum">2.0</field>
         </record>
 
+        <!-- Material untuk pengujian no-stock -->
+        <record id="mat_tinta_spesial" model="smi.material">
+            <field name="name">Tinta Spesial (No Stock)</field>
+            <field name="uom_id" ref="uom_kg"/>
+            <field name="category_id" ref="cat_tinta"/>
+            <field name="stok_minimum">2.0</field>
+        </record>
+
         <!-- ── Titik Inventori ── -->
         <record id="point_gudang_a1" model="smi.inventory_point">
             <field name="name">Gudang A1</field>
@@ -149,6 +157,18 @@
             <field name="koordinat_x">82.0</field>
             <field name="koordinat_y">72.5</field>
             <field name="deskripsi">Area belakang dekat loading dock.</field>
+        </record>
+        <record id="point_gudang_d1" model="smi.inventory_point">
+            <field name="name">Gudang D1 (Kosong)</field>
+            <field name="koordinat_x">5.0</field>
+            <field name="koordinat_y">5.0</field>
+            <field name="deskripsi">Titik kosong.</field>
+        </record>
+        <record id="point_gudang_d2" model="smi.inventory_point">
+            <field name="name">Gudang D2 (Stok Sedikit)</field>
+            <field name="koordinat_x">10.0</field>
+            <field name="koordinat_y">6.5</field>
+            <field name="deskripsi">Titik dengan stok sedikit.</field>
         </record>
 
     </data>

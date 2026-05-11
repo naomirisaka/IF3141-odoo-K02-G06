@@ -265,6 +265,49 @@
             <field name="user_id" ref="user_staf_produksi_4"/>
             <field name="state">habis</field>
         </record>
+        
+        <!-- Low-stock entries at Gudang D2 -->
+        <record id="se_kertas_hvs_d2" model="smi.stock_entry">
+            <field name="material_id" ref="mat_kertas_hvs_80"/>
+            <field name="inventory_point_id" ref="point_gudang_d2"/>
+            <field name="jumlah_awal">20.0</field>
+            <field name="jumlah_tersisa">2.0</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=5)"/>
+            <field name="user_id" ref="user_staf_produksi_2"/>
+            <field name="state">tersedia</field>
+            <field name="catatan">Stok sedikit di titik D2</field>
+        </record>
+
+        <record id="se_tinta_cyan_d2" model="smi.stock_entry">
+            <field name="material_id" ref="mat_tinta_cyan"/>
+            <field name="inventory_point_id" ref="point_gudang_d2"/>
+            <field name="jumlah_awal">8.0</field>
+            <field name="jumlah_tersisa">1.0</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=4)"/>
+            <field name="user_id" ref="user_staf_produksi_4"/>
+            <field name="state">tersedia</field>
+        </record>
+
+        <record id="se_laminasi_doff_d2" model="smi.stock_entry">
+            <field name="material_id" ref="mat_laminasi_doff"/>
+            <field name="inventory_point_id" ref="point_gudang_d2"/>
+            <field name="jumlah_awal">3.0</field>
+            <field name="jumlah_tersisa">1.0</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=3)"/>
+            <field name="user_id" ref="user_staf_produksi"/>
+            <field name="state">tersedia</field>
+        </record>
+
+        <!-- No-stock entry: material exists but all stock is zero at its only entry -->
+        <record id="se_tinta_spesial_d2_habis" model="smi.stock_entry">
+            <field name="material_id" ref="mat_tinta_spesial"/>
+            <field name="inventory_point_id" ref="point_gudang_d2"/>
+            <field name="jumlah_awal">5.0</field>
+            <field name="jumlah_tersisa">0.0</field>
+            <field name="tanggal_masuk" eval="DateTime.now() - timedelta(days=7)"/>
+            <field name="user_id" ref="user_staf_produksi"/>
+            <field name="state">habis</field>
+        </record>
 
     </data>
 </odoo>
