@@ -34,9 +34,11 @@ export class DenahPage extends Component {
                 <!-- Body -->
                 <div class="smi-card__body" style="padding:16px;">
 
-                    <MapWidget onReady="(api) => this.registerMapApi(api)" mode="state.modeTampilan"
-                               onNewPoint="(coords) => this.handleNewPoint(coords)"
-                               onPointSelected="(p) => this.handlePointSelected(p)"/>
+                    <MapWidget
+                            materialId="state.materialId"
+                            onReady="(api) => this.registerMapApi(api)" mode="state.modeTampilan"
+                            onNewPoint="(coords) => this.handleNewPoint(coords)"
+                            onPointSelected="(p) => this.handlePointSelected(p)"/>
 
                 </div>
 
@@ -135,8 +137,16 @@ export class DenahPage extends Component {
             showAddModal: false,
             pendingCoords: null,
             newPointName: '',
+            materialId: null,
         });
+
+        const params = new URLSearchParams(window.location.search);
+        const materialId = params.get('material_id');
+
+        this.state.materialId = materialId ? parseInt(materialId) : null;
+
         this.mapApi = null;
+
         try {
             var dataEl = document.getElementById('smi_map_data');
             this.canManage = dataEl && dataEl.dataset && dataEl.dataset.canManage === '1';

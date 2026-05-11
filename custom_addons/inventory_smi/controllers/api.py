@@ -69,18 +69,30 @@ class SmiMapApiController(http.Controller):
         domain = [('active', '=', True)]
         points = request.env['smi.inventory_point'].search(domain)
 
+        # filter points with specific material
         if material_id:
             try:
                 mid = int(material_id)
+                
             except (ValueError, TypeError):
-                return _json_response({'error': 'material_id tidak valid'}, 400)
+                return _json_response(
+                    {'error': 'material_id tidak valid'},
+                    400
+                )
+            
             points = points.filtered(
                 lambda p: mid in p.stock_entry_ids.filtered(
                     lambda e: e.state == 'tersedia'
                 ).mapped('material_id').ids
             )
 
-        data = {'points': [_point_summary(p) for p in points]}
+        data = {
+            'points': [
+                _point_summary(p)
+                for p in points
+            ]
+        }
+
         return _json_response(data)
 
     # ------------------------------------------------------------------
