@@ -223,7 +223,7 @@
                             style="max-width:260px;"
                             onchange="this.form.submit()">
 
-                        <option value="">-- Semua Bahan --</option>
+                        <option value="">Semua Bahan</option>
 
                         <t t-foreach="materials" t-as="mat">
 

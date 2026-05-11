@@ -244,6 +244,7 @@ whenReady(() => {
                 templates,
                 props: {
                     mode: 'view',
+                    materialId: dashTarget.dataset.materialId,
                     onPointSelected: (point) => {
                         try {
                             try { window.__smi_map_selected_point = point; } catch (e) {}
