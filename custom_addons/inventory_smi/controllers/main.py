@@ -23,7 +23,7 @@ class SmiMainController(http.Controller):
         user = request.env.user
         values = {
             **self._get_dashboard_stats(),
-            'top5_bahan': self._get_top5_bahan(),
+            'top10_bahan': self._get_top10_bahan(),
             'recent_orders': self._get_recent_orders(),
             'recent_activity': self._get_recent_activity(),
             'map_points': self._get_map_points(),
@@ -43,7 +43,7 @@ class SmiMainController(http.Controller):
     def dashboard_api(self, **kwargs):
         stats = self._get_dashboard_stats()
 
-        top5 = [
+        top10 = [
             {
                 'id': m.id,
                 'name': m.name,
@@ -54,7 +54,7 @@ class SmiMainController(http.Controller):
                     m.last_added_date.isoformat() if m.last_added_date else None
                 ),
             }
-            for m in self._get_top5_bahan()
+            for m in self._get_top10_bahan()
         ]
 
         orders = [
@@ -81,7 +81,7 @@ class SmiMainController(http.Controller):
             for a in self._get_recent_activity()
         ]
 
-        data = {**stats, 'top5_bahan': top5, 'recent_orders': orders, 'recent_activity': activity}
+        data = {**stats, 'top10_bahan': top10, 'recent_orders': orders, 'recent_activity': activity}
         return Response(json.dumps(data, default=str), content_type='application/json')
 
     # ------------------------------------------------------------------
@@ -102,15 +102,21 @@ class SmiMainController(http.Controller):
             'low_stock_count': low_stock_count,
         }
 
-    def _get_top5_bahan(self):
+    def _get_top10_bahan(self):
         materials = request.env['smi.material'].search([('active', '=', True)])
         low = materials.filtered(lambda m: m.is_low_stock).sorted('total_stok')
         normal = materials.filtered(lambda m: not m.is_low_stock).sorted('total_stok')
-        return list(low) + list(normal[:5])
+        # Show low-stock items first, then fill remaining slots with normal-stock items up to 10 total
+        max_items = 10
+        result = list(low)
+        if len(result) < max_items:
+            needed = max_items - len(result)
+            result += list(normal[:needed])
+        return result[:max_items]
 
     def _get_recent_orders(self):
         return request.env['smi.order'].search(
-            [], order='tanggal desc, id desc', limit=5
+            [], order='tanggal desc, id desc', limit=3
         )
 
     def _get_recent_activity(self):
@@ -126,7 +132,7 @@ class SmiMainController(http.Controller):
             if not entries:
                 color = '#94A3B8'
             elif any(e.material_id.is_low_stock for e in entries):
-                color = '#CE3737'
+                color = '#F59E0B'
             else:
                 color = "#239670"
             result.append({

@@ -111,16 +111,21 @@ class TestDashboardStats(_DashBase):
         self.assertEqual(after, before - 1)
 
 
-class TestDashboardTop5Bahan(_DashBase):
+class TestDashboardTop10Bahan(_DashBase):
 
-    def _get_top5(self):
-        """Mirror the controller's top-5 logic: low-stock first, then ASC by total_stok."""
+    def _get_top10(self):
+        """Mirror the controller's top-10 logic: low-stock first, then fill up to 10 total."""
         materials = self.env['smi.material'].search([('active', '=', True)])
         low = materials.filtered(lambda m: m.is_low_stock).sorted('total_stok')
         normal = materials.filtered(lambda m: not m.is_low_stock).sorted('total_stok')
-        return list(low) + list(normal)
+        max_items = 10
+        result = list(low)
+        if len(result) < max_items:
+            needed = max_items - len(result)
+            result += list(normal[:needed])
+        return result[:max_items]
 
-    def test_dashboard_top5_bahan_low_stock_first(self):
+    def test_dashboard_top10_bahan_low_stock_first(self):
         """Low-stock materials appear before normal-stock materials in top-5."""
         normal = self._make_material('Normal Dash Mat', stok_minimum=0.0)
         low = self._make_material('Low Dash Mat', stok_minimum=100.0)
@@ -128,27 +133,27 @@ class TestDashboardTop5Bahan(_DashBase):
         self._add_stock(low, 5.0)
         normal.invalidate_recordset()
         low.invalidate_recordset()
-        top5 = self._get_top5()
-        ids = [m.id for m in top5]
+        top10 = self._get_top10()
+        ids = [m.id for m in top10]
         self.assertIn(low.id, ids)
         self.assertIn(normal.id, ids)
         self.assertLess(ids.index(low.id), ids.index(normal.id))
 
-    def test_dashboard_top5_returns_at_most_5(self):
-        """Top-5 list is capped at 5 entries."""
-        for i in range(7):
-            m = self._make_material(f'Bahan Top5-{i}')
+    def test_dashboard_top10_returns_at_most_10(self):
+        """Top-10 list is capped at 10 entries."""
+        for i in range(12):
+            m = self._make_material(f'Bahan Top10-{i}')
             self._add_stock(m, float(i + 1) * 10)
-        top5 = self._get_top5()[:5]
-        self.assertLessEqual(len(top5), 5)
+        top10 = self._get_top10()[:10]
+        self.assertLessEqual(len(top10), 10)
 
-    def test_dashboard_top5_contains_material_fields(self):
-        """Each material in top-5 has name, total_stok, uom, is_low_stock."""
+    def test_dashboard_top10_contains_material_fields(self):
+        """Each material in top-10 has name, total_stok, uom, is_low_stock."""
         mat = self._make_material('Mat Fields Dash', stok_minimum=0.0)
         self._add_stock(mat, 30.0)
         mat.invalidate_recordset()
-        top5 = self._get_top5()
-        found = next((m for m in top5 if m.id == mat.id), None)
+        top10 = self._get_top10()
+        found = next((m for m in top10 if m.id == mat.id), None)
         if found:
             self.assertTrue(found.name)
             self.assertIsNotNone(found.total_stok)
@@ -158,13 +163,13 @@ class TestDashboardTop5Bahan(_DashBase):
 class TestDashboardRecentOrders(_DashBase):
 
     def test_dashboard_recent_orders_max_5(self):
-        """Dashboard order feed returns at most 5 entries."""
+        """Dashboard order feed returns at most 3 entries."""
         mat = self._make_material('Mat Orders Dash')
         self._add_stock(mat, 1000.0)
         for i in range(7):
             self._make_order(mat, 1.0)
-        orders = self.env['smi.order'].search([], order='tanggal desc, id desc', limit=5)
-        self.assertLessEqual(len(orders), 5)
+        orders = self.env['smi.order'].search([], order='tanggal desc, id desc', limit=3)
+        self.assertLessEqual(len(orders), 3)
 
     def test_dashboard_recent_orders_sorted_by_date_desc(self):
         """Orders in dashboard feed are newest first."""
@@ -172,7 +177,7 @@ class TestDashboardRecentOrders(_DashBase):
         self._add_stock(mat, 1000.0)
         o1 = self.env['smi.order'].create({'name': 'Old Order', 'tanggal': '2026-01-01'})
         o2 = self.env['smi.order'].create({'name': 'New Order', 'tanggal': '2026-03-01'})
-        orders = self.env['smi.order'].search([], order='tanggal desc, id desc', limit=5)
+        orders = self.env['smi.order'].search([], order='tanggal desc, id desc', limit=3)
         ids = orders.ids
         self.assertLess(ids.index(o2.id), ids.index(o1.id))
 
@@ -263,7 +268,7 @@ class TestDashboardTemplate(TransactionCase):
     def test_dashboard_page_has_bahan_section(self):
         """Dashboard page template contains bahan list section."""
         tmpl = self.env.ref('inventory_smi.dashboard_page')
-        self.assertIn('top5_bahan', tmpl.arch)
+        self.assertIn('top10_bahan', tmpl.arch)
 
     def test_dashboard_page_has_order_section(self):
         """Dashboard page template contains recent orders section."""

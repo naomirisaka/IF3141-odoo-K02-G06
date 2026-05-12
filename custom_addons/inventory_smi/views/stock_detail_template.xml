@@ -19,7 +19,10 @@
             <div class="smi-card__header">
                 <span class="smi-card__title">Detail Stok</span>
                 <span style="font-size:13px;color:var(--text-muted);font-weight:500;" t-esc="material.name"/>
-                <t t-if="material.is_low_stock">
+                <t t-if="material.total_stok == 0">
+                    <span class="smi-badge smi-badge--kosong">Stok Kosong</span>
+                </t>
+                <t t-elif="material.is_low_stock">
                     <span class="smi-badge smi-badge--low-stock">Sisa Sedikit</span>
                 </t>
                 <t t-else="">

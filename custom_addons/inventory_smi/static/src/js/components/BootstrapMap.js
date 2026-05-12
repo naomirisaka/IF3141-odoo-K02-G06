@@ -53,13 +53,13 @@ export class DenahPage extends Component {
                         </span>
 
                         <span>
-                            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#CE3737;margin-right:4px;"></span>
+                            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#F59E0B;margin-right:4px;"></span>
                             Sisa Sedikit
                         </span>
 
                         <span>
                             <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#94A3B8;margin-right:4px;"></span>
-                            Kosong
+                            Tidak Ada Bahan
                         </span>
 
                     </div>

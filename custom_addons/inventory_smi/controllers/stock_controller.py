@@ -258,7 +258,7 @@ class SmiStockController(http.Controller):
             if not entries:
                 color = '#94A3B8'
             elif any(e.material_id.is_low_stock for e in entries):
-                color = "#CE3737"
+                color = "#F59E0B"
             else:
                 color = '#10B981'
 

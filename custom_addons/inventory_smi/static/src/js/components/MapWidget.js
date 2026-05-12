@@ -221,7 +221,7 @@ export class MapWidget extends Component {
     pointColor(point) {
         if (!point.materials || point.materials.length === 0) return '#94A3B8';
         const hasLow = point.materials.some(m => m.is_low_stock);
-        if (hasLow) return '#CE3737';
+        if (hasLow) return '#F59E0B';
         return '#239670';
     }
 

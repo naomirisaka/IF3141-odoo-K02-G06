@@ -107,7 +107,7 @@
                         <span style="font-size:12px;color:var(--text-muted);">Prioritas stok rendah</span>
                     </div>
                     <div class="smi-card__body">
-                        <t t-if="top5_bahan">
+                        <t t-if="top10_bahan">
                             <table class="smi-table">
                                 <thead>
                                     <tr>
@@ -118,7 +118,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <t t-foreach="top5_bahan" t-as="mat">
+                                    <t t-foreach="top10_bahan" t-as="mat">
                                         <tr>
                                             <td>
                                                 <span style="font-weight:500;" t-esc="mat.name"/>
@@ -134,8 +134,11 @@
                                                 </t>
                                                 <t t-else="">—</t>
                                             </td>
-                                            <td>
-                                                <t t-if="mat.is_low_stock">
+                                            <td style="align-items:center">
+                                                <t t-if="mat.total_stok == 0">
+                                                    <span class="smi-badge smi-badge--kosong">Kosong</span>
+                                                </t>
+                                                <t t-elif="mat.is_low_stock">
                                                     <span class="smi-badge smi-badge--low-stock">Sisa Sedikit</span>
                                                 </t>
                                                 <t t-else="">
@@ -178,12 +181,12 @@
                                 Aman
                             </span>
                             <span>
-                                <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#CE3737;margin-right:4px;"></span>
+                                <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#F59E0B;margin-right:4px;"></span>
                                 Sisa Sedikit
                             </span>
                             <span>
                                 <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#94A3B8;margin-right:4px;"></span>
-                                Kosong
+                                Tidak Ada Bahan
                             </span>
                         </div>
                     </div>

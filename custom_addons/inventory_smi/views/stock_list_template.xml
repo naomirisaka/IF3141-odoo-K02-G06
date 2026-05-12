@@ -61,8 +61,11 @@
                                     </td>
                                     <td style="color:var(--text-muted);" t-esc="mat.uom_id.name"/>
                                     <td t-esc="'%.1f' % (mat.stok_minimum or 0.0)"/>
-                                    <td>
-                                        <t t-if="mat.is_low_stock">
+                                    <td style="align-items:center">
+                                        <t t-if="mat.total_stok == 0">
+                                            <span class="smi-badge smi-badge--kosong">Kosong</span>
+                                        </t>
+                                        <t t-elif="mat.is_low_stock">
                                             <span class="smi-badge smi-badge--low-stock">Sisa Sedikit</span>
                                         </t>
                                         <t t-else="">

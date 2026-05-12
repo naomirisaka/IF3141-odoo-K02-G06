@@ -370,14 +370,14 @@
 .smi-badge {
   display: inline-flex;
   align-items: center;
-  text-align: center;
   padding: 3px 10px;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 500;
 }
-.smi-badge--low-stock { background: #FEF2F2; color: var(--smi-danger); }
+.smi-badge--kosong { background: #FEF2F2; color: var(--smi-danger); }
 .smi-badge--aman      { background: #ECFDF5; color: var(--smi-success); }
+.smi-badge--low-stock   { background: #fbfee4; color: var(--smi-warning); }
 .smi-badge--draft     { background: #F1F5F9; color: var(--smi-text-muted); }
 .smi-badge--confirmed { background: #EFF6FF; color: var(--smi-primary); }
 .smi-badge--done      { background: #ECFDF5; color: var(--smi-success); }
