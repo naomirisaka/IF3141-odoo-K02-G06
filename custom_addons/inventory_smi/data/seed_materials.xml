@@ -110,7 +110,7 @@
             <field name="name">Foil Gold</field>
             <field name="uom_id" ref="uom_rol"/>
             <field name="category_id" ref="cat_foil"/>
-            <field name="stok_minimum">2.0</field>
+            <field name="stok_minimum">5.0</field>
         </record>
         <record id="mat_foil_silver" model="smi.material">
             <field name="name">Foil Silver</field>
