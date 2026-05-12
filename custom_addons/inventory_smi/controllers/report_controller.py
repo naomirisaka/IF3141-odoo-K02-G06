@@ -33,39 +33,42 @@ class ReportController(http.Controller):
 
         try:
             Stock = request.env['smi.stock_entry']
-            domain = []
+            domain = [('state', '=', 'tersedia'), ('jumlah_tersisa', '>', 0)]
             if date_from:
                 domain.append(('tanggal_masuk', '>=', date_from))
             if date_to:
                 domain.append(('tanggal_masuk', '<=', date_to))
             entries = Stock.search(domain, order='tanggal_masuk')
-            _logger.info(f'Found {len(entries)} stock entries')
+            _logger.info(f'Found {len(entries)} available stock entries')
 
-            rows = []
+            grouped = {}
             for e in entries:
-                rows.append({
-                    'tanggal_masuk': e.tanggal_masuk or '',
-                    'material': _clean_text(e.material_id.name if e.material_id else ''),
-                    'inventory_point': _clean_text(e.inventory_point_id.name if e.inventory_point_id else ''),
-                    'jumlah_awal': e.jumlah_awal,
-                    'jumlah_tersisa': e.jumlah_tersisa,
-                    'state': _clean_text(e.state),
-                    'catatan': _clean_text(getattr(e, 'catatan', '')),
-                })
+                point_name = _clean_text(e.inventory_point_id.name if e.inventory_point_id else 'Tanpa Titik')
+                material_name = _clean_text(e.material_id.name if e.material_id else 'Tanpa Material')
+                uom_name = _clean_text(e.material_id.uom_id.name if e.material_id and e.material_id.uom_id else '')
+                key = (point_name, material_name, uom_name)
+
+                if key not in grouped:
+                    grouped[key] = {
+                        'inventory_point': point_name,
+                        'material': material_name,
+                        'uom': uom_name,
+                        'jumlah_akhir': 0.0,
+                    }
+                grouped[key]['jumlah_akhir'] += (e.jumlah_tersisa or 0.0)
+
+            rows = sorted(grouped.values(), key=lambda r: (r['inventory_point'], r['material']))
 
             if fmt == 'csv':
                 sio = io.StringIO(newline='')
                 writer = csv.writer(sio, lineterminator='\n')
-                writer.writerow(['Tanggal Masuk', 'Material', 'Titik', 'Jumlah Awal', 'Jumlah Tersisa', 'State', 'Catatan'])
+                writer.writerow(['Titik Stok', 'Material', 'Satuan', 'Jumlah Akhir Tersedia'])
                 for r in rows:
                     writer.writerow([
-                        r['tanggal_masuk'],
-                        r['material'],
                         r['inventory_point'],
-                        r['jumlah_awal'],
-                        r['jumlah_tersisa'],
-                        r['state'],
-                        r['catatan'],
+                        r['material'],
+                        r['uom'],
+                        r['jumlah_akhir'],
                     ])
                 data = sio.getvalue().encode('utf-8-sig')
                 headers = [

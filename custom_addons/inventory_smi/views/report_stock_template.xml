@@ -20,7 +20,7 @@
           </style>
         </head>
         <body>
-          <h1>Laporan Stok SMI</h1>
+          <h1>Laporan Ringkasan Stok Tersedia</h1>
           <div class="meta">
             Periode: <strong t-esc="date_from or '—'"/> sampai <strong t-esc="date_to or '—'"/>
           </div>
@@ -28,25 +28,19 @@
           <table>
             <thead>
               <tr>
-                <th>Tanggal</th>
-                <th>Material</th>
                 <th>Titik Stok</th>
-                <th class="right">Awal</th>
-                <th class="right">Tersisa</th>
-                <th>Status</th>
-                <th>Catatan</th>
+                <th>Material</th>
+                <th>Satuan</th>
+                <th class="right">Jumlah Akhir Tersedia</th>
               </tr>
             </thead>
             <tbody>
               <t t-foreach="rows" t-as="r">
                 <tr>
-                  <td><t t-esc="r['tanggal_masuk']"/></td>
-                  <td><t t-esc="r['material']"/></td>
                   <td><t t-esc="r['inventory_point']"/></td>
-                  <td class="right"><t t-esc="r['jumlah_awal']"/></td>
-                  <td class="right"><t t-esc="r['jumlah_tersisa']"/></td>
-                  <td><t t-esc="r['state']"/></td>
-                  <td><t t-esc="r.get('catatan') or ''"/></td>
+                  <td><t t-esc="r['material']"/></td>
+                  <td><t t-esc="r['uom']"/></td>
+                  <td class="right"><t t-esc="r['jumlah_akhir']"/></td>
                 </tr>
               </t>
             </tbody>
