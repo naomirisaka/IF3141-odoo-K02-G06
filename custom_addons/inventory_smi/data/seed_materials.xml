@@ -159,13 +159,13 @@
             <field name="deskripsi">Area belakang dekat loading dock.</field>
         </record>
         <record id="point_gudang_d1" model="smi.inventory_point">
-            <field name="name">Gudang D1 (Kosong)</field>
+            <field name="name">Gudang D1</field>
             <field name="koordinat_x">5.0</field>
             <field name="koordinat_y">5.0</field>
             <field name="deskripsi">Titik kosong.</field>
         </record>
         <record id="point_gudang_d2" model="smi.inventory_point">
-            <field name="name">Gudang D2 (Stok Sedikit)</field>
+            <field name="name">Gudang D2</field>
             <field name="koordinat_x">10.0</field>
             <field name="koordinat_y">6.5</field>
             <field name="deskripsi">Titik dengan stok sedikit.</field>
