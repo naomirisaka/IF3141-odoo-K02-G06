@@ -1,61 +1,97 @@
-# README — Kelompok G06 (K02)
+<div align="center">
+  <h1>Sistem Manajemen Inventaris (SMI)</h1>
+  <p><em>Proyek ini dibuat untuk memenuhi Tugas Besar IF3141 Sistem Informasi</em></p>
+</div>
 
 ## Identitas Kelompok
-- Nomor Kelompok: G06
-- Nomor Kelas: K02
-
-Anggota:
-- 13523072  Sabilul Huda
-- 13523084  Lutfi Hakim Yusra
-- 13523118  Farrel Athalla Putra
-- 13523120  Bevinda Vivian
-- 13523122  Naomi Risaka Sitorus
+**Nomor Kelompok:** G06<br/>
+**Nomor Kelas:** K02
+<table align="center">
+  <tr>
+    <td align="center">
+      <a href="https://github.com/bill2247">
+        <img src="https://avatars.githubusercontent.com/bill2247" width="80" style="border-radius: 50%;" /><br />
+        <b>Sabilul Huda</b><br/>
+        <sub>13523072</sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/pixelatedbus">
+        <img src="https://avatars.githubusercontent.com/pixelatedbus" width="80" style="border-radius: 50%;" /><br />
+        <b>Lutfi Hakim Yusra</b><br/>
+        <sub>13523084</sub>
+      </a>
+    </td>    
+    <td align="center">
+      <a href="https://github.com/farrelathalla">
+        <img src="https://avatars.githubusercontent.com/farrelathalla" width="80" style="border-radius: 50%;" /><br />
+        <b>Farrel Athalla Putra</b><br/>
+        <sub>13523118</sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/bevindav">
+        <img src="https://avatars.githubusercontent.com/bevindav" width="80" style="border-radius: 50%;" /><br />
+        <b>Bevinda Vivian</b><br/>
+        <sub>13523120</sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/naomirisaka">
+        <img src="https://avatars.githubusercontent.com/naomirisaka" width="80" style="border-radius: 50%;" /><br />
+        <b>Naomi Risaka Sitorus</b><br/>
+        <sub>13523122</sub>
+      </a>
+    </td>
+  </tr>
+</table>
 
 ---
 
 ## Nama Sistem & Perusahaan
-- Nama Sistem: Sistem Manajemen Inventori (SMI)
-- Perusahaan: CV Dunia Offset Printing
-- Logo perusahaan: ![Logo Perusahaan](docs/logos.png) 
+**Nama Sistem:** Sistem Manajemen Inventori (SMI)<br/>
+**Perusahaan:** CV Dunia Offset Printing<br/>
+![Logo Perusahaan](docs/logos.png) 
+
 ---
 
 ## Deskripsi Sistem
-Sistem Manajemen Inventaris (SMI) berfungsi sebagai pusat informasi yang mengintegrasikan aliran stok dalam operasional kesehariannya. Data operasional yang mencakup penerimaan stok baru, rincian pesanan, perintah pengeluaran stok, serta penentuan titik lokasi inventori diperbarui secara aktif oleh Kepala Produksi dan Staf Produksi. Sebagai aktor dengan wewenang konfigurasi, Kepala Produksi juga menginput batas stok minimum serta menerima output berupa visualisasi denah interaktif dan laporan stok real-time melalui dashboard.
+Sistem Manajemen Inventaris (SMI) merupakan aplikasi berbasis web yang dirancang untuk membantu CV Dunia Offset Printing dalam mengelola inventaris bahan baku secara terintegrasi dan real-time. Sistem ini mendukung proses operasional mulai dari pencatatan stok masuk, pengelolaan pesanan produksi, pengurangan stok menggunakan metode FIFO, hingga monitoring kondisi inventaris melalui dashboard dan visualisasi denah penyimpanan.
 
-Di sisi administratif, Admin bertanggung jawab dalam pengelolaan akun pengguna dan mengamati informasi sistem melalui logging untuk menentukan kesehatan aplikasi. Direktur mendapatkan laporan stok periodik dalam bentuk file yang digunakan sebagai bahan evaluasi strategis perusahaan. Alur data yang mengalir dari SMI menuju aktor yang terlibat dan sebaliknya direpresentasikan dalam Context Diagram (tempatkan diagram di bawah ini jika tersedia).
+Dalam operasionalnya, Kepala Produksi dan Staf Produksi bertugas memperbarui data inventaris, mengelola kebutuhan material pesanan, serta memantau lokasi penyimpanan bahan baku melalui antarmuka denah interaktif. Admin bertanggung jawab dalam pengelolaan akun pengguna dan pemantauan aktivitas sistem, sementara Direktur menggunakan laporan stok sebagai bahan evaluasi dan pengambilan keputusan operasional. Dengan sistem ini, proses pengelolaan inventaris yang sebelumnya dilakukan secara manual dapat menjadi lebih terstruktur, akurat, dan mudah dipantau.
 
-**Context Diagram:** 
+Untuk menggambarkan hubungan antara sistem dengan seluruh aktor yang terlibat, aliran data pada Sistem Manajemen Inventaris (SMI) direpresentasikan melalui Context Diagram berikut.
+
 ![Context_Diagram](docs/state%20diagram.png)
 
 ---
 
-## Cara Menjalankan Sistem (ringkasan langkah)
-Berikut langkah persiapan dan menjalankan sistem pada lingkungan development berbasis Docker. Saya akan menyertakan placeholder screenshot expected result untuk setiap langkah — silakan paste screenshot yang sesuai di tempat yang disediakan.
+## Cara Menjalankan Sistem
+Berikut langkah persiapan dan menjalankan sistem pada lingkungan development berbasis Docker.
 
 Langkah-langkah:
-
 1. Clone repository
 
 ```bash
-git clone <url-repository>
-cd IF3141-odoo-K02-G06
+git clone https://github.com/naomirisaka/IF3141-odoo-K02-G06.git 
+cd IF3141-Implementasi-K02-G06 
 ```
 
 Expected result: folder project tersedia dan struktur file terlihat.
 
-![Clone_repository](screenshots/01_clone_repo.png)
+![Clone_repository](docs/screenshots/01_clone_repo.png)
 
 2. Jalankan Docker services
 
 ```bash
-docker compose up -d
+docker compose up -d --build
 ```
 
 Expected result: container `web` (Odoo) dan `db` (Postgres) berjalan; Odoo tersedia di `http://localhost:8069`.
 
-![docker_compose](screenshots/02_docker_compose.png)
+![docker_compose](docs/screenshots/02_docker_compose.png)
 
-3. (Opsional) Buat virtualenv untuk pengembangan modul
+3. (Opsional) Buat virtual environment untuk menjalankan sistem.
 
 ```bash
 python3 -m venv .venv
@@ -66,75 +102,79 @@ pip install -r requirements.txt
 
 Expected result: virtualenv aktif dan dependency terpasang.
 
-![virtual_env](screenshots/03_virtual_env.png)
+![virtual_env](docs/screenshots/03_virtual_env.png)
 
-4. Jalankan seeding (pastikan container sudah jalan). Seeding modul termasuk demo users akan dieksekusi saat upgrade module — gunakan perintah berikut untuk memastikan data demo & seed dimuat:
+4. Jalankan seeding (pastikan container sudah jalan). Seeding modul termasuk demo users akan dieksekusi saat upgrade module.
 
 ```bash
 docker compose exec web odoo -d postgres -i base,inventory_smi --stop-after-init
+docker compose restart web
 ```
 
-Catatan: perintah ini memaksa Odoo memuat modul `inventory_smi` dan `base` sehingga data demo (`data/demo_users.xml`, `data/seed_materials.xml`, dsb.) akan dieksekusi.
+>Catatan: Perintah ini memaksa Odoo memuat modul `inventory_smi` dan `base` sehingga data demo (`data/demo_users.xml`, `data/seed_materials.xml`, dsb.) akan dieksekusi.
 
 Expected result: Log Odoo menunjukan bahwa data `demo_users`, `seed_materials`, dan seed lainnya berhasil dimuat.
 
-![seeding](screenshots/04_seeding.png)
+![seeding](docs/screenshots/04_seeding.png)
 
 5. Buka aplikasi di browser
 
-```
+```bash
 http://localhost:8069
 ```
 
 Expected result: halaman login Odoo (custom template SMI) muncul.
 
-![open_web](screenshots/05_open_web.png)
+![open_web](docs/screenshots/05_open_web.png)
 
-6. Login dan verifikasi role specific pages
-Login ke salah satu credential yang tersedia dan pastikan halaman sesuai dengan role yang digunakan.
+6. Login akun dan akses SMI
+Login ke salah satu kredensial yang tersedia dan pastikan halaman sesuai dengan role yang digunakan.
 
 Expected result: setiap role melihat menu dan halaman sesuai haknya.
 
 Direktur:
-![direktur](screenshots/06_direktur.png)
+![direktur](docs/screenshots/06_direktur.png)
 
 Kepala Produksi:
-![kepala](screenshots/06_kepala.png)
+![kepala](docs/screenshots/06_kepala.png)
 
 Staff Produksi:
-![staf](screenshots/06_staf.png)
+![staf](docs/screenshots/06_staf.png)
 
 Administrator SMI:
-![admin](screenshots/06_admin.png)
+![admin](docs/screenshots/06_admin.png)
+
+
+7. Setelah selesai, hentikan Docker services
+```bash
+docker compose down
+```
+
+>Catatan: gunakan `docker compose down -v` jika ingin sekaligus menghapus volume database dan seluruh data lokal container.
+
+Expected result: seluruh container Docker (web dan db) berhenti dan network project dibersihkan.
+
+![docker_down](docs/screenshots/07_docker_down.png)
 
 ---
 
-## Kredensial (satu akun per role)
-Gunakan satu akun per role berikut (akun demo ada di `data/demo_users.xml`):
+## Kredensial Tiap Role
+Berikut merupakan kredensial akun demo untuk tiap peran/role (akun demo lengkapnya tersedia di `data/demo_users.xml`):
 
-- Admin SMI
-  - Username: `admin_smi`
-  - Password: `admin123`
+| Nama | Username | Password | Peran |
+|------|----------|----------|-------|
+| Admin SMI | `admin_smi` | `admin123` | Admin |
+| Kepala Produksi | `kepala` | `kepala123` | Kepala Produksi |
+| Staf Produksi | `staf1` | `staf123` | Staf Produksi |
+| Direktur | `direktur` | `direktur123` | Direktur |
 
-- Kepala Produksi
-  - Username: `kepala`
-  - Password: `kepala123`
+> Catatan: terdapat juga akun `admin` Odoo bawaan, tetapi ini berbeda dengan untuk grup SMI, gunakan kredensial demo di atas untuk menguji fitur SMI spesifik.
 
-- Staf Produksi
-  - Username: `staf1`
-  - Password: `staf123`
+---
 
-- Direktur
-  - Username: `direktur`
-  - Password: `direktur123`
+## Kesimpulan dan Saran
+Sistem Manajemen Inventaris (SMI) berhasil menyediakan pengelolaan inventaris bahan baku secara lebih terstruktur, terintegrasi, dan real-time untuk mendukung operasional CV Dunia Offset Printing. Sistem ini mencakup proses pencatatan stok, pengelolaan lokasi penyimpanan, monitoring inventaris, hingga pelaporan stok melalui dashboard interaktif sehingga dapat membantu meningkatkan efisiensi dan akurasi pengelolaan bahan baku.
 
-> Catatan: akun `admin` Odoo bawaan juga ada (admin/admin) namun grup SMI berbeda; gunakan kredensial demo di atas untuk menguji fitur SMI spesifik.
-
-## Kesimpulan dan Saran (singkat)
-Sistem Manajemen Inventaris (SMI) menyediakan alur kerja komprehensif untuk pencatatan penerimaan dan pengeluaran bahan, pengaturan lokasi penyimpanan, manajemen pengguna berbasis peran, serta pelaporan stok melalui dashboard interaktif. Untuk deployment production, disarankan untuk:
-
-- Menghapus atau tidak menyimpan password dalam bentuk plaintext pada kolom `smi_plain_password` (gunakan only hashed passwords).
-- Mengamankan layanan Docker serta konfigurasi `odoo.conf` dengan variable sensitif di environment atau secret manager.
-- Menjalankan backup rutin database dan filestore, serta menguji prosedur import/export secara periodik.
+Ke depannya, sistem dapat dikembangkan lebih lanjut melalui integrasi dengan proses produksi dan administrasi perusahaan, seperti integrasi data SPK, push notification status pesanan, serta pengelolaan laporan operasional yang lebih terpusat. Selain itu, fleksibilitas pengaturan landmark pada denah inventori dapat mendukung penggunaan sistem dalam jangka panjang, terutama ketika tata letak area produksi mengalami perubahan. Penerapan backup data dan pengamanan sistem juga perlu diperhatikan agar keberlangsungan operasional perusahaan tetap terjaga.
 
 ---
