@@ -73,7 +73,7 @@ Langkah-langkah:
 1. Clone repository
 
 ```bash
-git clone https://github.com/naomirisaka/IF3141-odoo-K02-G06.git 
+git clone https://github.com/naomirisaka/IF3141-Implementasi-K02-G06.git 
 cd IF3141-Implementasi-K02-G06 
 ```
 
