@@ -236,17 +236,18 @@ whenReady(() => {
                     mode: 'view',
                     onPointSelected: (point) => {
                         try {
-                            try { window.__smi_map_selected_point = point; } catch (e) {}
                             var modalEl = document.getElementById('map-modal');
                             var modalOpen = modalEl && modalEl.classList && modalEl.classList.contains('open');
 
                             if (modalOpen) {
+                                // Langsung pilih dan tutup modal
+                                if (typeof window.selectInventoryPoint === 'function') {
+                                    window.selectInventoryPoint(String(point.id), point.name || '');
+                                }
                                 return;
                             }
-                            
-                            if (typeof window.selectInventoryPoint === 'function') {
-                                window.selectInventoryPoint(String(point.id), point.name || '');
-                            } else if (typeof window.showPointPanel === 'function') {
+
+                            if (typeof window.showPointPanel === 'function') {
                                 window.showPointPanel(point.id);
                             }
                         } catch (e) {

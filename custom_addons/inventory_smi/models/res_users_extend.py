@@ -58,25 +58,16 @@ class ResUsersExtend(models.Model):
         return False
 
     # ------------------------------------------------------------------
-    # Override _check_credentials to enforce lockout + track failures
+    # Override _check_credentials to enforce lockout only
+    # Failure tracking is done in the controller (auth.py) so writes
+    # are not rolled back by Odoo's authenticate() cursor management.
     # ------------------------------------------------------------------
 
     def _check_credentials(self, password, env):
         user_sudo = self.sudo()
-
-        # Lockout check — before attempting password verification
         if user_sudo._smi_is_locked():
             raise AccessDenied()
-
-        try:
-            result = super()._check_credentials(password, env)
-            # Correct password — reset fail state
-            user_sudo._smi_reset_login_fail()
-            return result
-        except AccessDenied:
-            # Wrong password — track the failure
-            user_sudo._smi_record_failed_login()
-            raise
+        return super()._check_credentials(password, env)
 
     # ------------------------------------------------------------------
     # Track password change date

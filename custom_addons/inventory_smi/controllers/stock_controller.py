@@ -48,7 +48,27 @@ class SmiStockController(http.Controller):
 
         if request.httprequest.method == 'POST':
             try:
-                material_id = int(post.get('material_id', 0))
+                material_id_raw = post.get('material_id', '')
+                if material_id_raw == '__new__':
+                    new_material_name = post.get('new_material_name', '').strip()
+                    new_uom_id = int(post.get('new_uom_id', 0) or 0)
+                    new_category_id = int(post.get('new_category_id', 0) or 0)
+                    if not new_material_name:
+                        raise ValidationError('Nama bahan baru wajib diisi.')
+                    if not new_uom_id or not new_category_id:
+                        raise ValidationError('Satuan dan kategori wajib diisi untuk bahan baru.')
+                    new_mat = request.env['smi.material'].create({
+                        'name': new_material_name,
+                        'uom_id': new_uom_id,
+                        'category_id': new_category_id,
+                    })
+                    material_id = new_mat.id
+                else:
+                    material_id = int(material_id_raw or 0)
+
+                if not material_id:
+                    raise ValidationError('Nama bahan wajib dipilih.')
+
                 inventory_point_id = int(post.get('inventory_point_id', 0))
                 jumlah_awal = float(post.get('jumlah_awal', 0))
                 tanggal_masuk = post.get('tanggal_masuk') or False
@@ -69,9 +89,14 @@ class SmiStockController(http.Controller):
                 error = str(e)
                 materials = request.env['smi.material'].search([('active', '=', True)])
                 points = request.env['smi.inventory_point'].search([('active', '=', True)])
+                uoms = request.env['smi.uom'].search([('active', '=', True)])
+                categories = request.env['smi.material.category'].search([('active', '=', True)])
                 values = {
                     'materials': materials,
+                    'materials_json': json.dumps([{'id': m.id, 'name': m.name} for m in materials]),
                     'points': points,
+                    'uoms': uoms,
+                    'categories': categories,
                     'error': error,
                     'post': post,
                     'is_direktur': user.has_group('inventory_smi.group_direktur'),
@@ -84,9 +109,14 @@ class SmiStockController(http.Controller):
 
         materials = request.env['smi.material'].search([('active', '=', True)])
         points = request.env['smi.inventory_point'].search([('active', '=', True)])
+        uoms = request.env['smi.uom'].search([('active', '=', True)])
+        categories = request.env['smi.material.category'].search([('active', '=', True)])
         values = {
             'materials': materials,
+            'materials_json': json.dumps([{'id': m.id, 'name': m.name} for m in materials]),
             'points': points,
+            'uoms': uoms,
+            'categories': categories,
             'error': None,
             'post': {},
             'is_direktur': user.has_group('inventory_smi.group_direktur'),
