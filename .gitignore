@@ -20,6 +20,5 @@ __pycache__/
 .vscode/
 .idea/
 
-# Planning docs (local only)
-PLAN.md
-IMPLEMENTATION.md
+# Logs
+*.log
