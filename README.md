@@ -84,14 +84,24 @@ Expected result: folder project tersedia dan struktur file terlihat.
 2. Jalankan Docker services
 
 ```bash
-docker compose up -d --build
+docker compose build
+docker compose up -d
 ```
 
 Expected result: container `web` (Odoo) dan `db` (Postgres) berjalan; Odoo tersedia di `http://localhost:8069`.
 
-![docker_compose](docs/screenshots/02_docker_compose.png)
+![start_docker_1](docs/screenshots/02_start_docker_1.png)
+![start_docker_2](docs/screenshots/02_start_docker_2.png)
 
 3. (Opsional) Buat virtual environment untuk menjalankan sistem.
+Untuk Windows:
+```bash
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+```
+Untuk Linux/MacOS:
 
 ```bash
 python3 -m venv .venv
@@ -102,20 +112,22 @@ pip install -r requirements.txt
 
 Expected result: virtualenv aktif dan dependency terpasang.
 
-![virtual_env](docs/screenshots/03_virtual_env.png)
+![virtual_env_1](docs/screenshots/03_virtual_env_1.png)
+![virtual_env_2](docs/screenshots/03_virtual_env_2.png)
 
-4. Jalankan seeding (pastikan container sudah jalan). Seeding modul termasuk demo users akan dieksekusi saat upgrade module.
+4. Jalankan seeding. Seeding modul termasuk demo users akan dieksekusi saat upgrade module.
 
 ```bash
-docker compose exec web odoo -d postgres -i base,inventory_smi --stop-after-init
+docker compose run --rm web odoo -d postgres -i inventory_smi --without-demo=all --stop-after-init
 docker compose restart web
 ```
 
->Catatan: Perintah ini memaksa Odoo memuat modul `inventory_smi` dan `base` sehingga data demo (`data/demo_users.xml`, `data/seed_materials.xml`, dsb.) akan dieksekusi.
+>Catatan: Jika mengalami error seeding/module, reset volume terlebih dahulu dengan `docker compose down -v` dan `docker compose up -d` lalu jalankan kembali perintah tersebut.
 
 Expected result: Log Odoo menunjukan bahwa data `demo_users`, `seed_materials`, dan seed lainnya berhasil dimuat.
 
-![seeding](docs/screenshots/04_seeding.png)
+![seeding_1](docs/screenshots/04_seeding_1.png)
+![seeding_2](docs/screenshots/04_seeding_2.png)
 
 5. Buka aplikasi di browser
 
@@ -154,7 +166,7 @@ docker compose down
 
 Expected result: seluruh container Docker (web dan db) berhenti dan network project dibersihkan.
 
-![docker_down](docs/screenshots/07_compose_down.png)
+![stop_docker](docs/screenshots/07_stop_docker.png)
 
 ---
 
