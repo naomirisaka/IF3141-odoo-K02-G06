@@ -73,8 +73,8 @@ Langkah-langkah:
 1. Clone repository
 
 ```bash
-git clone https://github.com/naomirisaka/IF3141-Implementasi-K02-G06.git 
-cd IF3141-Implementasi-K02-G06 
+git clone https://github.com/naomirisaka/IF3141-Implementasi-K02-G06.git
+cd IF3141-Implementasi-K02-G06
 ```
 
 Expected result: folder project tersedia dan struktur file terlihat.
@@ -154,7 +154,7 @@ docker compose down
 
 Expected result: seluruh container Docker (web dan db) berhenti dan network project dibersihkan.
 
-![docker_down](docs/screenshots/07_docker_down.png)
+![docker_down](docs/screenshots/07_compose_down.png)
 
 ---
 
